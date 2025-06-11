@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flash-messages.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     @yield('css')
 </head>
 
 <body>
 
     <body>
-        {{-- @include('user.components.header') --}}
+        @include('partials.header')
 
         <div class="flash-messages-container">
             @include('partials.flash-messages')
@@ -29,8 +30,9 @@
 
         {{-- @include('user.components.footer') --}}
 
-        <script src="{{ asset('js/flash-messages.js') }}"></script>
         @yield('js')
+        <script src="{{ asset('js/flash-messages.js') }}"></script>
+        <script src="{{ asset('js/home.js') }}"></script>
     </body>
 </body>
 
