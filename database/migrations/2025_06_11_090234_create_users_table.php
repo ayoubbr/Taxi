@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('firstname', 100)->nullable();
             $table->string('lastname', 100)->nullable();
             $table->foreignId('role_id')->constrained('roles')->onDelete('restrict');
-            $table->enum('user_type', ['CLIENT', 'HOTEL_STAFF', 'DRIVER']);
+            $table->enum('user_type', ['CLIENT', 'OPPERATOR', 'DRIVER', 'ADMIN']);
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
