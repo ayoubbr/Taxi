@@ -50,7 +50,6 @@
                 <button type="button" class="btn-primary flex-center" onclick="window.print()">
                     <i class="fas fa-print"></i> Print Details
                 </button>
-                {{-- You can add more complex save functionality here, e.g., generating a PDF --}}
                 <a href="{{ route('home') }}" class="btn-primary flex-center" style="background-color: #98a1a8;">
                     <i class="fas fa-home"></i> Back to Home
                 </a>

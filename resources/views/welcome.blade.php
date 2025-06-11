@@ -24,8 +24,7 @@
             <div class="booking-card">
                 <h3>Book Your Ride</h3>
                 <form action="{{ route('bookings.store') }}" method="POST" class="booking-form">
-                    @csrf <!-- Add CSRF token for POST requests -->
-
+                    @csrf
                     <div class="form-group">
                         <label for="client_name">
                             <i class="fas fa-user"></i>

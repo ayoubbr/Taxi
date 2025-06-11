@@ -18,22 +18,17 @@
 </head>
 
 <body>
+    @include('partials.header')
 
-    <body>
-        @include('partials.header')
+    <div class="flash-messages-container">
+        @include('partials.flash-messages')
+    </div>
 
-        <div class="flash-messages-container">
-            @include('partials.flash-messages')
-        </div>
+    @yield('content')
 
-        @yield('content')
-
-        {{-- @include('user.components.footer') --}}
-
-        @yield('js')
-        <script src="{{ asset('js/flash-messages.js') }}"></script>
-        <script src="{{ asset('js/home.js') }}"></script>
-    </body>
+    @yield('js')
+    <script src="{{ asset('js/flash-messages.js') }}"></script>
+    <script src="{{ asset('js/home.js') }}"></script>
 </body>
 
 </html>

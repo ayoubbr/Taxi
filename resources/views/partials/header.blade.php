@@ -14,15 +14,14 @@
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>
                 @auth
-                    <li>
+                    <li class="flex-center">
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                             @csrf
-                            <button type="submit" class="btn-login"
-                                style="background: none; border: none; color: inherit; cursor: pointer; padding: 0;">Logout</button>
+                            <button type="submit" class="btn-login" style="cursor: pointer;">Logout</button>
                         </form>
                     </li>
                 @else
-                    <li><a href="{{ route('login') }}" class="btn-login">Login</a></li>
+                    <li class="flex-center"><a href="{{ route('login') }}" class="btn-login">Login</a></li>
                 @endauth
             </ul>
         </nav>
