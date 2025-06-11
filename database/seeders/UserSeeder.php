@@ -54,6 +54,17 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            'username' => 'another.driver',
+            'password' => Hash::make('password'),
+            'email' => 'another.driver@example.com',
+            'firstname' => 'another',
+            'lastname' => 'Driver',
+            'role_id' => $driverRole->id,
+            'user_type' => 'DRIVER',
+            'is_active' => true,
+        ]);
+
+        User::create([
             'username' => 'mane.operator',
             'password' => Hash::make('password'),
             'email' => 'mane.operaton@example.com',

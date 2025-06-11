@@ -22,10 +22,9 @@
                     {{ session('status') }}
                 </div>
             @endif
-            {{-- {{ route('login') }} --}}
-            <form method="POST" action="" class="auth-form">
-                @csrf
 
+            <form method="POST" action="{{ route('login') }}" class="auth-form">
+                @csrf
                 <!-- Email Address -->
                 <div class="form-group">
                     <label for="email">
@@ -76,7 +75,7 @@
                 <!-- Forgot Password Link -->
                 <div class="forgot-password">
                     @if (Route::has('password.request'))
-                    {{-- {{ route('password.request') }} --}}
+                        {{-- {{ route('password.request') }} --}}
                         <a href="" class="link">
                             <i class="fas fa-key"></i>
                             Forgot your password?

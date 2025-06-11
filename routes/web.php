@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +17,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
-Route::get('/login', function () {
-    return view('auth/login');
-})->name('login');
+})->name('home');
 
-Route::get('/register', function () {
-    return view('auth/register');
-})->name('register');
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Booking Routes
+Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('bookings.confirmation');
+
+// Example protected route (for logged-in users)
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return "Welcome to your dashboard!";
+    })->name('dashboard');
+});

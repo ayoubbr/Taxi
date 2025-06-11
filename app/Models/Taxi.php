@@ -13,6 +13,7 @@ class Taxi extends Model
         'license_plate',
         'model',
         'type',
+        'city',
         'capacity',
         'driver_id',
         'is_available',

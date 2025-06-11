@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('client_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('client_name', 100);
             $table->string('pickup_location');
+            $table->string('pickup_city', 100)->nullable();
             $table->string('destination');
             $table->dateTime('pickup_datetime');
             $table->enum('status', ['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'])->default('PENDING');

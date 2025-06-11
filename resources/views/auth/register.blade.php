@@ -15,10 +15,9 @@
                 <h2>Create Account</h2>
                 <p>Join us and start booking your rides today</p>
             </div>
-            {{-- {{ route('register') }} --}}
-            <form method="POST" action="" class="auth-form">
-                @csrf
 
+            <form method="POST" action="{{ route('register') }}" class="auth-form">
+                @csrf
                 <!-- Name -->
                 <div class="form-group">
                     <label for="name">

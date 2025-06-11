@@ -14,6 +14,7 @@ class Booking extends Model
         'client_id',
         'client_name',
         'pickup_location',
+        'pickup_city',
         'destination',
         'pickup_datetime',
         'status',
