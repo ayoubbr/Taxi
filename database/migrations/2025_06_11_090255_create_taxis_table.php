@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('license_plate', 50)->unique();
             $table->string('model', 100)->nullable();
-            $table->enum('type', ['Standard', 'Van', 'Luxury']);
+            $table->enum('type', ['standard', 'van', 'luxe']);
             $table->string('city', 100)->nullable();
             $table->integer('capacity');
             $table->foreignId('driver_id')->nullable()->constrained('users')->onDelete('set null');

@@ -1,0 +1,136 @@
+ .confirmation-container {
+     display: flex;
+     margin-top: 70px;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 40px 20px;
+     background-color: #f9f9f9;
+     min-height: 80vh;
+ }
+
+ .confirmation-card {
+     background-color: #fff;
+     border-radius: 12px;
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+     padding: 40px;
+     text-align: center;
+     max-width: 600px;
+     width: 100%;
+ }
+
+ .confirmation-card h2 {
+     color: #007bff;
+     font-size: 2.2em;
+     margin-bottom: 20px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .confirmation-card h2 i {
+     margin-right: 15px;
+     color: #28a745;
+     /* Green for success icon */
+ }
+
+ .confirmation-card p {
+     font-size: 1.1em;
+     color: #555;
+     margin-bottom: 10px;
+     line-height: 1.6;
+ }
+
+ .booking-details {
+     margin-top: 30px;
+     border-top: 1px solid #eee;
+     padding-top: 20px;
+     text-align: left;
+ }
+
+ .booking-details h3 {
+     color: #333;
+     margin-bottom: 15px;
+     font-size: 1.5em;
+ }
+
+ .booking-details ul {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+ }
+
+ .booking-details ul li {
+     margin-bottom: 10px;
+     color: #666;
+ }
+
+ .booking-details ul li strong {
+     color: #333;
+     min-width: 120px;
+     display: inline-block;
+ }
+
+ .qr-code-section {
+     margin-top: 30px;
+     padding-top: 20px;
+     border-top: 1px solid #eee;
+ }
+
+ .qr-code-section h3 {
+     color: #333;
+     margin-bottom: 15px;
+     font-size: 1.5em;
+ }
+
+ .qr-code-display {
+     border: 1px solid #ddd;
+     padding: 15px;
+     border-radius: 8px;
+     display: inline-block;
+     background-color: #fff;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+ }
+
+ .qr-code-display svg {
+     display: block;
+     margin: 0 auto;
+ }
+
+ .print-save-buttons {
+     margin-top: 30px;
+ }
+
+ .print-save-buttons .btn-primary {
+     margin: 0 10px;
+     padding: 12px 25px;
+     font-size: 1em;
+     height: 60px;
+     gap: 8px;
+ }
+
+ @media (max-width: 768px) {
+     .confirmation-card {
+         padding: 25px;
+     }
+
+     .confirmation-card h2 {
+         font-size: 1.8em;
+         flex-direction: column;
+     }
+
+     .confirmation-card h2 i {
+         margin-right: 0;
+         margin-bottom: 10px;
+     }
+
+     .booking-details ul li {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+     }
+
+     .booking-details ul li strong {
+         margin-bottom: 5px;
+     }
+ }

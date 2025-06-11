@@ -20,7 +20,7 @@ class TaxiSeeder extends Seeder
         Taxi::create([
             'license_plate' => 'ABC-123',
             'model' => 'Toyota Camry',
-            'type' => 'Standard',
+            'type' => 'standard',
             'capacity' => 4,
             'city' => 'Marrakesh', // Example city
             'driver_id' => $driver1 ? $driver1->id : null,
@@ -30,7 +30,7 @@ class TaxiSeeder extends Seeder
         Taxi::create([
             'license_plate' => 'XYZ-789',
             'model' => 'Mercedes Sprinter',
-            'type' => 'Van',
+            'type' => 'van',
             'capacity' => 7,
             'city' => 'Casablanca', // Another example city
             'driver_id' => $driver2 ? $driver2->id : null,
@@ -40,7 +40,7 @@ class TaxiSeeder extends Seeder
         Taxi::create([
             'license_plate' => 'LXC-456',
             'model' => 'BMW 7 Series',
-            'type' => 'Luxury',
+            'type' => 'luxe',
             'capacity' => 4,
             'city' => 'Marrakesh', // Another example city
             'driver_id' => null, // No driver assigned yet

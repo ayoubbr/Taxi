@@ -19,10 +19,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inconsolata', monospace;
 }
 
 body {
-    font-family: 'Inconsolata', monospace;
     color: var(--text-color);
     line-height: 1.6;
     background-color: var(--light-color);
@@ -56,4 +56,10 @@ ul {
 img {
     max-width: 100%;
     height: auto;
+}
+
+.flex-center {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 }
