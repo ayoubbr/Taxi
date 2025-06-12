@@ -2,11 +2,11 @@
 
 return [
     'proximity_map' => [
-        'Marrakesh' => ['Safi', 'Essaouira', 'Casablanca'],
-        'Casablanca' => ['Rabat', 'Marrakesh', 'El Jadida'],
+        'Marrakech' => ['Safi', 'Essaouira', 'Casablanca'],
+        'Casablanca' => ['Rabat', 'Marrakech', 'El Jadida'],
         'Rabat' => ['Casablanca', 'Kenitra', 'Meknes'],
-        'Safi' => ['Marrakesh', 'Essaouira'],
-        'Essaouira' => ['Marrakesh', 'Safi'],
+        'Safi' => ['Marrakech', 'Essaouira'],
+        'Essaouira' => ['Marrakech', 'Safi'],
         'Agadir' => ['Taroudant', 'Essaouira'],
         // ...
     ],

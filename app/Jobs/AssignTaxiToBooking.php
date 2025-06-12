@@ -16,6 +16,7 @@ class AssignTaxiToBooking implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $booking;
+    protected $taxi_type;
     protected $currentSearchTier;
     protected $maxSearchTiers;
 
@@ -26,9 +27,10 @@ class AssignTaxiToBooking implements ShouldQueue
      * @param int $currentSearchTier The current tier (hops) to search for taxis.
      * @param int $maxSearchTiers The maximum tier to search before giving up.
      */
-    public function __construct(Booking $booking, int $currentSearchTier = 0, int $maxSearchTiers = 2)
+    public function __construct(Booking $booking, string $taxi_type, int $currentSearchTier = 0, int $maxSearchTiers = 2)
     {
         $this->booking = $booking;
+        $this->taxi_type = $taxi_type;
         $this->currentSearchTier = $currentSearchTier;
         $this->maxSearchTiers = $maxSearchTiers;
     }
@@ -47,12 +49,16 @@ class AssignTaxiToBooking implements ShouldQueue
             return;
         }
 
+
         $pickupCity = $this->booking->pickup_city;
-        $taxiType = $this->booking->taxi_type;
+        $taxiType = $this->taxi_type;
 
         Log::info("Attempting to assign taxi for booking {$this->booking->booking_uuid} in tier {$this->currentSearchTier}.");
 
         $citiesToSearch = $this->getCitiesForTier($pickupCity, $this->currentSearchTier);
+
+        Log::info("taxi type : $taxiType");
+        Log::info('cities to search :', $citiesToSearch);
 
         $assignedTaxi = Taxi::whereIn('city', $citiesToSearch)
             ->where('type', $taxiType)
@@ -77,11 +83,12 @@ class AssignTaxiToBooking implements ShouldQueue
 
             // No taxi found in current tier, try next tier if available
             if ($this->currentSearchTier < $this->maxSearchTiers) {
-                // Dispatch the job again for the next tier after a delay
-                $delay = ($this->currentSearchTier + 1) * 30; // e.g., 30s delay for tier 1, 60s for tier 2
+                $delay = ($this->currentSearchTier + 1) * 30;
                 Log::info("Retrying assignment for booking {$this->booking->booking_uuid} in next tier (Tier " . ($this->currentSearchTier + 1) . ") in {$delay} seconds.");
-                AssignTaxiToBooking::dispatch($this->booking, $this->currentSearchTier + 1, $this->maxSearchTiers)->delay(now()->addSeconds($delay));
+                AssignTaxiToBooking::dispatch($this->booking,  $this->taxi_type, $this->currentSearchTier + 1, $this->maxSearchTiers)
+                    ->delay(now()->addSeconds($delay));
             } else {
+
                 // No taxi found after all attempts
                 $this->booking->update(['status' => 'NO_TAXI_FOUND']); // Or a different status like 'FAILED_ASSIGNMENT'
                 Log::warning("No taxi could be assigned for booking {$this->booking->booking_uuid} after all attempts.");
@@ -103,6 +110,7 @@ class AssignTaxiToBooking implements ShouldQueue
         $proximityMap = config('cities.proximity_map');
         $cities = [$startCity]; // Always include the start city in tier 0
 
+        // Log::info("start city {$startCity}");
         if ($tier === 0) {
             return [$startCity];
         }

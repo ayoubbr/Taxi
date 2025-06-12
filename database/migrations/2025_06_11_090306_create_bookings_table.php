@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('pickup_city', 100)->nullable();
             $table->string('destination');
             $table->dateTime('pickup_datetime');
-            $table->enum('status', ['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'])->default('PENDING');
+            $table->enum('status', ['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'NO_TAXI_FOUND'])->default('PENDING');
             $table->foreignId('assigned_taxi_id')->nullable()->constrained('taxis')->onDelete('set null');
             $table->foreignId('assigned_driver_id')->nullable()->constrained('users')->onDelete('set null');
             $table->decimal('estimated_fare', 10, 2)->nullable();
