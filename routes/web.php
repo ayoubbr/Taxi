@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DriverController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,4 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return "Welcome to your dashboard!";
     })->name('dashboard');
+});
+
+// Driver Specific Routes
+Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'driver' middleware
+    Route::get('/driver/dashboard', [DriverController::class, 'assignedBookings'])->name('driver.dashboard');
+    // Route::get('/driver/scan-qr', [DriverController::class, 'scanQrCodeForm'])->name('driver.scan.qr');
+    // Example in web.php
+    Route::get('/driver/scan-qr/{booking_uuid}', [DriverController::class, 'scanQrCodeForm'])->name('driver.scan.qr.form');
+    // Route::post('/driver/scan-qr-process', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
+    Route::post('/driver/scan-qr', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
+    Route::post('/driver/bookings/{booking}/update-status', [DriverController::class, 'updateBookingStatus'])->name('driver.booking.update-status');
 });

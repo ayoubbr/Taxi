@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="auth-container">
+    <div class="auth-container mt-70">
         <div class="auth-card">
             <div class="auth-header">
                 <div class="logo">

@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <div class="confirmation-container">
+    <div class="confirmation-container mt-70">
         <div class="confirmation-card">
             <h2><i class="fas fa-check-circle"></i> Booking Confirmed!</h2>
             <p>Your taxi has been booked successfully. Please find your booking details and QR code below.</p>
