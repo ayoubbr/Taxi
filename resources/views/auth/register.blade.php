@@ -141,7 +141,7 @@
 
         <!-- Side Image -->
         <div class="auth-image">
-            <img src="{{ asset('images/auth-illustration.svg') }}" alt="Registration illustration">
+            <img src="{{ asset('images/taxi-2.webp') }}" alt="Registration illustration">
             <div class="auth-image-content">
                 <h3>Join Our Community</h3>
                 <p>Experience the convenience of modern taxi booking with QR code validation and real-time tracking.</p>

@@ -21,7 +21,20 @@
                     <li><strong>Date & Time:</strong>
                         {{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('d M Y H:i') }}</li>
                     <li><strong>Status:</strong> <span
-                            style="font-weight: bold; color: {{ $booking->status == 'ASSIGNED' ? 'green' : ($booking->status == 'PENDING' ? 'orange' : 'inherit') }}">{{ $booking->status }}</span>
+                            style="font-weight: bold; 
+                            color: {{ $booking->status == 'ASSIGNED'
+                                ? 'green'
+                                : ($booking->status == 'PENDING'
+                                    ? 'orange'
+                                    : ($booking->status == 'IN_PROGRESS'
+                                        ? 'blue'
+                                        : ($booking->status == 'COMPLETED'
+                                            ? 'blueViolet'
+                                            : ($booking->status == 'CANCELLED'
+                                                ? 'red'
+                                                : ($booking->status == 'NO_TAXI_FOUND'
+                                                    ? 'black'
+                                                    : 'inherit'))))) }}">{{ $booking->status }}</span>
                     </li>
                     @if ($booking->estimated_fare)
                         <li><strong>Estimated Fare:</strong> ${{ number_format($booking->estimated_fare, 2) }}</li>

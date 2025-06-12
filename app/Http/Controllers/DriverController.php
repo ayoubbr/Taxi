@@ -29,7 +29,7 @@ class DriverController extends Controller
         $driverId = Auth::id();
 
         $bookings = Booking::where('assigned_driver_id', $driverId)
-            ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']) // Show relevant statuses
+            // ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']) // Show relevant statuses
             ->orderBy('pickup_datetime', 'asc')
             ->get();
 
@@ -149,7 +149,7 @@ class DriverController extends Controller
     public function updateBookingStatus(Request $request, Booking $booking)
     {
         $request->validate([
-            'status' => 'required|in:ARRIVED,COMPLETED,CANCELLED', // Define allowed transitions
+            'status' => 'required|in:IN_PROGRESS,COMPLETED,CANCELLED', // Define allowed transitions
         ]);
 
         if ($booking->assigned_driver_id !== Auth::id()) {
@@ -160,11 +160,7 @@ class DriverController extends Controller
         if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
             $booking->status = 'COMPLETED';
             $booking->save();
-            return back()->with('success', 'Booking completed!');
-        } elseif ($booking->status === 'ASSIGNED' && $request->status === 'ARRIVED') {
-            $booking->status = 'ARRIVED'; // Or directly 'IN_PROGRESS' if arrival means starting ride
-            $booking->save();
-            return back()->with('success', 'Driver arrived!');
+            return back()->with('success', 'Ride completed!');
         }
 
         return back()->with('error', 'Invalid status transition.');

@@ -109,7 +109,7 @@
 
         <!-- Side Image -->
         <div class="auth-image">
-            <img src="{{ asset('images/auth-illustration.svg') }}" alt="Login illustration">
+            <img src="{{ asset('images/taxi-2.webp') }}" alt="Login illustration">
             <div class="auth-image-content">
                 <h3>Welcome Back!</h3>
                 <p>Access your dashboard, manage your bookings, and enjoy seamless taxi services with our secure platform.

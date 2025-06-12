@@ -202,14 +202,13 @@
                         </div>
                         <div class="booking-actions">
                             @if ($booking->status === 'ASSIGNED')
-                                <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
+                                {{-- <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="status" value="IN_PROGRESS">
                                     <button type="submit" class="btn btn-update-status">
                                         <i class="fas fa-play"></i> Start Ride
                                     </button>
-                                </form>
-                                {{-- For actual QR scanning, you'd navigate to a specific page or open a modal --}}
+                                </form> --}}
                                 <a href="{{ route('driver.scan.qr.form', ['booking_uuid' => $booking->booking_uuid]) }}"
                                     class="btn btn-scan-qr">
                                     <i class="fas fa-qrcode"></i> Scan QR
