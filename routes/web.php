@@ -29,8 +29,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Booking Routes
 Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
+Route::get('/bookings/create', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('bookings.confirmation');
+
+
+Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
+Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
+Route::put('/bookings/{uuid}', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
 
 // Example protected route (for logged-in users)
 Route::middleware('auth')->group(function () {

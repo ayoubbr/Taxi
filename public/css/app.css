@@ -67,3 +67,44 @@ img {
 .mt-70 {
     margin-top: 70px;
 }
+
+/* Buttons */
+.btn-primary {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    text-align: center;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+}
+
+.btn-login:hover {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+

@@ -1,5 +1,5 @@
 <!-- resources/views/welcome.blade.php -->
-@extends('layout')
+@extends('client.layout')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
