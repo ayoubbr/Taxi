@@ -49,13 +49,13 @@
 
         <main class="dashboard-main">
             <header class="dashboard-header">
-                <div class="header-left">
+                <div class="header-left" id="header-left">
                     <button class="menu-toggle" id="menuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1>Driver Dashboard</h1>
                 </div>
-                <div class="header-right">
+                {{-- <div class="header-right">
                     <div class="header-actions">
                         <button class="btn-icon">
                             <i class="fas fa-bell"></i>
@@ -65,7 +65,7 @@
                             <i class="fas fa-envelope"></i>
                         </button>
                     </div>
-                </div>
+                </div> --}}
             </header>
 
             <div class="dashboard-stats">
@@ -235,6 +235,8 @@
             if (menuToggle) {
                 menuToggle.addEventListener('click', function() {
                     sidebar.classList.toggle('active');
+                    // document.getElementById('header-left')
+                    menuToggle.classList.toggle('translate-header-left');
                 });
             }
 
