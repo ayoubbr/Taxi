@@ -15,15 +15,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $clientRole = Role::where('name', 'client')->first();
-        $operatorRole = Role::where('name', 'operator')->first();
-        $driverRole = Role::where('name', 'driver')->first();
         $adminRole = Role::where('name', 'admin')->first();
+        $clientRole = Role::where('name', 'client')->first();
+        $driverRole = Role::where('name', 'driver')->first();
+        $operatorRole = Role::where('name', 'operator')->first();
 
         User::create([
-            'username' => 'admin',
+            'username' => 'super.admin',
             'password' => Hash::make('password'),
-            'email' => 'admin@example.com',
+            'email' => 'admin@email.com',
             'firstname' => 'Super',
             'lastname' => 'Admin',
             'role_id' => $adminRole->id,
@@ -32,21 +32,21 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'username' => 'john.doe',
+            'username' => 'john.client',
             'password' => Hash::make('password'),
-            'email' => 'john.doe@example.com',
+            'email' => 'john.client@email.com',
             'firstname' => 'John',
-            'lastname' => 'Doe',
+            'lastname' => 'Client',
             'role_id' => $clientRole->id,
             'user_type' => 'CLIENT',
             'is_active' => true,
         ]);
 
         User::create([
-            'username' => 'jane.driver',
+            'username' => 'alex.driver',
             'password' => Hash::make('password'),
-            'email' => 'jane.driver@example.com',
-            'firstname' => 'Jane',
+            'email' => 'alex.driver@email.com',
+            'firstname' => 'Alex',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
             'user_type' => 'DRIVER',
@@ -56,8 +56,8 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'another.driver',
             'password' => Hash::make('password'),
-            'email' => 'another.driver@example.com',
-            'firstname' => 'another',
+            'email' => 'another.driver@email.com',
+            'firstname' => 'Another',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
             'user_type' => 'DRIVER',
@@ -65,10 +65,10 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'username' => 'mane.operator',
+            'username' => 'one.operator',
             'password' => Hash::make('password'),
-            'email' => 'mane.operaton@example.com',
-            'firstname' => 'Mane',
+            'email' => 'one.operator@email.com',
+            'firstname' => 'One',
             'lastname' => 'Operator',
             'role_id' => $operatorRole->id,
             'user_type' => 'OPPERATOR',

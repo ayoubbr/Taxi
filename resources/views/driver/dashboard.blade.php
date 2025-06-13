@@ -1,233 +1,283 @@
-@extends('layout')
+@extends('driver.layout')
 
 @section('css')
-    {{-- <link rel="stylesheet" href="{{ asset('css/home.css') }}"> --}}
-    <style>
-        .driver-dashboard {
-            padding: 40px 20px;
-            min-height: 80vh;
-            background-color: #f8f9fa;
-        }
-
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .dashboard-header h2 {
-            color: #007bff;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .dashboard-header p {
-            color: #6c757d;
-            font-size: 1.1em;
-        }
-
-        .bookings-list {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            padding: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .bookings-list h3 {
-            color: #343a40;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .booking-item {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .booking-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .booking-info {
-            flex: 2;
-            min-width: 280px;
-            margin-right: 20px;
-            margin-bottom: 15px;
-        }
-
-        .booking-info p {
-            margin: 5px 0;
-            color: #495057;
-            font-size: 0.95em;
-        }
-
-        .booking-info p strong {
-            color: #343a40;
-            min-width: 100px;
-            display: inline-block;
-        }
-
-        .booking-actions {
-            flex: 1;
-            min-width: 180px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .booking-actions .btn {
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-scan-qr {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .btn-scan-qr:hover {
-            background-color: #218838;
-        }
-
-        .btn-update-status {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-update-status:hover {
-            background-color: #0056b3;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.85em;
-            color: white;
-        }
-
-        .status-PENDING {
-            background-color: #ffc107;
-        }
-
-        /* Yellow */
-        .status-ASSIGNED {
-            background-color: #007bff;
-        }
-
-        /* Blue */
-        .status-IN_PROGRESS {
-            background-color: #6f42c1;
-        }
-
-        /* Purple */
-        .status-COMPLETED {
-            background-color: #28a745;
-        }
-
-        /* Green */
-        .status-CANCELLED {
-            background-color: #dc3545;
-        }
-
-        /* Red */
-        .status-NO_TAXI_FOUND {
-            background-color: #6c757d;
-        }
-
-        /* Gray */
-
-        @media (max-width: 768px) {
-            .booking-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .booking-info {
-                margin-right: 0;
-                width: 100%;
-            }
-
-            .booking-actions {
-                width: 100%;
-                margin-top: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
 @endsection
 
 @section('content')
-    <div class="driver-dashboard mt-70">
-        <div class="container">
-            <div class="dashboard-header">
-                <h2>Driver Dashboard</h2>
-                <p>Welcome, {{ Auth::user()->firstname }}. Here are your assigned bookings.</p>
+    <div class="driver-dashboard">
+        <aside class="dashboard-sidebar">
+            <div class="driver-profile">
+                <div class="driver-avatar">
+                    <span>{{ strtoupper(substr(Auth::user()->firstname, 0, 1)) }}</span>
+                </div>
+                <div class="driver-info">
+                    <h3>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h3>
+                    <span class="driver-status online">Online</span>
+                </div>
             </div>
 
-            <div class="bookings-list">
-                <h3>Your Current Bookings</h3>
-                @forelse ($bookings as $booking)
-                    <div class="booking-item">
-                        <div class="booking-info">
-                            <p><strong>Booking ID:</strong> {{ $booking->booking_uuid }}</p>
-                            <p><strong>Client:</strong> {{ $booking->client_name }}</p>
-                            <p><strong>Pickup:</strong> {{ $booking->pickup_location }} ({{ $booking->pickup_city }})</p>
-                            <p><strong>Destination:</strong> {{ $booking->destination }}</p>
-                            <p><strong>Time:</strong>
-                                {{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('d M Y H:i') }}</p>
-                            <p><strong>Status:</strong> <span
-                                    class="status-badge status-{{ $booking->status }}">{{ $booking->status }}</span></p>
-                            <p><strong>Taxi Type:</strong> {{ ucfirst($booking->taxi_type) }}</p>
-                            @if ($booking->estimated_fare)
-                                <p><strong>Estimated Fare:</strong> ${{ number_format($booking->estimated_fare, 2) }}</p>
-                            @endif
-                        </div>
-                        <div class="booking-actions">
-                            @if ($booking->status === 'ASSIGNED')
-                                {{-- <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="status" value="IN_PROGRESS">
-                                    <button type="submit" class="btn btn-update-status">
-                                        <i class="fas fa-play"></i> Start Ride
-                                    </button>
-                                </form> --}}
-                                <a href="{{ route('driver.scan.qr.form', ['booking_uuid' => $booking->booking_uuid]) }}"
-                                    class="btn btn-scan-qr">
-                                    <i class="fas fa-qrcode"></i> Scan QR
-                                </a>
-                            @elseif ($booking->status === 'IN_PROGRESS')
-                                <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="status" value="COMPLETED">
-                                    <button type="submit" class="btn btn-update-status">
-                                        <i class="fas fa-check-circle"></i> Complete Ride
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                    </div>
-                @empty
-                    <p class="text-center">No assigned bookings at the moment. Check back later!</p>
-                @endforelse
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-route"></i> My Rides</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-chart-line"></i> Earnings</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
             </div>
-        </div>
+        </aside>
+
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Driver Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="btn-icon">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ $bookings->where('status', 'ASSIGNED')->count() }}</h3>
+                        <p>Assigned Rides</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ $bookings->where('status', 'IN_PROGRESS')->count() }}</h3>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ $bookings->where('status', 'COMPLETED')->count() }}</h3>
+                        <p>Completed Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>${{ number_format($bookings->where('status', 'COMPLETED')->sum('estimated_fare'), 2) }}</h3>
+                        <p>Today's Earnings</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="content-header">
+                    <h2>Current Bookings</h2>
+                    <div class="filter-controls">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="ASSIGNED">Assigned</button>
+                        <button class="filter-btn" data-filter="IN_PROGRESS">In Progress</button>
+                    </div>
+                </div>
+
+                <div class="bookings-container">
+                    @forelse ($bookings as $booking)
+                        <div class="booking-card" data-status="{{ $booking->status }}">
+                            <div class="booking-header">
+                                <div class="booking-id">
+                                    <span class="label">Booking ID:</span>
+                                    <span class="value">{{ substr($booking->booking_uuid, 0, 8) }}</span>
+                                </div>
+                                <div class="booking-status status-{{ $booking->status }}">
+                                    {{ str_replace('_', ' ', $booking->status) }}
+                                </div>
+                            </div>
+
+                            <div class="booking-body">
+                                <div class="booking-client">
+                                    <div class="client-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="client-info">
+                                        <h4>{{ $booking->client_name }}</h4>
+                                        <div class="taxi-type">
+                                            <i class="fas fa-taxi"></i> {{ ucfirst($booking->taxi_type) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-route">
+                                    <div class="route-point pickup">
+                                        <div class="point-marker">A</div>
+                                        <div class="point-details">
+                                            <h5>Pickup Location</h5>
+                                            <p>{{ $booking->pickup_location }}</p>
+                                            <span class="city">{{ $booking->pickup_city }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="route-line">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </div>
+
+                                    <div class="route-point destination">
+                                        <div class="point-marker">B</div>
+                                        <div class="point-details">
+                                            <h5>Destination</h5>
+                                            <p>{{ $booking->destination }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>{{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('d M Y') }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>{{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('H:i') }}</span>
+                                    </div>
+                                    @if ($booking->estimated_fare)
+                                        <div class="detail-item">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <span>${{ number_format($booking->estimated_fare, 2) }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="booking-actions">
+                                @if ($booking->status === 'ASSIGNED')
+                                    <a href="{{ route('driver.scan.qr.form', ['booking_uuid' => $booking->booking_uuid]) }}"
+                                        class="btn btn-primary">
+                                        <i class="fas fa-qrcode"></i> Scan QR Code
+                                    </a>
+                                    <button class="btn btn-secondary btn-directions">
+                                        <i class="fas fa-directions"></i> Get Directions
+                                    </button>
+                                @elseif ($booking->status === 'IN_PROGRESS')
+                                    <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="status" value="COMPLETED">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-check-circle"></i> Complete Ride
+                                        </button>
+                                    </form>
+                                    <button class="btn btn-secondary btn-navigate">
+                                        <i class="fas fa-map-marked-alt"></i> Navigate
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="no-bookings">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-calendar-times"></i>
+                                </div>
+                                <h3>No Bookings Found</h3>
+                                <p>You don't have any assigned bookings at the moment.</p>
+                                <p>Take a break or check back later!</p>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </main>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.querySelector('.dashboard-sidebar');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const bookingCards = document.querySelectorAll('.booking-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter cards
+                    bookingCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-status') ===
+                            filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Simulate loading state for direction buttons
+            const directionButtons = document.querySelectorAll('.btn-directions, .btn-navigate');
+
+            directionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                        alert('Navigation would open in a maps application in production.');
+                    }, 1500);
+                });
+            });
+        });
+    </script>
 @endsection

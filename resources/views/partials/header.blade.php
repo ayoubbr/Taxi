@@ -10,10 +10,14 @@
             </button>
             <ul class="nav-menu">
                 <li><a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'active' : '' }}">Home</a></li>
-                <li><a href="#">Services</a></li>
+                {{-- <li><a href="#">Services</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">Contact</a></li> --}}
                 @auth
+                    @if (Auth::user()->user_type == 'DRIVER')
+                        <li><a href="{{ route('driver.dashboard') }}"
+                                class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    @endif
                     <li class="flex-center">
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                             @csrf

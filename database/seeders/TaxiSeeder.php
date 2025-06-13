@@ -22,7 +22,17 @@ class TaxiSeeder extends Seeder
             'model' => 'Toyota Camry',
             'type' => 'standard',
             'capacity' => 4,
-            'city' => 'Marrakesh', // Example city
+            'city' => 'Marrakech',
+            'driver_id' => $driver1 ? $driver1->id : null,
+            'is_available' => true,
+        ]);
+
+        Taxi::create([
+            'license_plate' => 'DEF-555',
+            'model' => 'BYD Star',
+            'type' => 'luxe',
+            'capacity' => 4,
+            'city' => 'Marrakech',
             'driver_id' => $driver1 ? $driver1->id : null,
             'is_available' => true,
         ]);
@@ -32,7 +42,7 @@ class TaxiSeeder extends Seeder
             'model' => 'Mercedes Sprinter',
             'type' => 'van',
             'capacity' => 7,
-            'city' => 'Casablanca', // Another example city
+            'city' => 'Casablanca',
             'driver_id' => $driver2 ? $driver2->id : null,
             'is_available' => true,
         ]);
@@ -42,8 +52,8 @@ class TaxiSeeder extends Seeder
             'model' => 'BMW 7 Series',
             'type' => 'luxe',
             'capacity' => 4,
-            'city' => 'Marrakesh', // Another example city
-            'driver_id' => null, // No driver assigned yet
+            'city' => 'Casablanca',
+            'driver_id' => $driver2 ? $driver2->id : null,
             'is_available' => true,
         ]);
     }
