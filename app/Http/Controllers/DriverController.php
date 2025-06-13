@@ -46,40 +46,6 @@ class DriverController extends Controller
 
     /**
      * Process QR code scan and update booking status.
-     * This method will need to be further developed for actual QR scanning.
-     */
-    // public function processQrCodeScan(Request $request)
-    // {
-    //     $request->validate([
-    //         'qr_data' => 'required|string', // This would be the decoded QR data
-    //     ]);
-
-    //     $decodedData = json_decode($request->qr_data, true);
-
-    //     if (!$decodedData || !isset($decodedData['bookingId'])) {
-    //         return redirect()->route('driver.dashboard')->with('error', 'Invalid QR Code data.');
-    //     }
-
-    //     $booking = Booking::where('booking_uuid', $decodedData['bookingId'])
-    //         ->where('assigned_driver_id', Auth::id())
-    //         ->first();
-
-    //     if (!$booking) {
-    //         return redirect()->route('driver.dashboard')->with('error', 'Booking not found or not assigned to you.');
-    //     }
-
-    //     // Example: Update status to IN_PROGRESS upon scan
-    //     if ($booking->status === 'ASSIGNED') {
-    //         $booking->status = 'IN_PROGRESS';
-    //         $booking->save();
-    //         return redirect()->route('driver.dashboard')->with('success', 'Booking ' . $booking->booking_uuid . ' is now IN PROGRESS!');
-    //     } else {
-    //         return redirect()->route('driver.dashboard')->with('info', 'Booking status is already ' . $booking->status . '.');
-    //     }
-    // }
-
-    /**
-     * Process QR code scan and update booking status.
      */
     public function processQrCodeScan(Request $request)
     {

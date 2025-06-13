@@ -22,16 +22,8 @@ class BookingController extends Controller
     public function show($uuid)
     {
         $booking = Booking::where('booking_uuid', $uuid)->first();
-        // $qrData = [
-        //     'bookingId' => $booking->uuid,
-        //     'clientName' => $booking->client_name,
-        //     'pickupLocation' => $request->pickup_location,
-        //     'destination' => $request->destination,
-        //     'pickupDateTime' => $pickupDateTime,
-        // ];
-
-        // Generate QR Code as SVG string (can be saved to disk if preferred)
         $qrCodeSvg = QrCode::size(250)->generate(json_encode($booking->qr_code_data));
+       
         return view('client.bookings.show', compact('booking', 'qrCodeSvg'));
     }
 
