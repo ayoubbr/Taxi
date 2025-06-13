@@ -24,8 +24,50 @@
     <div class="flash-messages-container">
         @include('partials.flash-messages')
     </div>
+    <div class="driver-dashboard">
+        <aside class="dashboard-sidebar">
+            <div class="driver-profile">
+                <div class="driver-avatar">
+                    <span>{{ strtoupper(substr(Auth::user()->firstname, 0, 1)) }}</span>
+                </div>
+                <div class="driver-info">
+                    <h3>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h3>
+                    <span class="driver-status online">Online</span>
+                </div>
+            </div>
 
-    @yield('content')
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('driver.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
+                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> My Rides</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-chart-line"></i> Earnings</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
+        @yield('content')
+
+    </div>
 
     @yield('js')
     <script src="{{ asset('js/flash-messages.js') }}"></script>

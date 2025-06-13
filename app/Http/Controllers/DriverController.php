@@ -37,6 +37,52 @@ class DriverController extends Controller
     }
 
     /**
+     * Display a list of available bookings that a driver can apply for.
+     */
+    public function availableBookings()
+    {
+        $driver = Auth::user();
+        $driverTaxi = $driver->taxi;
+
+        // dd($driverTaxi);
+
+        if (!$driverTaxi) {
+            // Handle case where driver has no taxi assigned
+            return view('driver.available-bookings')->with('bookings', collect());
+        }
+
+        $proximityMap = config('cities.proximity_map');
+
+        // Flatten the proximity map to get all searchable cities based on driver's city
+        $searchableCities = collect([$driverTaxi->city]);
+        if (isset($proximityMap[$driverTaxi->city])) {
+            $searchableCities = $searchableCities->merge($proximityMap[$driverTaxi->city]);
+        }
+        // dd($searchableCities);
+
+        // This is a simplified tier search. For the timed tier expansion,
+        // the scheduled command will update booking's `search_tier`
+        $bookings = Booking::where('status', 'PENDING')
+            ->where('taxi_type', $driverTaxi->type)
+            // This logic ensures drivers only see bookings in tiers they have access to.
+            ->where(function ($query) use ($searchableCities, $proximityMap) {
+                $query->where(function ($q) use ($searchableCities) {
+                    // Tier 0 and 1
+                    $q->whereIn('pickup_city', $searchableCities)
+                        ->where('search_tier', '<=', 1);
+                })->orWhere('search_tier', '>=', 2); // Tier 2+ is open to all
+            })
+            ->where('pickup_datetime', '>', now()->subMinutes(60))
+            ->orderBy('pickup_datetime', 'asc')
+            ->get();
+        // dd($bookings);
+
+
+        return view('driver.available-bookings', compact('bookings'));
+    }
+
+
+    /**
      * Show form for driver to scan QR code.
      */
     public function scanQrCodeForm($uuid)

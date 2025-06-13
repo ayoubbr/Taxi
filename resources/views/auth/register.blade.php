@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('client.layout')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">

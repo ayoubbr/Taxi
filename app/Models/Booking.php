@@ -22,6 +22,8 @@ class Booking extends Model
         'assigned_driver_id',
         'estimated_fare',
         'qr_code_data',
+        'search_tier', // Add this to the fillable properties
+        'taxi_type',
     ];
 
     protected $casts = [
@@ -42,5 +44,25 @@ class Booking extends Model
     public function assignedDriver()
     {
         return $this->belongsTo(User::class, 'assigned_driver_id');
+    }
+
+    // public function taxi()
+    // {
+    //     return $this->belongsTo(Taxi::class, 'assigned_taxi_id');
+    // }
+
+    // public function driver()
+    // {
+    //     return $this->belongsTo(User::class, 'assigned_driver_id');
+    // }
+
+    public function applications()
+    {
+        return $this->hasMany(BookingApplication::class);
+    }
+
+    public function hasDriverApplied($driverId)
+    {
+        return $this->applications()->where('driver_id', $driverId)->exists();
     }
 }

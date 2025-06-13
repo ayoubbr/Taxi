@@ -138,12 +138,17 @@
 
                                 <div class="info-item">
                                     <span class="info-label">Taxi Type</span>
-                                    <span class="info-value">{{ ucfirst($booking->assignedTaxi->type) }}</span>
+                                    @if (isset($booking->taxi_type))
+                                        <span class="info-value">{{ ucfirst($booking->taxi_type) }}</span>
+                                    @else
+                                        <span class="info-value">N/A</span>
+                                    @endif
                                 </div>
 
                                 <div class="info-item">
                                     <span class="info-label">Passengers</span>
-                                    <span class="info-value">{{ $booking->passengers }}</span>
+                                    {{-- <span class="info-value">{{ $booking->passengers }}</span> --}}
+                                    <span class="info-value">N/A</span>
                                 </div>
 
                                 @if ($booking->estimated_fare)
@@ -271,6 +276,9 @@
 
                         <a href="{{ route('booking.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> New Booking
+                        </a>
+                        <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Show Applications
                         </a>
                     </div>
                 </div>

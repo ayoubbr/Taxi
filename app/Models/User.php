@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Booking::class, 'assigned_driver_id');
     }
+
+    public function applications()
+    {
+        return $this->hasMany(BookingApplication::class, 'driver_id');
+    }
 }

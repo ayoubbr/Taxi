@@ -27,6 +27,8 @@ return new class extends Migration
             $table->foreignId('assigned_driver_id')->nullable()->constrained('users')->onDelete('set null');
             $table->decimal('estimated_fare', 10, 2)->nullable();
             $table->json('qr_code_data')->nullable();
+            $table->integer('search_tier')->nullable();
+            $table->enum('taxi_type', ['standard', 'van', 'luxe'])->nullable();
             $table->timestamps();
         });
     }

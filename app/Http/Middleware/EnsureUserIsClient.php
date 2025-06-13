@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureUserIsDriver
+
+class EnsureUserIsClient
 {
     /**
      * Handle an incoming request.
@@ -16,9 +17,9 @@ class EnsureUserIsDriver
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->user_type !== 'DRIVER') {
-            // abort(403, 'Unauthorized. You must be a driver to access this page.');
-            return back()->with('error', 'Unauthorized. You must be a driver to access this page.');
+        if (!Auth::check() || Auth::user()->user_type !== 'CLIENT') {
+            // abort(403, 'Unauthorized. You must be a client to access this page.');
+            return back()->with('error', 'Unauthorized. You must be a client to access this page.');
         }
         return $next($request);
     }

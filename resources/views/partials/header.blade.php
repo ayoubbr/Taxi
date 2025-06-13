@@ -10,7 +10,10 @@
             </button>
             <ul class="nav-menu">
                 <li><a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'active' : '' }}">Home</a></li>
-                <li><a href="{{ route('client.bookings.index') }}" class="{{ Request::routeIs('client.bookings.index') ? 'active' : '' }}">Bookings</a></li>
+                @if (Auth::user()->user_type == 'CLIENT')
+                    <li><a href="{{ route('client.bookings.index') }}"
+                            class="{{ Request::routeIs('client.bookings.index') ? 'active' : '' }}">Bookings</a></li>
+                @endif
                 {{-- <li><a href="#">Services</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li> --}}

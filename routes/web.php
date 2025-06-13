@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingApplicationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DriverController;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +35,6 @@ Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.st
 Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('bookings.confirmation');
 
 
-Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
-Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
-Route::put('/bookings/{uuid}', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
 
 // Example protected route (for logged-in users)
 Route::middleware('auth')->group(function () {
@@ -44,6 +42,16 @@ Route::middleware('auth')->group(function () {
         return "Welcome to your dashboard!";
     })->name('dashboard');
 });
+
+// Client-side booking application management
+Route::middleware('auth', 'client')->group(function () {
+    Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
+    Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
+    Route::put('/bookings/{uuid}', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
+    Route::get('/bookings/{booking}/applications', [BookingController::class, 'showApplications'])->name('client.bookings.applications');
+    Route::post('/bookings/{booking}/applications/{application}/accept', [BookingController::class, 'acceptApplication'])->name('client.bookings.accept_application');
+});
+
 
 // Driver Specific Routes
 Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'driver' middleware
@@ -54,4 +62,8 @@ Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'd
     // Route::post('/driver/scan-qr-process', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
     Route::post('/driver/scan-qr', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
     Route::post('/driver/bookings/{booking}/update-status', [DriverController::class, 'updateBookingStatus'])->name('driver.booking.update-status');
+
+    // New routes for available bookings
+    Route::get('/driver/bookings/available', [DriverController::class, 'availableBookings'])->name('driver.bookings.available');
+    Route::post('/bookings/{booking}/apply', [BookingApplicationController::class, 'store'])->name('driver.bookings.apply');
 });
