@@ -17,7 +17,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::all();
+        $bookings = Booking::where('client_id', Auth::id())->get();
         return view('client.bookings.index', compact('bookings'));
     }
 
@@ -35,7 +35,6 @@ class BookingController extends Controller
     {
         return view('bookings.create'); // If you want a dedicated booking page
     }
-
 
     // public function store(Request $request)
     // {
@@ -188,7 +187,6 @@ class BookingController extends Controller
         return redirect()->route('bookings.confirmation', ['uuid' => $booking->booking_uuid]);
     }
 
-
     public function showConfirmation($uuid)
     {
         $booking = Booking::where('booking_uuid', $uuid)->firstOrFail();
@@ -221,6 +219,10 @@ class BookingController extends Controller
     {
         // Authorization: Ensure the logged-in user is the client for this booking
         if (Auth::id() !== $booking->client_id) {
+            abort(403);
+        }
+
+        if ($booking->status != 'PENDING') {
             abort(403);
         }
 

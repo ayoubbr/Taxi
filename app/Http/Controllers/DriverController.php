@@ -72,7 +72,7 @@ class DriverController extends Controller
                         ->where('search_tier', '<=', 1);
                 })->orWhere('search_tier', '>=', 2); // Tier 2+ is open to all
             })
-            ->where('pickup_datetime', '>', now()->subMinutes(60))
+            ->where('pickup_datetime', '>', now()->subMinutes(1440))
             ->orderBy('pickup_datetime', 'asc')
             ->get();
         // dd($bookings);

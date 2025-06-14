@@ -6,12 +6,15 @@
 @endsection
 
 @section('content')
-    <section class="hero">
+    @php
+        // dd(Auth::user());
+    @endphp
+    <section class="hero mt-70">
         <div class="container">
             <div class="hero-content">
                 <h2>Book Your Taxi <span>Instantly</span></h2>
                 <p>Fast, reliable and secure taxi service at your fingertips</p>
-                <a href="#booking" class="btn-primary">Book Now</a>
+                <a href="#booking" class="btn btn-primary">Book Now</a>
             </div>
             <div class="hero-image">
                 <img src="{{ asset('images/taxi-2.webp') }}" alt="Taxi illustration">
@@ -131,7 +134,7 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn-primary btn-block">
+                        <button type="submit" class="btn btn-primary btn-block">
                             <i class="fas fa-search"></i>
                             Find a Taxi
                         </button>
@@ -226,7 +229,7 @@
             <div class="cta-content">
                 <h2>Ready to Book Your Taxi?</h2>
                 <p>Fast, reliable and secure taxi service at your fingertips</p>
-                <a href="#booking" class="btn-primary">Book Now</a>
+                <a href="#booking" class="btn btn-primary">Book Now</a>
             </div>
         </div>
     </section>

@@ -134,49 +134,7 @@
     margin-bottom: 30px;
 }
 
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    border: none;
-    text-decoration: none;
-}
 
-.btn i {
-    margin-right: 8px;
-}
-
-.btn-primary {
-    background: var(--primary-color);
-    color: var(--secondary-color);
-}
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-}
-
-.btn-secondary {
-    background: var(--gray-color);
-    color: var(--text-color);
-}
-
-.btn-secondary:hover {
-    background: var(--gray-dark);
-}
-
-.btn-danger {
-    background: var(--danger-color);
-    color: white;
-}
-
-.btn-danger:hover {
-    background: #d32f2f;
-}
 
 .filter-controls {
     display: flex;
@@ -438,6 +396,7 @@
     background: transparent;
     border: 1px solid var(--danger-color);
     color: var(--danger-color);
+    width: -webkit-fill-available;
 }
 
 .btn-cancel:hover {

@@ -52,7 +52,7 @@
 
                 <!-- Booking Actions -->
                 <div class="booking-actions">
-                    <a href="{{ route('booking.create') }}" class="btn btn-primary">
+                    <a href="{{ route('booking.create') }}" class="btn btn-primary" style="width: 210px;">
                         <i class="fas fa-plus"></i> New Booking
                     </a>
 

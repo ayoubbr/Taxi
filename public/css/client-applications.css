@@ -1,0 +1,751 @@
+:root {
+    --primary-color: #ffcc00;
+    --primary-dark: #e6b800;
+    --secondary-color: #333333;
+    --accent-color: #3a7bd5;
+    --accent-gradient: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    --success-color: #00c853;
+    --warning-color: #ff9100;
+    --danger-color: #ff3d00;
+    --info-color: #2979ff;
+    --text-color: #333333;
+    --text-light: #6e6e6e;
+    --text-lighter: #9e9e9e;
+    --light-color: #ffffff;
+    --gray-color: #f5f5f5;
+    --gray-dark: #e0e0e0;
+    --border-color: #e0e0e0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --border-radius-sm: 4px;
+    --border-radius: 8px;
+    --border-radius-lg: 16px;
+    --transition: all 0.3s ease;
+}
+
+/* Page Layout */
+.applications-page {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding-bottom: 60px;
+}
+
+/* Page Header */
+.page-header {
+    background: var(--secondary-color);
+    color: white;
+    padding: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    margin-right: 15px;
+    transition: var(--transition);
+}
+
+.back-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.header-info h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.header-info p {
+    margin: 5px 0 0;
+    opacity: 0.8;
+    font-family: monospace;
+}
+
+.booking-summary {
+    display: flex;
+    gap: 20px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: var(--border-radius);
+    font-size: 14px;
+}
+
+.summary-item i {
+    margin-right: 8px;
+}
+
+/* Page Content */
+.page-content {
+    padding: 30px 0;
+}
+
+/* Trip Summary Card */
+.trip-summary-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.trip-summary-card h2 {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+}
+
+.trip-route {
+    margin-bottom: 20px;
+}
+
+.route-point {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.point-marker {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.pickup .point-marker {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.destination .point-marker {
+    background: var(--accent-color);
+    color: white;
+}
+
+.point-details h4 {
+    margin: 0 0 5px;
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.point-details p {
+    margin: 0 0 5px;
+    font-weight: 600;
+}
+
+.city {
+    font-size: 12px;
+    color: var(--text-lighter);
+}
+
+.route-divider {
+    display: flex;
+    align-items: center;
+    margin: 0 0 15px 15px;
+    position: relative;
+}
+
+.route-line {
+    width: 2px;
+    height: 30px;
+    background: var(--border-color);
+}
+
+.route-distance {
+    position: absolute;
+    left: 20px;
+    background: white;
+    padding: 0 10px;
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.trip-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.meta-item i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Applications Section */
+.applications-section {
+    margin-bottom: 30px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.applications-count {
+    display: flex;
+    align-items: center;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.applications-count .count {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.applications-count .label {
+    font-size: 14px;
+}
+
+/* Applications Grid */
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+}
+
+.application-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.application-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Driver Header */
+.driver-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.driver-profile {
+    display: flex;
+    align-items: center;
+}
+
+.driver-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--gray-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 24px;
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+.driver-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.driver-info h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+}
+
+.driver-rating {
+    display: flex;
+    align-items: center;
+    color: var(--warning-color);
+    margin-bottom: 5px;
+}
+
+.driver-rating .rating-value {
+    margin-left: 5px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.driver-experience {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.driver-experience i {
+    margin-right: 5px;
+}
+
+.application-time {
+    text-align: right;
+    font-size: 12px;
+}
+
+.time-label {
+    display: block;
+    color: var(--text-lighter);
+    margin-bottom: 2px;
+}
+
+.time-value {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Taxi Details */
+.taxi-details {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.taxi-details h4 {
+    margin: 0 0 15px;
+    font-size: 16px;
+}
+
+.taxi-info {
+    display: flex;
+    gap: 15px;
+}
+
+.taxi-image {
+    width: 80px;
+    height: 60px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.taxi-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.taxi-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--gray-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-size: 24px;
+}
+
+.taxi-specs {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.spec-item {
+    display: flex;
+    font-size: 14px;
+    gap: 6px;
+}
+
+.spec-label {
+    color: var(--text-light);
+}
+
+.spec-value {
+    font-weight: 500;
+}
+
+/* Driver Features */
+.driver-features {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.driver-features h4 {
+    margin: 0 0 15px;
+    font-size: 16px;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.feature-item i {
+    margin-right: 8px;
+    color: var(--success-color);
+    width: 16px;
+}
+
+/* Driver Message */
+.driver-message {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--gray-color);
+}
+
+.driver-message h4 {
+    margin: 0 0 10px;
+    font-size: 16px;
+}
+
+.driver-message p {
+    margin: 0;
+    font-style: italic;
+    color: var(--text-light);
+}
+
+/* Application Actions */
+.application-actions {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.price-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--gray-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--gray-dark);
+}
+
+.accept-form {
+    margin: 0;
+}
+
+/* Empty State */
+.no-applications {
+    text-align: center;
+}
+
+.empty-state {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.empty-icon {
+    font-size: 60px;
+    color: var(--text-lighter);
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    margin: 0 0 15px;
+    font-size: 24px;
+}
+
+.empty-state p {
+    margin: 0 0 10px;
+    color: var(--text-light);
+}
+
+.empty-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.contact-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: var(--gray-color);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.contact-option:hover {
+    background: var(--gray-dark);
+}
+
+.contact-option i {
+    margin-right: 15px;
+    font-size: 20px;
+    color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .applications-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .spec-item {
+        /* display: flex; */
+        justify-content: space-between;
+        /* font-size: 14px; */
+    }
+
+    .booking-summary {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .applications-count {
+        align-self: flex-start;
+    }
+
+    .driver-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .application-time {
+        text-align: left;
+    }
+
+    .taxi-info {
+        flex-direction: column;
+    }
+
+    .taxi-specs {
+        grid-template-columns: 1fr;
+    }
+
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+
+    .application-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 576px) {
+    .trip-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .empty-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .contact-options {
+        gap: 10px;
+    }
+}

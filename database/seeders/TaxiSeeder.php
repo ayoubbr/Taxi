@@ -27,15 +27,15 @@ class TaxiSeeder extends Seeder
             'is_available' => true,
         ]);
 
-        Taxi::create([
-            'license_plate' => 'DEF-555',
-            'model' => 'BYD Star',
-            'type' => 'luxe',
-            'capacity' => 4,
-            'city' => 'Marrakech',
-            'driver_id' => $driver1 ? $driver1->id : null,
-            'is_available' => true,
-        ]);
+        // Taxi::create([
+        //     'license_plate' => 'DEF-555',
+        //     'model' => 'BYD Star',
+        //     'type' => 'luxe',
+        //     'capacity' => 4,
+        //     'city' => 'Marrakech',
+        //     'driver_id' => $driver1 ? $driver1->id : null,
+        //     'is_available' => true,
+        // ]);
 
         Taxi::create([
             'license_plate' => 'XYZ-789',
@@ -47,14 +47,14 @@ class TaxiSeeder extends Seeder
             'is_available' => true,
         ]);
 
-        Taxi::create([
-            'license_plate' => 'LXC-456',
-            'model' => 'BMW 7 Series',
-            'type' => 'luxe',
-            'capacity' => 4,
-            'city' => 'Casablanca',
-            'driver_id' => $driver2 ? $driver2->id : null,
-            'is_available' => true,
-        ]);
+        // Taxi::create([
+        //     'license_plate' => 'LXC-456',
+        //     'model' => 'BMW 7 Series',
+        //     'type' => 'luxe',
+        //     'capacity' => 4,
+        //     'city' => 'Casablanca',
+        //     'driver_id' => $driver2 ? $driver2->id : null,
+        //     'is_available' => true,
+        // ]);
     }
 }

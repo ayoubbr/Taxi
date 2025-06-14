@@ -277,9 +277,11 @@
                         <a href="{{ route('booking.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> New Booking
                         </a>
-                        <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Show Applications
-                        </a>
+                        @if ($booking->status == 'PENDING')
+                            <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary">
+                                <i class="fa-solid fa-eye"></i> Show Applications
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -7,8 +7,13 @@
 @section('content')
 <main class="dashboard-main">
     <header class="dashboard-header">
-        <h1>Available Bookings</h1>
-        <p>Find new rides to apply for.</p>
+        <div class="header-left" id="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                {{-- <h1>Driver Dashboard</h1> --}}
+                <h1>Available Bookings</h1>
+            </div>
     </header>
 
     <div class="dashboard-content">

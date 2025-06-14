@@ -19,8 +19,6 @@
 </head>
 
 <body>
-    {{-- @include('partials.header') --}}
-
     <div class="flash-messages-container">
         @include('partials.flash-messages')
     </div>
@@ -42,9 +40,12 @@
                         <a href="{{ route('driver.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                     </li>
                     <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
-                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> My Rides</a>
+                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> Availble Rides</a>
                     </li>
-                    <li>
+                    {{-- <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
+                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> My Rides</a>
+                    </li> --}}
+                    {{-- <li>
                         <a href="#"><i class="fas fa-history"></i> History</a>
                     </li>
                     <li>
@@ -52,7 +53,7 @@
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </nav>
 
@@ -71,6 +72,62 @@
 
     @yield('js')
     <script src="{{ asset('js/flash-messages.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.querySelector('.dashboard-sidebar');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                    // document.getElementById('header-left')
+                    menuToggle.classList.toggle('translate-header-left');
+                });
+            }
+
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const bookingCards = document.querySelectorAll('.booking-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter cards
+                    bookingCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-status') ===
+                            filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Simulate loading state for direction buttons
+            const directionButtons = document.querySelectorAll('.btn-directions, .btn-navigate');
+
+            directionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                        alert('Navigation would open in a maps application in production.');
+                    }, 1500);
+                });
+            });
+        });
+    </script>
     {{-- <script src="{{ asset('js/home.js') }}"></script> --}}
 </body>
 
