@@ -173,26 +173,28 @@
     </div>
 
     <!-- Cancel Booking Modal -->
-    <div class="modal" id="cancelModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Cancel Booking</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to cancel this booking? This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">No, Keep It</button>
-                <form id="cancelForm" action="{{ route('bookings.cancel', $booking->booking_uuid) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="status" value="CANCELLED">
-                    <button type="submit" class="btn btn-danger">Yes, Cancel Booking</button>
-                </form>
+    @if (isset($booking))
+        <div class="modal" id="cancelModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Cancel Booking</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this booking? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal">No, Keep It</button>
+                    <form id="cancelForm" action="{{ route('bookings.cancel', $booking->booking_uuid) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="CANCELLED">
+                        <button type="submit" class="btn btn-danger">Yes, Cancel Booking</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('js')
