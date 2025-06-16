@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\BookingApplication;
-use App\Notifications\DriverAppliedNotification; // <-- 1. Import the new notification class
+use App\Notifications\DriverAppliedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification; // <-- 2. Import the Notification facade
+use Illuminate\Support\Facades\Notification;
 
 class BookingApplicationController extends Controller
 {
@@ -41,8 +41,7 @@ class BookingApplicationController extends Controller
         ]);
 
         // --- 3. Notify the client that a new driver has applied ---
-        // We use the `client` relationship we defined on the Booking model
-        if ($booking->client) { // Make sure a client is associated with the booking
+        if ($booking->client) {
             Notification::send($booking->client, new DriverAppliedNotification($booking, $driver));
         }
 

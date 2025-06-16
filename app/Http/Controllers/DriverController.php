@@ -29,7 +29,7 @@ class DriverController extends Controller
         $driverId = Auth::id();
 
         $bookings = Booking::where('assigned_driver_id', $driverId)
-            // ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS']) // Show relevant statuses
+            ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
             ->orderBy('pickup_datetime', 'asc')
             ->get();
 
@@ -44,43 +44,42 @@ class DriverController extends Controller
         $driver = Auth::user();
         $driverTaxi = $driver->taxi;
 
-        // dd($driverTaxi);
-
         if (!$driverTaxi) {
             // Handle case where driver has no taxi assigned
             return view('driver.available-bookings')->with('bookings', collect());
         }
 
+        $driverCity = $driverTaxi->city;
         $proximityMap = config('cities.proximity_map');
+        $neighborCities = $proximityMap[$driverCity] ?? [];
 
-        // Flatten the proximity map to get all searchable cities based on driver's city
-        $searchableCities = collect([$driverTaxi->city]);
-        if (isset($proximityMap[$driverTaxi->city])) {
-            $searchableCities = $searchableCities->merge($proximityMap[$driverTaxi->city]);
-        }
-        // dd($searchableCities);
-
-        // This is a simplified tier search. For the timed tier expansion,
-        // the scheduled command will update booking's `search_tier`
         $bookings = Booking::where('status', 'PENDING')
             ->where('taxi_type', $driverTaxi->type)
-            // This logic ensures drivers only see bookings in tiers they have access to.
-            ->where(function ($query) use ($searchableCities, $proximityMap) {
-                $query->where(function ($q) use ($searchableCities) {
-                    // Tier 0 and 1
-                    $q->whereIn('pickup_city', $searchableCities)
-                        ->where('search_tier', '<=', 1);
-                })->orWhere('search_tier', '>=', 2); // Tier 2+ is open to all
+            ->where(function ($query) use ($driverCity, $neighborCities) {
+
+                // Condition 1: Show bookings located in the driver's own city.
+                // These are visible immediately (search_tier >= 0).
+                $query->where('pickup_city', $driverCity);
+
+                // Condition 2: Show bookings in neighboring cities ONLY IF their
+                // search tier has been increased to 1 or higher.
+                $query->orWhere(function ($q) use ($neighborCities) {
+                    $q->whereIn('pickup_city', $neighborCities)
+                        ->where('search_tier', '>=', 1);
+                });
+
+                // Condition 3: Show bookings if their search tier has become global (2 or higher),
+                // regardless of the driver's location. This covers cities that are not immediate neighbors.
+                $query->orWhere('search_tier', '>=', 2);
             })
+            // Only show bookings that are in the future.
+            // I will move sub minutes in PRODUCTION ***************************** 
             ->where('pickup_datetime', '>', now()->subMinutes(1440))
             ->orderBy('pickup_datetime', 'asc')
             ->get();
-        // dd($bookings);
-
 
         return view('driver.available-bookings', compact('bookings'));
     }
-
 
     /**
      * Show form for driver to scan QR code.
@@ -95,10 +94,9 @@ class DriverController extends Controller
      */
     public function processQrCodeScan(Request $request)
     {
-        $scannedQrData = $request->input('qr_data'); // Get the scanned data
-        $expectedBookingUuid = $request->input('expected_booking_uuid'); // Get the expected UUID from hidden input
-        // dd($scannedQrData);
-        // dd($expectedBookingUuid);
+        $scannedQrData = $request->input('qr_data'); 
+        $expectedBookingUuid = $request->input('expected_booking_uuid'); 
+        
         Log::info('QR Scan Data Received: ' . $scannedQrData . ', Expected UUID: ' . $expectedBookingUuid);
 
         // Basic validation
@@ -143,7 +141,6 @@ class DriverController extends Controller
 
         // --- Update Booking Status Logic ---
         try {
-            // Example: Update status from ASSIGNED to IN_PROGRESS
             if ($booking->status === 'ASSIGNED') {
                 $booking->status = 'IN_PROGRESS';
                 $booking->save();
@@ -157,24 +154,23 @@ class DriverController extends Controller
         }
     }
 
-    // You'll add methods for 'Arrived', 'Complete', etc. later
-    public function updateBookingStatus(Request $request, Booking $booking)
-    {
-        $request->validate([
-            'status' => 'required|in:IN_PROGRESS,COMPLETED,CANCELLED', // Define allowed transitions
-        ]);
+    // public function updateBookingStatus(Request $request, Booking $booking)
+    // {
+    //     $request->validate([
+    //         'status' => 'required|in:IN_PROGRESS,COMPLETED,CANCELLED', // Define allowed transitions
+    //     ]);
 
-        if ($booking->assigned_driver_id !== Auth::id()) {
-            abort(403, 'You are not authorized to update this booking.');
-        }
+    //     if ($booking->assigned_driver_id !== Auth::id()) {
+    //         abort(403, 'You are not authorized to update this booking.');
+    //     }
 
-        // Add logic for valid status transitions
-        if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
-            $booking->status = 'COMPLETED';
-            $booking->save();
-            return back()->with('success', 'Ride completed!');
-        }
+    //     // Add logic for valid status transitions
+    //     if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
+    //         $booking->status = 'COMPLETED';
+    //         $booking->save();
+    //         return back()->with('success', 'Ride completed!');
+    //     }
 
-        return back()->with('error', 'Invalid status transition.');
-    }
+    //     return back()->with('error', 'Invalid status transition.');
+    // }
 }

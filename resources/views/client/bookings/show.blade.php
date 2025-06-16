@@ -274,7 +274,7 @@
                             </button>
                         @endif
 
-                        <a href="{{ route('booking.create') }}" class="btn btn-primary">
+                        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> New Booking
                         </a>
                         @if ($booking->status == 'PENDING')

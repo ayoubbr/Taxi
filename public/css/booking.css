@@ -14,7 +14,7 @@
      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
      padding: 40px;
      text-align: center;
-     max-width: 600px;
+     max-width: 640px;
      width: 100%;
  }
 
@@ -102,10 +102,13 @@
 
  .print-save-buttons .btn-primary {
      margin: 0 10px;
-     padding: 12px 25px;
+     padding: 6px 15px;
      font-size: 1em;
      height: 60px;
      gap: 8px;
+     border-radius: 6px;
+     border: none;
+     cursor: pointer;
  }
 
  @media (max-width: 768px) {
@@ -132,4 +135,13 @@
      .booking-details ul li strong {
          margin-bottom: 5px;
      }
+
+      .print-save-buttons{
+        flex-direction: column;
+        gap: 15px;
+      }
+
+       .print-save-buttons .btn-primary{
+        width: 100%;
+       }
  }

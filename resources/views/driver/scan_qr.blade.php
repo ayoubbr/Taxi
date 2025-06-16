@@ -1,7 +1,9 @@
 @extends('driver.layout')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/home.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
+
     <style>
         .qr-scan-container {
             display: flex;
@@ -11,6 +13,9 @@
             padding: 40px 20px;
             min-height: 80vh;
             background-color: #f8f9fa;
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
         }
 
         .qr-scan-card {
@@ -116,6 +121,21 @@
 
         .manual-input button:hover {
             background-color: #0056b3;
+        }
+
+        .btn-primary {
+            padding: 12px 25px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        @media (max-width: 768px) {
+            .qr-scan-container {
+                margin-left: 0;
+            }
         }
     </style>
 @endsection

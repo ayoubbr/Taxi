@@ -60,9 +60,12 @@
             </div>
 
             <div class="print-save-buttons flex-center">
-                <button type="button" class="btn-primary flex-center" onclick="window.print()">
+                {{-- <button type="button" class="btn-primary flex-center" onclick="window.print()">
                     <i class="fas fa-print"></i> Print Details
-                </button>
+                </button> --}}
+                <a href="{{ route('client.bookings.show', $booking->booking_uuid) }}" class="btn-primary flex-center">
+                    <i class="fas fa-eye"></i> Show Details
+                </a>
                 <a href="{{ route('home') }}" class="btn-primary flex-center" style="background-color: #98a1a8;">
                     <i class="fas fa-home"></i> Back to Home
                 </a>
