@@ -5,6 +5,7 @@
     --accent-color: #3a7bd5;
     --accent-gradient: linear-gradient(135deg, #3a7bd5, #00d2ff);
     --success-color: #00c853;
+    --background-color: #05135e;
     --warning-color: #ff9100;
     --danger-color: #ff3d00;
     --info-color: #2979ff;
@@ -118,17 +119,24 @@ img {
 }
 
 .btn-login {
-    background-color: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 8px 16px;
-    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    border: 2px solid var(--background-color);
+    color: var(--primary-color) !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
     font-weight: 700;
+    font-size: 18px !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 140px;
+    text-align: center;
 }
 
 .btn-login:hover {
     background-color: var(--primary-color);
-    color: var(--secondary-color);
+    color: var(--secondary-color) !important;
 }
 
 .btn-secondary {

@@ -52,7 +52,7 @@
 
                 <!-- Booking Actions -->
                 <div class="booking-actions">
-                    <a href="{{ route('booking.create') }}" class="btn btn-primary" style="width: 210px;">
+                    <a href="{{ route('bookings.create') }}" class="btn btn-primary" style="width: 210px;">
                         <i class="fas fa-plus"></i> New Booking
                     </a>
 
@@ -154,7 +154,7 @@
                                 </div>
                                 <h3>No Bookings Found</h3>
                                 <p>You haven't made any taxi bookings yet.</p>
-                                <a href="{{ route('booking.create') }}" class="btn btn-primary">
+                                <a href="{{ route('bookings.create') }}" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Book a Taxi Now
                                 </a>
                             </div>

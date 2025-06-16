@@ -33,7 +33,7 @@ class BookingController extends Controller
 
     public function create()
     {
-        return view('bookings.create'); // If you want a dedicated booking page
+        return view('client.bookings.create'); // If you want a dedicated booking page
     }
 
     // public function store(Request $request)

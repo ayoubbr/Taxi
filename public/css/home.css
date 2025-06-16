@@ -20,7 +20,7 @@
 /* Hero Section */
 .hero {
 	padding: 0;
-	background: linear-gradient(135deg, #3e70bb 0%, #0a3b8a 100%);
+	background: linear-gradient(135deg, var(--background-color) 0%, #0a3b8a 100%);
 	min-height: 70vh;
 	display: flex;
 	align-items: center;
@@ -358,7 +358,7 @@
 /* Media Queries */
 @media (min-width: 768px) {
 	.menu-toggle {
-		display: none;
+		display: none;	
 	}
 
 	.nav-menu {
@@ -368,6 +368,7 @@
 		background: none;
 		padding: 0;
 		min-width: auto;
+		align-items: center;
 	}
 
 	.nav-menu li {
@@ -427,5 +428,58 @@
 
 	.hero-content h2 {
 		font-size: 3rem;
+	}
+}
+
+/* New Booking form styles */
+
+.container {
+	position: relative;
+	z-index: 1;
+}
+
+.booking-card {
+	flex-direction: column;
+}
+
+.booking-card {
+	max-width: 750px;
+}
+
+.form-group {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	gap: 20px
+}
+
+.booking-form label {
+	min-width: fit-content;
+	margin-bottom: 0px;
+}
+
+.booking-form .form-row {
+	margin-bottom: 0px;
+}
+
+@media (max-width: 728px) {
+	.dashboard-content .container {
+		padding: 7px;
+	}
+
+	.form-group {
+		gap: 10px;
+		flex-direction: column;
+		justify-content: start;
+		align-items: start;
+	}
+
+	.booking-form label {
+		min-width: fit-content;
+	}
+
+	.booking-form .form-row {
+		margin-bottom: 1.5rem;
 	}
 }

@@ -30,7 +30,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Booking Routes
 Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
-Route::get('/bookings/create', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('bookings.confirmation');
 

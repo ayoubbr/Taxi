@@ -8,7 +8,7 @@
 /* Sidebar */
 .dashboard-sidebar {
     width: var(--sidebar-width);
-    background: #05135e;
+    background: var(--background-color);
     color: var(--light-color);
     position: fixed;
     height: 100vh;
