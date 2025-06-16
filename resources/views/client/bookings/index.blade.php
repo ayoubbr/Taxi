@@ -140,7 +140,7 @@
                                 </a>
 
                                 @if (in_array($booking->status, ['PENDING', 'ASSIGNED']))
-                                    <button class="btn btn-cancel" data-booking-id="{{ $booking->id }}">
+                                    <button class="btn btn-cancel" data-booking-id="{{ $booking->booking_uuid }}">
                                         <i class="fas fa-times"></i> Cancel
                                     </button>
                                 @endif
@@ -184,7 +184,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary close-modal">No, Keep It</button>
-                <form id="cancelForm" action="" method="POST">
+                <form id="cancelForm" action="{{ route('bookings.cancel', $booking->booking_uuid) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="status" value="CANCELLED">

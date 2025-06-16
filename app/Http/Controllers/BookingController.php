@@ -6,12 +6,14 @@ use App\Models\Booking;
 use App\Models\BookingApplication;
 use App\Models\User;
 use App\Notifications\BookingAssignedNotification;
+use App\Notifications\BookingCancelledNotification;
 use App\Notifications\NewBookingAvailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class BookingController extends Controller
 {
@@ -29,7 +31,35 @@ class BookingController extends Controller
         return view('client.bookings.show', compact('booking', 'qrCodeSvg'));
     }
 
-    public function cancel() {}
+    public function cancel($uuid)
+    {
+        $booking = Booking::where('booking_uuid', $uuid)->firstOrFail();
+
+        // Ensure only the booking owner can cancel
+        if ($booking->client_id !== Auth::id()) {
+            abort(403, 'You are not authorized to cancel this booking.');
+        }
+
+        // Only allow cancellation if status is PENDING or ASSIGNED
+        if (!in_array($booking->status, ['PENDING', 'ASSIGNED'])) {
+            return redirect()->back()->with('error', 'This booking cannot be cancelled.');
+        }
+
+        // If the booking was assigned, notify the driver
+        if ($booking->status === 'ASSIGNED' && $booking->assigned_driver_id) {
+            $driver = User::find($booking->assigned_driver_id);
+            Notification::send($driver, new BookingCancelledNotification($booking));
+        }
+
+        // Mark booking as cancelled
+        $booking->status = 'CANCELLED';
+        $booking->save();
+
+        // Optional: Delete applications if still pending
+        $booking->applications()->delete();
+
+        return redirect()->route('client.bookings.index')->with('success', 'Booking cancelled successfully.');
+    }
 
     public function create()
     {

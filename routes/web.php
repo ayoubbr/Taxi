@@ -46,9 +46,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth', 'client')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
     Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
-    Route::put('/bookings/{uuid}', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
     Route::get('/bookings/{booking}/applications', [BookingController::class, 'showApplications'])->name('client.bookings.applications');
     Route::post('/bookings/{booking}/applications/{application}/accept', [BookingController::class, 'acceptApplication'])->name('client.bookings.accept_application');
+    Route::put('/bookings/{uuid}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 });
 
 
