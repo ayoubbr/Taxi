@@ -375,7 +375,7 @@
 }
 
 .status-ASSIGNED {
-    background-color: var(--info-color);
+    background-color: var(--primary-color);
     color: white;
 }
 

@@ -157,36 +157,35 @@ class DriverController extends Controller
         if (!$driverTaxi) {
             return view('driver.available-bookings')->with('error', 'You must have a taxi assigned to view available bookings.');
         }
-        
+
         $query = Booking::where('status', 'PENDING')
-        ->where('taxi_type', $driverTaxi->type)
-        // ->whereDoesntHave('applications', function ($q) use ($driverId) {
-        //     $q->where('driver_id', Auth::id());
-        // })
-        ->when($request->filled('date'), function ($q) use ($request) {
-            $q->whereDate('pickup_datetime', $request->input('date'));
-        })
-        ->when($request->filled('pickup_location'), function ($q) use ($request) {
-            $q->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
-        })
-        ->when($request->filled('destination'), function ($q) use ($request) {
-            $q->where('destination', 'like', '%' . $request->input('destination') . '%');
-        })
-        ->when($request->filled('client_name'), function ($q) use ($request) {
-            $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
-        })
-        ;
-        
-        
+            ->where('taxi_type', $driverTaxi->type)
+            // ->whereDoesntHave('applications', function ($q) use ($driverId) {
+            //     $q->where('driver_id', Auth::id());
+            // })
+            ->when($request->filled('date'), function ($q) use ($request) {
+                $q->whereDate('pickup_datetime', $request->input('date'));
+            })
+            ->when($request->filled('pickup_location'), function ($q) use ($request) {
+                $q->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
+            })
+            ->when($request->filled('destination'), function ($q) use ($request) {
+                $q->where('destination', 'like', '%' . $request->input('destination') . '%');
+            })
+            ->when($request->filled('client_name'), function ($q) use ($request) {
+                $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+            });
+
+
         // Implement city-based filtering if needed, potentially from a configuration or Cities model
         if ($request->filled('pickup_city')) {
             $query->where('pickup_city', $request->input('pickup_city'));
         }
-        
-        
+
+
         $bookings = $query->orderBy('pickup_datetime', 'asc')
-        ->paginate(6); // Paginate with 10 items per page
-        
+            ->paginate(6); // Paginate with 10 items per page
+
         // dd($request->date);
 
         return view('driver.available-bookings', compact('bookings'));
@@ -265,23 +264,23 @@ class DriverController extends Controller
         }
     }
 
-    // public function updateBookingStatus(Request $request, Booking $booking)
-    // {
-    //     $request->validate([
-    //         'status' => 'required|in:IN_PROGRESS,COMPLETED,CANCELLED', // Define allowed transitions
-    //     ]);
+    public function updateBookingStatus(Request $request, Booking $booking)
+    {
+        $request->validate([
+            'status' => 'required|in:IN_PROGRESS,COMPLETED,CANCELLED', // Define allowed transitions
+        ]);
 
-    //     if ($booking->assigned_driver_id !== Auth::id()) {
-    //         abort(403, 'You are not authorized to update this booking.');
-    //     }
+        if ($booking->assigned_driver_id !== Auth::id()) {
+            abort(403, 'You are not authorized to update this booking.');
+        }
 
-    //     // Add logic for valid status transitions
-    //     if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
-    //         $booking->status = 'COMPLETED';
-    //         $booking->save();
-    //         return back()->with('success', 'Ride completed!');
-    //     }
+        // Add logic for valid status transitions
+        if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
+            $booking->status = 'COMPLETED';
+            $booking->save();
+            return back()->with('success', 'Ride completed!');
+        }
 
-    //     return back()->with('error', 'Invalid status transition.');
-    // }
+        return back()->with('error', 'Invalid status transition.');
+    }
 }
