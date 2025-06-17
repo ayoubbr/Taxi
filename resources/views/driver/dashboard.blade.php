@@ -2,6 +2,58 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+    <style>
+        .filter-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-form .form-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .filter-form input[type="date"],
+        .filter-form input[type="text"],
+        .filter-form select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .filter-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -13,17 +65,6 @@
                 </button>
                 <h1>Driver Dashboard</h1>
             </div>
-            {{-- <div class="header-right">
-                    <div class="header-actions">
-                        <button class="btn-icon">
-                            <i class="fas fa-bell"></i>
-                            <span class="notification-badge">3</span>
-                        </button>
-                        <button class="btn-icon">
-                            <i class="fas fa-envelope"></i>
-                        </button>
-                    </div>
-                </div> --}}
         </header>
 
         <div class="dashboard-stats">
@@ -37,8 +78,8 @@
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-road"></i>
+                <div class="stat-icon in-progress-icon">
+                    <i class="fas fa-route"></i>
                 </div>
                 <div class="stat-content">
                     <h3>{{ $bookings->where('status', 'IN_PROGRESS')->count() }}</h3>
@@ -46,12 +87,12 @@
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">
+                <div class="stat-icon completed-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="stat-content">
                     <h3>{{ $bookings->where('status', 'COMPLETED')->count() }}</h3>
-                    <p>Completed Today</p>
+                    <p>Completed Rides</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -66,14 +107,42 @@
         </div>
 
         <div class="dashboard-content">
-            <div class="content-header">
-                <h2>Current Bookings</h2>
-                <div class="filter-controls">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="ASSIGNED">Assigned</button>
-                    <button class="filter-btn" data-filter="IN_PROGRESS">In Progress</button>
+            {{-- Filter Form --}}
+            <form action="{{ route('driver.dashboard') }}" method="GET" class="filter-form">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" value="{{ request('date') }}">
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="ALL" {{ request('status') == 'ALL' ? 'selected' : '' }}>All</option>
+                        <option value="ASSIGNED" {{ request('status') == 'ASSIGNED' ? 'selected' : '' }}>Assigned</option>
+                        <option value="IN_PROGRESS" {{ request('status') == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
+                        </option>
+                        <option value="COMPLETED" {{ request('status') == 'COMPLETED' ? 'selected' : '' }}>Completed
+                        </option>
+                        <option value="CANCELLED" {{ request('status') == 'CANCELLED' ? 'selected' : '' }}>Cancelled
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="client_name">Client Name</label>
+                    <input type="text" id="client_name" name="client_name" placeholder="Client Name"
+                        value="{{ request('client_name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="pickup_location">Pickup Location</label>
+                    <input type="text" id="pickup_location" name="pickup_location" placeholder="Pickup Location"
+                        value="{{ request('pickup_location') }}">
+                </div>
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <input type="text" id="destination" name="destination" placeholder="Destination"
+                        value="{{ request('destination') }}">
+                </div>
+                <button type="submit">Apply Filters</button>
+            </form>
 
             <div class="bookings-container">
                 @forelse ($bookings as $booking)
@@ -83,77 +152,60 @@
                                 <span class="label">Booking ID:</span>
                                 <span class="value">{{ substr($booking->booking_uuid, 0, 8) }}</span>
                             </div>
-                            <div class="booking-status status-{{ $booking->status }}">
+                            <div class="booking-status status-{{ Str::slug($booking->status) }}">
                                 {{ str_replace('_', ' ', $booking->status) }}
                             </div>
                         </div>
-
                         <div class="booking-body">
-                            <div class="booking-client">
-                                <div class="client-avatar">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="client-info">
-                                    <h4>{{ $booking->client_name }}</h4>
-                                    <div class="taxi-type">
-                                        <i class="fas fa-taxi"></i> {{ ucfirst($booking->taxi_type) }}
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="booking-route">
                                 <div class="route-point pickup">
-                                    <div class="point-marker">A</div>
                                     <div class="point-details">
-                                        <h5>Pickup Location</h5>
-                                        <p>{{ $booking->pickup_location }}</p>
-                                        <span class="city">{{ $booking->pickup_city }}</span>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Pickup: {{ $booking->pickup_location }}</span>
                                     </div>
+                                    <span class="city">{{ $booking->pickup_city }}</span>
                                 </div>
-
-                                <div class="route-line">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </div>
-
+                                <div class="arrow-icon"><i class="fas fa-arrow-right"></i></div>
                                 <div class="route-point destination">
-                                    <div class="point-marker">B</div>
                                     <div class="point-details">
-                                        <h5>Destination</h5>
-                                        <p>{{ $booking->destination }}</p>
+                                        <i class="fas fa-location-arrow"></i>
+                                        <span>Destination: {{ $booking->destination }}</span>
                                     </div>
+                                    <span class="city">{{ $booking->destination_city }}</span>
                                 </div>
                             </div>
-
                             <div class="booking-details">
                                 <div class="detail-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>{{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('d M Y') }}</span>
+                                    <i class="fas fa-user"></i>
+                                    <span>{{ $booking->client_name }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ $booking->pickup_datetime->format('M d, Y') }}</span>
                                 </div>
                                 <div class="detail-item">
                                     <i class="fas fa-clock"></i>
-                                    <span>{{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('H:i') }}</span>
+                                    <span>{{ $booking->pickup_datetime->format('H:i') }}</span>
                                 </div>
-                                @if ($booking->estimated_fare)
-                                    <div class="detail-item">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>${{ number_format($booking->estimated_fare, 2) }}</span>
-                                    </div>
-                                @endif
+                                <div class="detail-item">
+                                    <i class="fas fa-taxi"></i>
+                                    <span>{{ ucfirst($booking->taxi_type) }}</span>
+                                </div>
                             </div>
                         </div>
-
                         <div class="booking-actions">
                             @if ($booking->status === 'ASSIGNED')
-                                <a href="{{ route('driver.scan.qr.form', ['booking_uuid' => $booking->booking_uuid]) }}"
+                                <a href="{{ route('driver.scan.qr.form', $booking->booking_uuid) }}"
                                     class="btn btn-primary">
-                                    <i class="fas fa-qrcode"></i> Scan QR Code
+                                    <i class="fas fa-qrcode"></i> Scan QR
                                 </a>
                                 <button class="btn btn-secondary btn-directions">
-                                    <i class="fas fa-directions"></i> Get Directions
+                                    <i class="fas fa-map-marked-alt"></i> Get Directions
                                 </button>
                             @elseif ($booking->status === 'IN_PROGRESS')
                                 <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
                                     @csrf
+                                    @method('POST') {{-- Use POST for status update --}}
                                     <input type="hidden" name="status" value="COMPLETED">
                                     <button type="submit" class="btn btn-success">
                                         <i class="fas fa-check-circle"></i> Complete Ride
@@ -162,6 +214,18 @@
                                 <button class="btn btn-secondary btn-navigate">
                                     <i class="fas fa-map-marked-alt"></i> Navigate
                                 </button>
+                            @endif
+                            @if ($booking->status === 'ASSIGNED' || $booking->status === 'IN_PROGRESS')
+                                <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" name="status" value="CANCELLED">
+                                    <button type="submit" class="btn btn-danger"
+                                        style="width: -webkit-fill-available;">
+                                        <i class="fas fa-times-circle"></i> Cancel Booking
+                                    </button>
+                                </form>
                             @endif
                         </div>
                     </div>
@@ -177,6 +241,11 @@
                         </div>
                     </div>
                 @endforelse
+            </div>
+
+            {{-- Pagination Links --}}
+            <div class="pagination-links">
+                {{ $bookings->links() }}
             </div>
         </div>
     </main>

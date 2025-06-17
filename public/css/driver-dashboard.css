@@ -379,7 +379,7 @@
 }
 
 .status-PENDING {
-    background-color: var(--secondary-color);
+    background-color: var(--info-color);
     color: white;
 }
 
@@ -396,10 +396,6 @@
 .status-CANCELLED {
     background-color: var(--danger-color);
     color: white;
-}
-
-.booking-body {
-    padding: 24px;
 }
 
 .booking-client {
@@ -450,7 +446,7 @@
 .route-point {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
 }
 
 .route-point:last-child {

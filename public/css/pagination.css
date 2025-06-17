@@ -209,6 +209,10 @@
     box-shadow: none !important;
 }
 
+.page-item.active {
+    width: 65px;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
 
@@ -216,6 +220,7 @@
     .pagination-links nav {
         gap: 4px;
         padding: 8px 12px;
+        flex-wrap: wrap;
     }
 
     .pagination .page-link,
@@ -230,11 +235,19 @@
     /* Hide page numbers on very small screens, keep only prev/next */
     @media (max-width: 480px) {
 
-        .pagination .page-item:not(.disabled):not(.active) .page-link:not([rel="prev"]):not([rel="next"]),
+        /* .pagination .page-item:not(.disabled):not(.active) .page-link:not([rel="prev"]):not([rel="next"]),
         .pagination-links nav a:not([rel="prev"]):not([rel="next"]),
         .pagination-links nav span:not([aria-current]):not([rel="prev"]):not([rel="next"]) {
             display: none;
         }
+
+
+
+        .pagination .page-item:not(.disabled):not(.active) .page-link:not([rel="prev"]):not([rel="next"]),
+        .pagination-links nav a:not([rel="prev"]):not([rel="next"]),
+        .pagination-links nav span:not([aria-current]):not([rel="prev"]):not([rel="next"]) {
+            display: none;
+        } */
 
         /* Show only first, active, last, and navigation */
         .pagination .page-item:first-child .page-link,

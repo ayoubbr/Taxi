@@ -24,14 +24,41 @@ class DriverController extends Controller
     /**
      * Display a list of bookings assigned to the authenticated driver.
      */
-    public function assignedBookings()
+    // public function assignedBookings()
+    // {
+    //     $driverId = Auth::id();
+
+    //     $bookings = Booking::where('assigned_driver_id', $driverId)
+    //         ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
+    //         ->orderBy('pickup_datetime', 'asc')
+    //         ->get();
+
+    //     return view('driver.dashboard', compact('bookings'));
+    // }
+
+    public function assignedBookings(Request $request)
     {
         $driverId = Auth::id();
 
         $bookings = Booking::where('assigned_driver_id', $driverId)
             ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
+            ->when($request->filled('date'), function ($query) use ($request) {
+                $query->whereDate('pickup_datetime', $request->input('date'));
+            })
+            ->when($request->filled('status') && $request->input('status') !== 'ALL', function ($query) use ($request) {
+                $query->where('status', $request->input('status'));
+            })
+            ->when($request->filled('client_name'), function ($query) use ($request) {
+                $query->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+            })
+            ->when($request->filled('pickup_location'), function ($query) use ($request) {
+                $query->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
+            })
+            ->when($request->filled('destination'), function ($query) use ($request) {
+                $query->where('destination', 'like', '%' . $request->input('destination') . '%');
+            })
             ->orderBy('pickup_datetime', 'asc')
-            ->get();
+            ->paginate(1); // Paginate with 10 items per page
 
         return view('driver.dashboard', compact('bookings'));
     }
@@ -39,44 +66,128 @@ class DriverController extends Controller
     /**
      * Display a list of available bookings that a driver can apply for.
      */
-    public function availableBookings()
+    // public function availableBookings()
+    // {
+    //     $driver = Auth::user();
+    //     $driverTaxi = $driver->taxi;
+
+    //     if (!$driverTaxi) {
+    //         // Handle case where driver has no taxi assigned
+    //         return view('driver.available-bookings')->with('bookings', collect());
+    //     }
+
+    //     $driverCity = $driverTaxi->city;
+    //     $proximityMap = config('cities.proximity_map');
+    //     $neighborCities = $proximityMap[$driverCity] ?? [];
+
+    //     $bookings = Booking::where('status', 'PENDING')
+    //         ->where('taxi_type', $driverTaxi->type)
+    //         ->where(function ($query) use ($driverCity, $neighborCities) {
+
+    //             // Condition 1: Show bookings located in the driver's own city.
+    //             // These are visible immediately (search_tier >= 0).
+    //             $query->where('pickup_city', $driverCity);
+
+    //             // Condition 2: Show bookings in neighboring cities ONLY IF their
+    //             // search tier has been increased to 1 or higher.
+    //             $query->orWhere(function ($q) use ($neighborCities) {
+    //                 $q->whereIn('pickup_city', $neighborCities)
+    //                     ->where('search_tier', '>=', 1);
+    //             });
+
+    //             // Condition 3: Show bookings if their search tier has become global (2 or higher),
+    //             // regardless of the driver's location. This covers cities that are not immediate neighbors.
+    //             $query->orWhere('search_tier', '>=', 2);
+    //         })
+    //         // Only show bookings that are in the future.
+    //         // I will move sub minutes in PRODUCTION ***************************** 
+    //         ->where('pickup_datetime', '>', now()->subMinutes(1440))
+    //         ->orderBy('pickup_datetime', 'asc')
+    //         ->paginate(2);
+
+    //     return view('driver.available-bookings', compact('bookings'));
+    // }
+
+    // public function availableBookings(Request $request)
+    // {
+    //     $driver = Auth::user();
+    //     $driverTaxi = $driver->taxi;
+    //     $driverId = Auth::id();
+
+    //     if (!$driverTaxi) {
+    //         return view('driver.available-bookings')->with('error', 'You must have a taxi assigned to view available bookings.');
+    //     }
+
+    //     $query = Booking::where('status', 'PENDING')
+    //         ->where('taxi_type', $driverTaxi->taxi_type)
+    //         ->whereDoesntHave('applications', function ($q) use ($driverId) {
+    //             $q->where('driver_id', $driverId);
+    //         })
+    //         ->when($request->filled('date'), function ($q) use ($request) {
+    //             $q->whereDate('pickup_datetime', $request->input('date'));
+    //         })
+    //         ->when($request->filled('pickup_location'), function ($q) use ($request) {
+    //             $q->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
+    //         })
+    //         ->when($request->filled('destination'), function ($q) use ($request) {
+    //             $q->where('destination', 'like', '%' . $request->input('destination') . '%');
+    //         })
+    //         ->when($request->filled('client_name'), function ($q) use ($request) {
+    //             $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+    //         });
+
+
+    //     // Implement city-based filtering if needed, potentially from a configuration or Cities model
+    //     if ($request->filled('pickup_city')) {
+    //         $query->where('pickup_city', $request->input('pickup_city'));
+    //     }
+
+
+    //     $bookings = $query->orderBy('pickup_datetime', 'asc')
+    //         ->paginate(2); // Paginate with 10 items per page
+
+    //     return view('driver.available-bookings', compact('bookings'));
+    // }
+
+    public function availableBookings(Request $request)
     {
         $driver = Auth::user();
         $driverTaxi = $driver->taxi;
-
+        $driverId = Auth::id();
         if (!$driverTaxi) {
-            // Handle case where driver has no taxi assigned
-            return view('driver.available-bookings')->with('bookings', collect());
+            return view('driver.available-bookings')->with('error', 'You must have a taxi assigned to view available bookings.');
         }
-
-        $driverCity = $driverTaxi->city;
-        $proximityMap = config('cities.proximity_map');
-        $neighborCities = $proximityMap[$driverCity] ?? [];
-
-        $bookings = Booking::where('status', 'PENDING')
-            ->where('taxi_type', $driverTaxi->type)
-            ->where(function ($query) use ($driverCity, $neighborCities) {
-
-                // Condition 1: Show bookings located in the driver's own city.
-                // These are visible immediately (search_tier >= 0).
-                $query->where('pickup_city', $driverCity);
-
-                // Condition 2: Show bookings in neighboring cities ONLY IF their
-                // search tier has been increased to 1 or higher.
-                $query->orWhere(function ($q) use ($neighborCities) {
-                    $q->whereIn('pickup_city', $neighborCities)
-                        ->where('search_tier', '>=', 1);
-                });
-
-                // Condition 3: Show bookings if their search tier has become global (2 or higher),
-                // regardless of the driver's location. This covers cities that are not immediate neighbors.
-                $query->orWhere('search_tier', '>=', 2);
-            })
-            // Only show bookings that are in the future.
-            // I will move sub minutes in PRODUCTION ***************************** 
-            ->where('pickup_datetime', '>', now()->subMinutes(1440))
-            ->orderBy('pickup_datetime', 'asc')
-            ->paginate(2);
+        
+        $query = Booking::where('status', 'PENDING')
+        ->where('taxi_type', $driverTaxi->type)
+        // ->whereDoesntHave('applications', function ($q) use ($driverId) {
+        //     $q->where('driver_id', Auth::id());
+        // })
+        ->when($request->filled('date'), function ($q) use ($request) {
+            $q->whereDate('pickup_datetime', $request->input('date'));
+        })
+        ->when($request->filled('pickup_location'), function ($q) use ($request) {
+            $q->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
+        })
+        ->when($request->filled('destination'), function ($q) use ($request) {
+            $q->where('destination', 'like', '%' . $request->input('destination') . '%');
+        })
+        ->when($request->filled('client_name'), function ($q) use ($request) {
+            $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+        })
+        ;
+        
+        
+        // Implement city-based filtering if needed, potentially from a configuration or Cities model
+        if ($request->filled('pickup_city')) {
+            $query->where('pickup_city', $request->input('pickup_city'));
+        }
+        
+        
+        $bookings = $query->orderBy('pickup_datetime', 'asc')
+        ->paginate(1); // Paginate with 10 items per page
+        
+        // dd($request->date);
 
         return view('driver.available-bookings', compact('bookings'));
     }

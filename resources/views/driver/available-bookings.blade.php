@@ -3,6 +3,57 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+    <style>
+        .filter-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-form .form-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .filter-form input[type="date"],
+        .filter-form input[type="text"],
+        .filter-form select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .filter-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -14,15 +65,33 @@
                 </button>
                 <h1>Available Bookings</h1>
             </div>
-            <div class="header-right">
-                <div class="booking-count">
-                    <span class="count">{{ $bookings->total() }}</span>
-                    <span class="label">Available</span>
-                </div>
-            </div>
         </header>
 
         <div class="dashboard-content">
+            {{-- Filter Form --}}
+            <form action="{{ route('driver.bookings.available') }}" method="GET" class="filter-form">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" value="{{ request('date') }}">
+                </div>
+                <div class="form-group">
+                    <label for="client_name">Client Name</label>
+                    <input type="text" id="client_name" name="client_name" placeholder="Client Name"
+                        value="{{ request('client_name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="pickup_location">Pickup Location</label>
+                    <input type="text" id="pickup_location" name="pickup_location" placeholder="Pickup Location"
+                        value="{{ request('pickup_location') }}">
+                </div>
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <input type="text" id="destination" name="destination" placeholder="Destination"
+                        value="{{ request('destination') }}">
+                </div>
+                <button type="submit">Apply Filters</button>
+            </form>
+
             <div class="bookings-container">
                 @forelse ($bookings as $booking)
                     <div class="booking-card">
@@ -39,23 +108,28 @@
                             <div class="booking-route">
                                 <div class="route-point pickup">
                                     <div class="point-details">
-                                        <h5>Pickup Location</h5>
-                                        <p>{{ $booking->pickup_location }}</p>
-                                        <span class="city">{{ $booking->pickup_city }}</span>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Pickup: {{ $booking->pickup_location }}</span>
                                     </div>
+                                    <span class="city">{{ $booking->pickup_city }}</span>
                                 </div>
-                                <div class="route-line"><i class="fas fa-ellipsis-v"></i></div>
+                                <div class="arrow-icon"><i class="fas fa-arrow-right"></i></div>
                                 <div class="route-point destination">
                                     <div class="point-details">
-                                        <h5>Destination</h5>
-                                        <p>{{ $booking->destination }}</p>
+                                        <i class="fas fa-location-arrow"></i>
+                                        <span>Destination: {{ $booking->destination }}</span>
                                     </div>
+                                    <span class="city">{{ $booking->destination_city }}</span>
                                 </div>
                             </div>
                             <div class="booking-details">
                                 <div class="detail-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>{{ $booking->pickup_datetime->format('d M Y') }}</span>
+                                    <i class="fas fa-user"></i>
+                                    <span>{{ $booking->client_name }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ $booking->pickup_datetime->format('M d, Y') }}</span>
                                 </div>
                                 <div class="detail-item">
                                     <i class="fas fa-clock"></i>
@@ -65,25 +139,15 @@
                                     <i class="fas fa-taxi"></i>
                                     <span>{{ ucfirst($booking->taxi_type) }}</span>
                                 </div>
-                                @if($booking->estimated_fare)
-                                <div class="detail-item">
-                                    <i class="fas fa-dollar-sign"></i>
-                                    <span>${{ number_format($booking->estimated_fare, 2) }}</span>
-                                </div>
-                                @endif
                             </div>
                         </div>
                         <div class="booking-actions">
                             @if ($booking->hasDriverApplied(Auth::id()))
-                                <button class="btn btn-secondary" disabled>
-                                    <i class="fas fa-check"></i> Already Applied
-                                </button>
+                                <button class="btn btn-secondary" disabled>Already Applied</button>
                             @else
                                 <form action="{{ route('driver.bookings.apply', $booking) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-paper-plane"></i> Apply Now
-                                    </button>
+                                    <button type="submit" class="btn btn-primary">Apply Now</button>
                                 </form>
                             @endif
                         </div>
@@ -91,66 +155,17 @@
                 @empty
                     <div class="no-bookings">
                         <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-calendar-times"></i>
-                            </div>
                             <h3>No Available Bookings</h3>
                             <p>There are no pending bookings matching your profile right now.</p>
-                            <p>Check back later or make sure your profile is complete!</p>
-                            <button class="btn btn-primary" onclick="location.reload()">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
                         </div>
                     </div>
                 @endforelse
             </div>
 
-            <!-- Enhanced Pagination -->
-            @if($bookings->hasPages())
-            <div class="custom-pagination">
-                <div class="pagination-summary">
-                    Showing {{ $bookings->firstItem() }} to {{ $bookings->lastItem() }} of {{ $bookings->total() }} bookings
-                </div>
-                <div class="pagination-links">
-                    {{ $bookings->links() }}
-                </div>
+            {{-- Pagination Links --}}
+            <div class="pagination-links">
+                {{ $bookings->links() }}
             </div>
-            @endif
         </div>
     </main>
-@endsection
-
-@section('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add loading state to pagination links
-        const paginationLinks = document.querySelectorAll('.pagination-links a');
-        
-        paginationLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                if (!this.classList.contains('disabled')) {
-                    this.classList.add('loading');
-                }
-            });
-        });
-        
-        // Auto-refresh every 60 seconds for new bookings
-        setInterval(function() {
-            // Only refresh if user is on first page to avoid disruption
-            const currentUrl = new URL(window.location.href);
-            if (!currentUrl.searchParams.has('page') || currentUrl.searchParams.get('page') === '1') {
-                location.reload();
-            }
-        }, 60000);
-        
-        // Mobile menu toggle (if you have a sidebar)
-        const menuToggle = document.getElementById('menuToggle');
-        if (menuToggle) {
-            menuToggle.addEventListener('click', function() {
-                // Add your sidebar toggle logic here
-                document.querySelector('.dashboard-sidebar')?.classList.toggle('active');
-            });
-        }
-    });
-</script>
 @endsection

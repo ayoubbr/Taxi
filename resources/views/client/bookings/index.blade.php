@@ -130,6 +130,10 @@
                                             <i class="fas fa-hashtag"></i>
                                             <span>{{ substr($booking->booking_uuid, 0, 8) }}</span>
                                         </div>
+                                        <div class="meta-item">
+                                            <i class="fa-solid fa-paper-plane"></i>
+                                                <span>Applications : {{ count($booking->applications) }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
