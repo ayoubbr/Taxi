@@ -150,8 +150,7 @@
                                     </button>
                                 @endif
                                 @if (in_array($booking->status, ['PENDING', 'ASSIGNED']) && count($booking->applications) > 0)
-                                    <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary"
-                                        style="width: 165px; padding: 35px;">
+                                    <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary view-apps-btn">
                                         <i class="fas fa-users"></i> View Driver Applications
                                     </a>
                                 @endif

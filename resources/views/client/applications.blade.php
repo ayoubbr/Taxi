@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="applications-page mt-70">
+    <div class="applications-page mt-82">
         <!-- Header Section -->
         <header class="page-header">
             <div class="container">

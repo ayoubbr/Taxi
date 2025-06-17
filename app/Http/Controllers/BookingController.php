@@ -19,7 +19,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::where('client_id', Auth::id())->paginate(4);
+        $bookings = Booking::where('client_id', Auth::id())->orderBy('pickup_datetime', 'desc')->paginate(4);
         return view('client.bookings.index', compact('bookings'));
     }
 

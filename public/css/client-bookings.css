@@ -362,6 +362,11 @@
     color: white;
 }
 
+.view-apps-btn {
+    width: 165px;
+    padding: 35px;
+}
+
 .btn-view:hover {
     background: #1c54b2;
 }
@@ -370,7 +375,7 @@
     background: transparent;
     border: 1px solid var(--danger-color);
     color: var(--danger-color);
-    width: -webkit-fill-available;
+    width: 165px;
 }
 
 .btn-cancel:hover {
@@ -497,6 +502,7 @@
     .booking-actions {
         flex-direction: column;
         align-items: stretch;
+        flex-wrap: wrap;
         gap: 15px;
     }
 
@@ -523,6 +529,13 @@
 
     .booking-actions {
         flex-direction: row;
+    }
+
+    .view-apps-btn,
+    .btn-cancel,
+    .btn-view {
+        width: 100%;
+        padding: 10px;
     }
 }
 

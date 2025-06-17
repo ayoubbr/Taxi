@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="booking-details-page mt-70">
+    <div class="booking-details-page mt-82">
         <!-- Header Section -->
         <header class="page-header">
             <div class="container">
@@ -107,10 +107,10 @@
                                     {!! $qrCodeSvg !!}
                                 </div>
                                 <p class="qr-instructions">Show this QR code to your driver to verify your booking</p>
-                                <a href="" download="booking-{{ $booking->booking_uuid }}.png"
+                                {{-- <a href="" download="booking-{{ $booking->booking_uuid }}.png"
                                     class="btn btn-secondary">
                                     <i class="fas fa-download"></i> Download QR Code
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                         <!-- Booking Info Card -->
@@ -219,7 +219,7 @@
                             dd($booking->driver());
                         @endphp --}}
                         @if ($booking->driver)
-                            <div class="details-card driver-card">
+                            <div class="details-card driver-card" style=" grid-column: span 2;">
                                 <h2>Driver Information</h2>
 
                                 <div class="driver-container">
@@ -259,11 +259,11 @@
                                             </div>
                                         </div>
 
-                                        <div class="driver-contact">
+                                        {{-- <div class="driver-contact">
                                             <a href="tel:{{ $booking->driver->phone }}" class="btn btn-contact">
                                                 <i class="fas fa-phone"></i> Call Driver
                                             </a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

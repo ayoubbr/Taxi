@@ -58,7 +58,7 @@ class DriverController extends Controller
                 $query->where('destination', 'like', '%' . $request->input('destination') . '%');
             })
             ->orderBy('pickup_datetime', 'asc')
-            ->paginate(1); // Paginate with 10 items per page
+            ->paginate(6); // Paginate with 10 items per page
 
         return view('driver.dashboard', compact('bookings'));
     }
@@ -185,7 +185,7 @@ class DriverController extends Controller
         
         
         $bookings = $query->orderBy('pickup_datetime', 'asc')
-        ->paginate(1); // Paginate with 10 items per page
+        ->paginate(6); // Paginate with 10 items per page
         
         // dd($request->date);
 
