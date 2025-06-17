@@ -512,9 +512,12 @@
 .close-modal {
     background: none;
     border: none;
-    font-size: 24px;
     cursor: pointer;
     color: var(--text-light);
+}
+
+.modal-header .close-modal {
+    font-size: 24px;
 }
 
 .modal-body {

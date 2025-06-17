@@ -2,6 +2,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/client-bookings.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
 @endsection
 
 @section('content')
@@ -132,7 +133,7 @@
                                         </div>
                                         <div class="meta-item">
                                             <i class="fa-solid fa-paper-plane"></i>
-                                                <span>Applications : {{ count($booking->applications) }}</span>
+                                            <span>Applications : {{ count($booking->applications) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +148,12 @@
                                     <button class="btn btn-cancel" data-booking-id="{{ $booking->booking_uuid }}">
                                         <i class="fas fa-times"></i> Cancel
                                     </button>
+                                @endif
+                                @if (in_array($booking->status, ['PENDING', 'ASSIGNED']) && count($booking->applications) > 0)
+                                    <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary"
+                                        style="width: 165px; padding: 35px;">
+                                        <i class="fas fa-users"></i> View Driver Applications
+                                    </a>
                                 @endif
                             </div>
                         </div>
@@ -166,12 +173,12 @@
                     @endforelse
                 </div>
 
-                {{-- <!-- Pagination -->
+                <!-- Pagination -->
                 @if ($bookings->count() > 0)
                     <div class="pagination-container">
                         {{ $bookings->links() }}
                     </div>
-                @endif --}}
+                @endif
             </div>
         </main>
     </div>

@@ -19,7 +19,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::where('client_id', Auth::id())->get();
+        $bookings = Booking::where('client_id', Auth::id())->paginate(4);
         return view('client.bookings.index', compact('bookings'));
     }
 
@@ -48,7 +48,7 @@ class BookingController extends Controller
         // If the booking was assigned, notify the driver
         if ($booking->status === 'ASSIGNED' && $booking->assigned_driver_id) {
             $driver = User::find($booking->assigned_driver_id);
-            Notification::send($driver, new BookingCancelledNotification($booking));
+            // Notification::send($driver, new BookingCancelledNotification($booking));
         }
 
         // Mark booking as cancelled
@@ -111,7 +111,7 @@ class BookingController extends Controller
                     ->where('type', $booking->taxi_type);
             })->get();
 
-        Notification::send($driversInCity, new NewBookingAvailable($booking));
+        // Notification::send($driversInCity, new NewBookingAvailable($booking));
 
         session()->flash('success', 'Your booking has been received and is now available for drivers to apply. You will be notified once a driver is assigned.');
 
@@ -144,7 +144,7 @@ class BookingController extends Controller
             abort(403);
         }
 
-        if ($booking->status != 'PENDING') {
+        if ($booking->status != 'PENDING' && $booking->status != 'ASSIGNED' ) {
             abort(403);
         }
 
@@ -170,7 +170,7 @@ class BookingController extends Controller
         $application->taxi->update(['is_available' => false]);
 
         // Notify the assigned driver
-        Notification::send($application->driver, new BookingAssignedNotification($booking));
+        // Notification::send($application->driver, new BookingAssignedNotification($booking));
 
         // Delete other applications for this booking
         $booking->applications()->where('id', '!=', $application->id)->delete();

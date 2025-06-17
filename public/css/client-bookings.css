@@ -458,10 +458,13 @@
     margin: 0;
 }
 
+.modal-header .close-modal {
+    font-size: 24px;
+}
+
 .close-modal {
     background: none;
     border: none;
-    font-size: 24px;
     cursor: pointer;
     color: var(--text-light);
 }

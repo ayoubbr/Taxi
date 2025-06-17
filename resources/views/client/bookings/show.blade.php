@@ -277,7 +277,7 @@
                         <a href="{{ route('bookings.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> New Booking
                         </a>
-                        @if ($booking->status == 'PENDING')
+                        @if ($booking->status == 'PENDING' || $booking->status == 'ASSIGNED')
                             <a href="{{ route('client.bookings.applications', $booking) }}" class="btn btn-primary">
                                 <i class="fa-solid fa-eye"></i> Show Applications
                             </a>

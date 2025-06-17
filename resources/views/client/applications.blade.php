@@ -259,15 +259,16 @@
                                                 data-phone="{{ $application->driver->phone }}">
                                                 <i class="fas fa-phone"></i> Contact
                                             </button> --}}
-
-                                            <form
-                                                action="{{ route('client.bookings.accept_application', ['booking' => $booking, 'application' => $application]) }}"
-                                                method="POST" class="accept-form">
-                                                @csrf
-                                                <button type="submit" class="btn btn-primary btn-accept">
-                                                    <i class="fas fa-check"></i> Accept & Assign
-                                                </button>
-                                            </form>
+                                            @if ($booking->status == 'PENDING')
+                                                <form
+                                                    action="{{ route('client.bookings.accept_application', ['booking' => $booking, 'application' => $application]) }}"
+                                                    method="POST" class="accept-form">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary btn-accept">
+                                                        <i class="fas fa-check"></i> Accept & Assign
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
