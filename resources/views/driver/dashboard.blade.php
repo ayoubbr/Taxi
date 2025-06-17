@@ -215,7 +215,7 @@
                                     <i class="fas fa-map-marked-alt"></i> Navigate
                                 </button>
                             @endif
-                            @if ($booking->status === 'ASSIGNED' || $booking->status === 'IN_PROGRESS')
+                            {{-- @if ($booking->status === 'ASSIGNED' || $booking->status === 'IN_PROGRESS')
                                 <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                     @csrf
@@ -226,7 +226,7 @@
                                         <i class="fas fa-times-circle"></i> Cancel Booking
                                     </button>
                                 </form>
-                            @endif
+                            @endif --}}
                         </div>
                     </div>
                 @empty

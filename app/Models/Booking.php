@@ -36,25 +36,25 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'client_id');
     }
 
-    public function assignedTaxi()
-    {
-        return $this->belongsTo(Taxi::class, 'assigned_taxi_id');
-    }
-
-    public function assignedDriver()
-    {
-        return $this->belongsTo(User::class, 'assigned_driver_id');
-    }
-
-    // public function taxi()
+    // public function assignedTaxi()
     // {
     //     return $this->belongsTo(Taxi::class, 'assigned_taxi_id');
     // }
 
-    // public function driver()
+    // public function assignedDriver()
     // {
     //     return $this->belongsTo(User::class, 'assigned_driver_id');
     // }
+
+    public function taxi()
+    {
+        return $this->belongsTo(Taxi::class, 'assigned_taxi_id');
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(User::class, 'assigned_driver_id');
+    }
 
     public function applications()
     {

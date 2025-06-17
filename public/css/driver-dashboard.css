@@ -344,6 +344,7 @@
     background: var(--gray-color);
     border-bottom: 1px solid var(--border-color);
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .booking-id {

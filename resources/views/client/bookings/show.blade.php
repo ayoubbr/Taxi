@@ -138,8 +138,8 @@
 
                                 <div class="info-item">
                                     <span class="info-label">Taxi Type</span>
-                                    @if (isset($booking->taxi_type))
-                                        <span class="info-value">{{ ucfirst($booking->taxi_type) }}</span>
+                                    @if ($booking->taxi != null)
+                                        <span class="info-value">{{ ucfirst($booking->taxi->type) }}</span>
                                     @else
                                         <span class="info-value">N/A</span>
                                     @endif
@@ -215,6 +215,9 @@
                             </div>
                         </div>
                         <!-- Driver Card -->
+                        {{-- @php
+                            dd($booking->driver());
+                        @endphp --}}
                         @if ($booking->driver)
                             <div class="details-card driver-card">
                                 <h2>Driver Information</h2>
@@ -248,11 +251,11 @@
                                         <div class="vehicle-info">
                                             <div class="vehicle-model">
                                                 <i class="fas fa-car"></i>
-                                                <span>{{ $booking->driver->vehicle_model }}</span>
+                                                <span>{{ $booking->driver->taxi->model }}</span>
                                             </div>
                                             <div class="vehicle-plate">
                                                 <i class="fas fa-id-card"></i>
-                                                <span>{{ $booking->driver->vehicle_plate }}</span>
+                                                <span>{{ $booking->driver->taxi->license_plate }}</span>
                                             </div>
                                         </div>
 
