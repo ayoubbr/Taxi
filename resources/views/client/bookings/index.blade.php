@@ -53,7 +53,7 @@
 
                 <!-- Booking Actions -->
                 <div class="booking-actions">
-                    <a href="{{ route('bookings.create') }}" class="btn btn-primary" style="width: 210px;">
+                    <a href="{{ route('client.bookings.create') }}" class="btn btn-primary" style="width: 210px;">
                         <i class="fas fa-plus"></i> New Booking
                     </a>
 
@@ -164,7 +164,7 @@
                                 </div>
                                 <h3>No Bookings Found</h3>
                                 <p>You haven't made any taxi bookings yet.</p>
-                                <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+                                <a href="{{ route('client.bookings.create') }}" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Book a Taxi Now
                                 </a>
                             </div>
@@ -195,7 +195,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary close-modal">No, Keep It</button>
-                    <form id="cancelForm" action="{{ route('bookings.cancel', $booking->booking_uuid) }}" method="POST">
+                    <form id="cancelForm" action="{{ route('client.bookings.cancel', $booking->booking_uuid) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status" value="CANCELLED">

@@ -277,7 +277,7 @@
                             </button>
                         @endif
 
-                        <a href="{{ route('bookings.create') }}" class="btn btn-primary">
+                        <a href="{{ route('client.bookings.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> New Booking
                         </a>
                         @if ($booking->status == 'PENDING' || $booking->status == 'ASSIGNED')
@@ -303,7 +303,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary close-modal">No, Keep It</button>
-                <form action="{{ route('bookings.cancel', $booking->booking_uuid) }}" method="POST">
+                <form action="{{ route('client.bookings.cancel', $booking->booking_uuid) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="status" value="CANCELLED">

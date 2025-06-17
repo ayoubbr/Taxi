@@ -14,6 +14,7 @@
                     @if (Auth::user()->user_type == 'CLIENT')
                         <li><a href="{{ route('client.bookings.index') }}"
                                 class="{{ Request::routeIs('client.bookings.index') ? 'active' : '' }}">Bookings</a></li>
+                      
                     @endif
                     @if (Auth::user()->user_type == 'DRIVER')
                         <li><a href="{{ route('driver.dashboard') }}"
@@ -26,7 +27,8 @@
                         </form>
                     </li>
                 @else
-                    <li class="flex-center" style="justify-content: start"><a href="{{ route('login') }}" class="btn-login">Login</a></li>
+                    <li class="flex-center" style="justify-content: start"><a href="{{ route('login') }}"
+                            class="btn-login">Login</a></li>
                 @endauth
             </ul>
         </nav>

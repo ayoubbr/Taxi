@@ -28,10 +28,6 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Booking Routes
-Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
-Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('bookings.confirmation');
 
 
 
@@ -45,10 +41,13 @@ Route::middleware('auth')->group(function () {
 // Client-side booking application management
 Route::middleware('auth', 'client')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
+    Route::get('/bookings/create', [BookingController::class, 'create'])->name('client.bookings.create');
     Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
+    Route::post('/bookings', [BookingController::class, 'store'])->name('client.bookings.store');
+    Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('client.bookings.confirmation');
     Route::get('/bookings/{booking}/applications', [BookingController::class, 'showApplications'])->name('client.bookings.applications');
     Route::post('/bookings/{booking}/applications/{application}/accept', [BookingController::class, 'acceptApplication'])->name('client.bookings.accept_application');
-    Route::put('/bookings/{uuid}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+    Route::put('/bookings/{uuid}/cancel', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
 });
 
 

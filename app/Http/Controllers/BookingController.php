@@ -63,19 +63,35 @@ class BookingController extends Controller
 
     public function create()
     {
-        return view('client.bookings.create');
+        $cities = array_keys(config('cities.proximity_map'));
+        sort($cities);
+
+        return view('client.bookings.create', compact('cities'));
     }
 
     public function store(Request $request)
     {
+        // Combine date and time for validation against the current time.
+        // We merge it into the request to create a custom validation rule.
+        if ($request->input('date') && $request->input('time')) {
+            $request->merge([
+                'pickup_datetime_combined' => $request->input('date') . ' ' . $request->input('time'),
+            ]);
+        }
+
         $request->validate([
             'client_name' => 'required|string|max:100',
             'pickup_location' => 'required|string|max:255',
             'pickup_city' => 'required|string|max:100',
             'destination' => 'required|string|max:255',
-            'date' => 'required|date_format:Y-m-d|after_or_equal:today',
+            'date' => 'required|date_format:Y-m-d',
             'time' => 'required|date_format:H:i',
+            'pickup_datetime_combined' => 'required|date_format:Y-m-d H:i|after:now',
             'taxi_type' => 'required|in:standard,van,luxe',
+        ], [
+            // Custom error messages for better user feedback
+            // 'pickup_city.different' => 'Pickup and destination cities cannot be the same.',
+            'pickup_datetime_combined.after' => 'The selected date and time must be in the future.',
         ]);
 
         $pickupDateTime = $request->input('date') . ' ' . $request->input('time');
@@ -115,7 +131,7 @@ class BookingController extends Controller
 
         session()->flash('success', 'Your booking has been received and is now available for drivers to apply. You will be notified once a driver is assigned.');
 
-        return redirect()->route('bookings.confirmation', ['uuid' => $booking->booking_uuid]);
+        return redirect()->route('client.bookings.confirmation', ['uuid' => $booking->booking_uuid]);
     }
 
     public function showConfirmation($uuid)
@@ -144,7 +160,7 @@ class BookingController extends Controller
             abort(403);
         }
 
-        if ($booking->status != 'PENDING' && $booking->status != 'ASSIGNED' ) {
+        if ($booking->status != 'PENDING' && $booking->status != 'ASSIGNED') {
             abort(403);
         }
 
