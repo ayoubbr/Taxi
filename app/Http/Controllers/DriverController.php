@@ -76,7 +76,7 @@ class DriverController extends Controller
             // I will move sub minutes in PRODUCTION ***************************** 
             ->where('pickup_datetime', '>', now()->subMinutes(1440))
             ->orderBy('pickup_datetime', 'asc')
-            ->get();
+            ->paginate(2);
 
         return view('driver.available-bookings', compact('bookings'));
     }
@@ -94,9 +94,9 @@ class DriverController extends Controller
      */
     public function processQrCodeScan(Request $request)
     {
-        $scannedQrData = $request->input('qr_data'); 
-        $expectedBookingUuid = $request->input('expected_booking_uuid'); 
-        
+        $scannedQrData = $request->input('qr_data');
+        $expectedBookingUuid = $request->input('expected_booking_uuid');
+
         Log::info('QR Scan Data Received: ' . $scannedQrData . ', Expected UUID: ' . $expectedBookingUuid);
 
         // Basic validation

@@ -682,3 +682,22 @@
         width: 100%;
     }
 }
+
+.booking-count {
+    display: flex;
+    align-items: center;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.booking-count .count {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.booking-count .label {
+    font-size: 14px;
+}

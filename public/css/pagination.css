@@ -1,0 +1,334 @@
+:root {
+    --primary-color: #ffcc00;
+    --primary-dark: #e6b800;
+    --secondary-color: #333333;
+    --accent-color: #3a7bd5;
+    --text-color: #333333;
+    --text-light: #6e6e6e;
+    --text-lighter: #9e9e9e;
+    --light-color: #ffffff;
+    --gray-color: #f5f5f5;
+    --gray-dark: #e0e0e0;
+    --border-color: #e0e0e0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* Pagination Container */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    width: 100%;
+}
+
+.pagination-links {
+    /* margin-top: 30px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Laravel's default pagination wrapper */
+.pagination-links nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Base pagination styles */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    gap: 8px;
+    background: var(--light-color);
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+/* Individual page items */
+.pagination .page-item {
+    margin: 0;
+}
+
+/* Page links - common styles */
+.pagination .page-link,
+.pagination-links nav a,
+.pagination-links nav span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 12px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: var(--transition);
+    background: var(--light-color);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover effects */
+.pagination .page-link:hover,
+.pagination-links nav a:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-dark);
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* Active page styles */
+.pagination .page-item.active .page-link,
+.pagination-links nav span[aria-current="page"] {
+    background: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--light-color) !important;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.pagination .page-item.active .page-link:hover {
+    background: var(--secondary-color) !important;
+    color: var(--light-color) !important;
+    transform: translateY(-1px);
+}
+
+/* Disabled states */
+.pagination .page-item.disabled .page-link,
+.pagination-links nav span:not([aria-current]):not([href]) {
+    background: var(--gray-color) !important;
+    border-color: var(--gray-dark) !important;
+    color: var(--text-lighter) !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.pagination .page-item.disabled .page-link:hover {
+    background: var(--gray-color) !important;
+    border-color: var(--gray-dark) !important;
+    color: var(--text-lighter) !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Previous/Next button styles */
+.pagination .page-link[rel="prev"],
+.pagination .page-link[rel="next"],
+.pagination-links nav a[rel="prev"],
+.pagination-links nav a[rel="next"] {
+    padding: 0 16px;
+    font-weight: 600;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--light-color);
+}
+
+.pagination .page-link[rel="prev"]:hover,
+.pagination .page-link[rel="next"]:hover,
+.pagination-links nav a[rel="prev"]:hover,
+.pagination-links nav a[rel="next"]:hover {
+    background: #1c54b2;
+    border-color: #1c54b2;
+    color: var(--light-color);
+}
+
+/* First/Last page styles */
+.pagination .page-link[aria-label*="First"],
+.pagination .page-link[aria-label*="Last"] {
+    background: var(--gray-color);
+    border-color: var(--gray-dark);
+    color: var(--text-light);
+}
+
+.pagination .page-link[aria-label*="First"]:hover,
+.pagination .page-link[aria-label*="Last"]:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-dark);
+    color: var(--secondary-color);
+}
+
+/* Laravel's default pagination classes */
+.pagination-links nav .relative {
+    position: relative;
+}
+
+.pagination-links nav .inline-flex {
+    display: inline-flex;
+}
+
+.pagination-links nav .items-center {
+    align-items: center;
+}
+
+/* Pagination info text */
+.pagination-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: var(--text-light);
+    background: var(--gray-color);
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+}
+
+/* Ellipsis styling */
+.pagination .page-item .page-link[aria-disabled="true"],
+.pagination-links nav span[aria-disabled="true"] {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-lighter) !important;
+    cursor: default !important;
+    font-weight: bold;
+    padding: 0 8px;
+}
+
+.pagination .page-item .page-link[aria-disabled="true"]:hover {
+    background: transparent !important;
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+
+    .pagination,
+    .pagination-links nav {
+        gap: 4px;
+        padding: 8px 12px;
+    }
+
+    .pagination .page-link,
+    .pagination-links nav a,
+    .pagination-links nav span {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 8px;
+        font-size: 13px;
+    }
+
+    /* Hide page numbers on very small screens, keep only prev/next */
+    @media (max-width: 480px) {
+
+        .pagination .page-item:not(.disabled):not(.active) .page-link:not([rel="prev"]):not([rel="next"]),
+        .pagination-links nav a:not([rel="prev"]):not([rel="next"]),
+        .pagination-links nav span:not([aria-current]):not([rel="prev"]):not([rel="next"]) {
+            display: none;
+        }
+
+        /* Show only first, active, last, and navigation */
+        .pagination .page-item:first-child .page-link,
+        .pagination .page-item:last-child .page-link,
+        .pagination .page-item.active .page-link {
+            display: flex;
+        }
+    }
+}
+
+/* Loading animation for pagination clicks */
+.pagination .page-link.loading,
+.pagination-links nav a.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.pagination .page-link.loading::after,
+.pagination-links nav a.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Custom pagination wrapper for better control */
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 30px 0;
+    padding: 20px;
+    /* background: var(--light-color); */
+    border-radius: var(--border-radius);
+    /* box-shadow: var(--shadow); */
+}
+
+.custom-pagination .pagination-summary {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-right: 20px;
+    padding: 8px 16px;
+    background: var(--gray-color);
+    border-radius: var(--border-radius);
+}
+
+/* Enhanced styles for Laravel's default pagination structure */
+.pagination-links nav>div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Target Laravel's specific pagination classes */
+.pagination-links nav .relative.inline-flex.items-center {
+    min-width: 44px;
+    height: 44px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius) !important;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+/* Active page in Laravel's structure */
+.pagination-links nav .relative.inline-flex.items-center.bg-blue-50 {
+    background: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--light-color) !important;
+}
+
+/* Hover states for Laravel's structure */
+.pagination-links nav .relative.inline-flex.items-center:hover:not(.bg-blue-50) {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-dark) !important;
+    color: var(--secondary-color) !important;
+    transform: translateY(-2px);
+}
