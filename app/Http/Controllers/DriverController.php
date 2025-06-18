@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Booking;
+use App\Models\BookingApplication;
+use App\Notifications\BookingCancelledNotification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class DriverController extends Controller
 {
@@ -40,7 +43,7 @@ class DriverController extends Controller
     {
         $driverId = Auth::id();
         $driverTaxi = Auth::user()->taxi;
-        
+
         $bookings = Booking::where('assigned_driver_id', $driverId)
             ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
             ->when($request->filled('date'), function ($query) use ($request) {
@@ -181,7 +184,7 @@ class DriverController extends Controller
                 $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
             });
 
-            // dd($request->all());
+        // dd($request->all());
 
 
         // Implement city-based filtering if needed, potentially from a configuration or Cities model
@@ -190,7 +193,7 @@ class DriverController extends Controller
         }
 
 
-        $bookings = $query->where('pickup_city', $driverTaxi->city )->orderBy('pickup_datetime', 'asc')
+        $bookings = $query->where('pickup_city', $driverTaxi->city)->orderBy('pickup_datetime', 'asc')
             ->paginate(6); // Paginate with 10 items per page
 
         // dd($bookings);
@@ -284,8 +287,31 @@ class DriverController extends Controller
         // Add logic for valid status transitions
         if ($booking->status === 'IN_PROGRESS' && $request->status === 'COMPLETED') {
             $booking->status = 'COMPLETED';
+            $booking->taxi->update(['is_available' => true]);
             $booking->save();
-            return back()->with('success', 'Ride completed!');
+            return back()->with('success', 'Ride completed successfully!');
+        }
+
+        // Add logic for valid status transitions
+        if ($booking->status === 'ASSIGNED' && $request->status === 'CANCELLED') {
+
+            // Notify the client that the driver cancelled
+            if ($booking->client) {
+                // Notification::send($booking->client, new BookingCancelledNotification($booking, 'driver'));
+            }
+
+            $bookingApplication = BookingApplication::where('booking_id', $booking->id)
+                ->where('driver_id', Auth::id())->first();
+            $bookingApplication->delete();
+
+            $booking->taxi->update(['is_available' => true]);
+
+            $booking->status = 'PENDING';
+            $booking->assigned_driver_id = NULL;
+            $booking->assigned_taxi_id = NULL;
+            $booking->save();
+
+            return redirect()->route('driver.dashboard')->with('success', 'You have cancelled the booking.');
         }
 
         return back()->with('error', 'Invalid status transition.');

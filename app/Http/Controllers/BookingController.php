@@ -48,17 +48,27 @@ class BookingController extends Controller
         // If the booking was assigned, notify the driver
         if ($booking->status === 'ASSIGNED' && $booking->assigned_driver_id) {
             $driver = User::find($booking->assigned_driver_id);
-            // Notification::send($driver, new BookingCancelledNotification($booking));
+            // Notification::send($driver, new BookingCancelledNotification($booking, 'client'));
+
+            // Make the taxi available again
+            if ($booking->taxi) {
+                $booking->taxi->update(['is_available' => true]);
+            }
         }
 
         // Mark booking as cancelled
         $booking->status = 'CANCELLED';
+        $booking->assigned_driver_id = NULL;
+        $booking->assigned_taxi_id = NULL;
+
         $booking->save();
 
-        // Optional: Delete applications if still pending
-        $booking->applications()->delete();
+        // Optional: If the booking was PENDING, delete any applications
+        if ($booking->applications()->exists()) {
+            $booking->applications()->delete();
+        }
 
-        return redirect()->route('client.bookings.index')->with('success', 'Booking cancelled successfully.');
+        return redirect()->route('client.bookings.index')->with('success', 'Booking has been successfully cancelled.');
     }
 
     public function create()

@@ -529,6 +529,7 @@
 .booking-actions {
     display: flex;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 .btn {

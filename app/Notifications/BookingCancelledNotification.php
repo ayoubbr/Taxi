@@ -13,15 +13,17 @@ class BookingCancelledNotification extends Notification
     use Queueable;
 
     protected $booking;
+    protected $cancellerRole;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Booking $booking)
+    public function __construct(Booking $booking, string $cancellerRole)
     {
         $this->booking = $booking;
+        $this->cancellerRole = $cancellerRole;
     }
 
     /**
@@ -43,18 +45,33 @@ class BookingCancelledNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = route('driver.dashboard');
+        $greeting = 'Hello ' . $notifiable->firstname . ',';
+        $subject = 'A Booking Has Been Cancelled';
+        $actionUrl = route('home'); // Default URL
+        $actionText = 'Visit Our Website';
+
+        if ($this->cancellerRole === 'client') {
+            // Message for the DRIVER when a CLIENT cancels
+            $line1 = 'We regret to inform you that the following booking has been cancelled by the client.';
+            $actionUrl = route('driver.dashboard');
+            $actionText = 'View My Dashboard';
+        } else {
+            // Message for the CLIENT when a DRIVER cancels
+            $line1 = 'We regret to inform you that your assigned driver has cancelled the following booking.';
+            $actionUrl = route('client.bookings.index');
+            $actionText = 'View My Bookings';
+        }
 
         return (new MailMessage)
-            ->subject('Booking Cancelled')
-            ->greeting('Hello ' . $notifiable->firstname . ',')
-            ->line('We regret to inform you that the following booking has been cancelled by the client.')
+            ->subject($subject)
+            ->greeting($greeting)
+            ->line($line1)
             ->line('**Cancelled Booking Details:**')
-            ->line('Pickup: ' . $this->booking->pickup_location)
+            ->line('Pickup: ' . $this->booking->pickup_location . ' (' . $this->booking->pickup_city . ')')
             ->line('Destination: ' . $this->booking->destination)
-            ->line('Originally Scheduled Time: ' . $this->booking->pickup_datetime->format('d M Y, H:i'))
-            ->action('View My Dashboard', $url)
-            ->line('We apologize for any inconvenience. You will be notified when new bookings become available.');
+            ->line('Originally Scheduled: ' . $this->booking->pickup_datetime->format('d M Y, H:i'))
+            ->action($actionText, $actionUrl)
+            ->line('We apologize for any inconvenience. For assistance, please contact our support team.');
     }
 
 

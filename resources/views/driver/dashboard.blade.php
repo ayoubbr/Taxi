@@ -195,37 +195,39 @@
                         <div class="booking-actions">
                             @if ($booking->status === 'ASSIGNED')
                                 <a href="{{ route('driver.scan.qr.form', $booking->booking_uuid) }}"
-                                    class="btn btn-primary">
+                                    class="btn btn-primary" style="min-width: max-content">
                                     <i class="fas fa-qrcode"></i> Scan QR
                                 </a>
-                                <button class="btn btn-secondary btn-directions">
+                                <button class="btn btn-secondary btn-directions" style="width: -webkit-fill-available;">
                                     <i class="fas fa-map-marked-alt"></i> Get Directions
                                 </button>
                             @elseif ($booking->status === 'IN_PROGRESS')
-                                <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST">
+                                <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST"
+                                    style="width: -webkit-fill-available;">
                                     @csrf
                                     @method('POST') {{-- Use POST for status update --}}
                                     <input type="hidden" name="status" value="COMPLETED">
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-success"
+                                        style="min-width: -webkit-fill-available;">
                                         <i class="fas fa-check-circle"></i> Complete Ride
                                     </button>
                                 </form>
-                                <button class="btn btn-secondary btn-navigate">
+                                <button class="btn btn-secondary btn-navigate" style="width: -webkit-fill-available;">
                                     <i class="fas fa-map-marked-alt"></i> Navigate
                                 </button>
                             @endif
-                            {{-- @if ($booking->status === 'ASSIGNED' || $booking->status === 'IN_PROGRESS')
+                            @if ($booking->status === 'ASSIGNED' || $booking->status === 'IN_PROGRESS')
                                 <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                    onsubmit="return confirm('Are you sure you want to cancel this booking?');"
+                                    style="width: -webkit-fill-available;">
                                     @csrf
                                     @method('POST')
                                     <input type="hidden" name="status" value="CANCELLED">
-                                    <button type="submit" class="btn btn-danger"
-                                        style="width: -webkit-fill-available;">
+                                    <button type="submit" class="btn btn-danger" style="width: -webkit-fill-available;">
                                         <i class="fas fa-times-circle"></i> Cancel Booking
                                     </button>
                                 </form>
-                            @endif --}}
+                            @endif
                         </div>
                     </div>
                 @empty
