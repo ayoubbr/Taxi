@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingApplicationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,14 +55,15 @@ Route::middleware('auth', 'client')->group(function () {
 // Driver Specific Routes
 Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'driver' middleware
     Route::get('/driver/dashboard', [DriverController::class, 'assignedBookings'])->name('driver.dashboard');
-    // Route::get('/driver/scan-qr', [DriverController::class, 'scanQrCodeForm'])->name('driver.scan.qr');
-    // Example in web.php
     Route::get('/driver/scan-qr/{booking_uuid}', [DriverController::class, 'scanQrCodeForm'])->name('driver.scan.qr.form');
-    // Route::post('/driver/scan-qr-process', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
     Route::post('/driver/scan-qr', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
     Route::post('/driver/bookings/{booking}/update-status', [DriverController::class, 'updateBookingStatus'])->name('driver.booking.update-status');
 
     // New routes for available bookings
     Route::get('/driver/bookings/available', [DriverController::class, 'availableBookings'])->name('driver.bookings.available');
     Route::post('/bookings/{booking}/apply', [BookingApplicationController::class, 'store'])->name('driver.bookings.apply');
+
+    // Driver Profile Routes
+    Route::get('/driver/profile', [ProfileController::class, 'edit'])->name('driver.profile');
+    Route::put('/driver/profile', [ProfileController::class, 'update'])->name('driver.profile.update');
 });

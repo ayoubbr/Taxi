@@ -39,7 +39,8 @@ class DriverController extends Controller
     public function assignedBookings(Request $request)
     {
         $driverId = Auth::id();
-
+        $driverTaxi = Auth::user()->taxi;
+        
         $bookings = Booking::where('assigned_driver_id', $driverId)
             ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
             ->when($request->filled('date'), function ($query) use ($request) {
@@ -51,12 +52,13 @@ class DriverController extends Controller
             ->when($request->filled('client_name'), function ($query) use ($request) {
                 $query->where('client_name', 'like', '%' . $request->input('client_name') . '%');
             })
-            ->when($request->filled('pickup_location'), function ($query) use ($request) {
-                $query->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
+            ->when($request->filled('pickup_city'), function ($query) use ($request) {
+                $query->where('pickup_city', 'like', '%' . $request->input('pickup_city') . '%');
             })
             ->when($request->filled('destination'), function ($query) use ($request) {
                 $query->where('destination', 'like', '%' . $request->input('destination') . '%');
             })
+            // ->where('pickup_city', $driverTaxi->city )
             ->orderBy('pickup_datetime', 'asc')
             ->paginate(6); // Paginate with 10 items per page
 
@@ -154,9 +156,12 @@ class DriverController extends Controller
         $driver = Auth::user();
         $driverTaxi = $driver->taxi;
         $driverId = Auth::id();
+
+        // dd($request->all());
         if (!$driverTaxi) {
             return view('driver.available-bookings')->with('error', 'You must have a taxi assigned to view available bookings.');
         }
+
 
         $query = Booking::where('status', 'PENDING')
             ->where('taxi_type', $driverTaxi->type)
@@ -166,15 +171,17 @@ class DriverController extends Controller
             ->when($request->filled('date'), function ($q) use ($request) {
                 $q->whereDate('pickup_datetime', $request->input('date'));
             })
-            ->when($request->filled('pickup_location'), function ($q) use ($request) {
-                $q->where('pickup_location', 'like', '%' . $request->input('pickup_location') . '%');
-            })
+            // ->when($request->filled('pickup_location'), function ($q) use ($request) {
+            //     $q->where('pickup_city', 'like', '%' . $request->input('pickup_location') . '%');
+            // })
             ->when($request->filled('destination'), function ($q) use ($request) {
                 $q->where('destination', 'like', '%' . $request->input('destination') . '%');
             })
             ->when($request->filled('client_name'), function ($q) use ($request) {
                 $q->where('client_name', 'like', '%' . $request->input('client_name') . '%');
             });
+
+            // dd($request->all());
 
 
         // Implement city-based filtering if needed, potentially from a configuration or Cities model
@@ -183,10 +190,10 @@ class DriverController extends Controller
         }
 
 
-        $bookings = $query->orderBy('pickup_datetime', 'asc')
+        $bookings = $query->where('pickup_city', $driverTaxi->city )->orderBy('pickup_datetime', 'asc')
             ->paginate(6); // Paginate with 10 items per page
 
-        // dd($request->date);
+        // dd($bookings);
 
         return view('driver.available-bookings', compact('bookings'));
     }

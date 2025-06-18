@@ -1,7 +1,6 @@
 @extends('driver.layout')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
     <style>
         .filter-form {
@@ -132,9 +131,9 @@
                         value="{{ request('client_name') }}">
                 </div>
                 <div class="form-group">
-                    <label for="pickup_location">Pickup Location</label>
-                    <input type="text" id="pickup_location" name="pickup_location" placeholder="Pickup Location"
-                        value="{{ request('pickup_location') }}">
+                    <label for="pickup_city">Pickup City</label>
+                    <input type="text" id="pickup_city" name="pickup_city" placeholder="Pickup City"
+                        value="{{ request('pickup_city') }}">
                 </div>
                 <div class="form-group">
                     <label for="destination">Destination</label>

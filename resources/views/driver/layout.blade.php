@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flash-messages.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/home.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
 </head>
@@ -36,11 +36,15 @@
 
             <nav class="sidebar-nav">
                 <ul>
+                    <li class="{{ Request::routeIs('driver.profile') ? 'active' : '' }}">
+                        <a href="{{ route('driver.profile') }}"><i class="fa-solid fa-user"></i> Profile</a>
+                    </li>
                     <li class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">
                         <a href="{{ route('driver.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                     </li>
                     <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
-                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> Availble Rides</a>
+                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> Availble
+                            Rides</a>
                     </li>
                     {{-- <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
                         <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> My Rides</a>
