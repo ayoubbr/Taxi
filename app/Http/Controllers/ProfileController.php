@@ -14,7 +14,7 @@ class ProfileController extends Controller
     /**
      * Show the form for editing the driver's profile.
      */
-    public function edit()
+    public function driverPorfile()
     {
         $driver = Auth::user();
         $taxi = $driver->taxi; // Assumes a 'taxi' relationship exists on the User model
@@ -27,7 +27,7 @@ class ProfileController extends Controller
     /**
      * Update the driver's profile information.
      */
-    public function update(Request $request)
+    public function updateDriverProfile(Request $request)
     {
         $driver = Auth::user();
         $taxi = $driver->taxi;
@@ -78,5 +78,44 @@ class ProfileController extends Controller
         );
 
         return redirect()->route('driver.profile')->with('success', 'Profile updated successfully!');
+    }
+
+    /**
+     * Show the form for editing the client's profile.
+     */
+    public function clientProfile()
+    {
+        $client = Auth::user();
+        return view('client.profile', compact('client'));
+    }
+
+    /**
+     * Update the client's profile information.
+     */
+    public function updateClientProfile(Request $request)
+    {
+        $client = Auth::user();
+
+        $request->validate([
+            'firstname' => 'required|string|max:100',
+            'lastname' => 'required|string|max:100',
+            'username' => ['required', 'string', 'max:100', Rule::unique('users')->ignore($client->id)],
+            'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($client->id)],
+            'password' => ['nullable', 'confirmed', Password::min(8)],
+        ]);
+
+        // Update User Information
+        $client->firstname = $request->firstname;
+        $client->lastname = $request->lastname;
+        $client->username = $request->username;
+        $client->email = $request->email;
+
+        if ($request->filled('password')) {
+            $client->password = Hash::make($request->password);
+        }
+
+        $client->save();
+
+        return redirect()->route('client.profile')->with('success', 'Profile updated successfully!');
     }
 }

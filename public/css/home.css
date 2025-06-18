@@ -481,5 +481,6 @@
 
 	.booking-form .form-row {
 		margin-bottom: 1.5rem;
+		flex-direction: column;
 	}
 }

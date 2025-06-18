@@ -468,6 +468,12 @@
     .dashboard-header p {
         display: none;
     }
+
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 @media (max-width: 480px) {

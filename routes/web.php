@@ -49,6 +49,9 @@ Route::middleware('auth', 'client')->group(function () {
     Route::get('/bookings/{booking}/applications', [BookingController::class, 'showApplications'])->name('client.bookings.applications');
     Route::post('/bookings/{booking}/applications/{application}/accept', [BookingController::class, 'acceptApplication'])->name('client.bookings.accept_application');
     Route::put('/bookings/{uuid}/cancel', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
+
+    Route::get('/client/profile', [ProfileController::class, 'clientProfile'])->name('client.profile');
+    Route::put('/client/profile', [ProfileController::class, 'updateClientProfile'])->name('client.profile.update');
 });
 
 
@@ -64,6 +67,6 @@ Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'd
     Route::post('/bookings/{booking}/apply', [BookingApplicationController::class, 'store'])->name('driver.bookings.apply');
 
     // Driver Profile Routes
-    Route::get('/driver/profile', [ProfileController::class, 'edit'])->name('driver.profile');
-    Route::put('/driver/profile', [ProfileController::class, 'update'])->name('driver.profile.update');
+    Route::get('/driver/profile', [ProfileController::class, 'driverPorfile'])->name('driver.profile');
+    Route::put('/driver/profile', [ProfileController::class, 'updateDriverProfile'])->name('driver.profile.update');
 });

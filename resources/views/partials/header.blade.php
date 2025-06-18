@@ -14,7 +14,9 @@
                     @if (Auth::user()->user_type == 'CLIENT')
                         <li><a href="{{ route('client.bookings.index') }}"
                                 class="{{ Request::routeIs('client.bookings.index') ? 'active' : '' }}">Bookings</a></li>
-                      
+
+                        <li><a href="{{ route('client.profile') }}"
+                                class="{{ Request::routeIs('client.profile') ? 'active' : '' }}">Profile</a></li>
                     @endif
                     @if (Auth::user()->user_type == 'DRIVER')
                         <li><a href="{{ route('driver.dashboard') }}"
