@@ -16,7 +16,7 @@ class EnsureUserIsDriver
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->user_type !== 'DRIVER') {
+        if (!Auth::check() || Auth::user()->role->name !== 'DRIVER') {
             // abort(403, 'Unauthorized. You must be a driver to access this page.');
             return back()->with('error', 'Unauthorized. You must be a driver to access this page.');
         }

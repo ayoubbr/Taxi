@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\BookingApplication;
+use App\Models\City;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\BookingAssignedNotification;
 use App\Notifications\BookingCancelledNotification;
@@ -131,9 +133,10 @@ class BookingController extends Controller
         ]);
 
         // Notify drivers in the same city
-        $driversInCity = User::where('user_type', 'DRIVER')
-            ->whereHas('taxi', function ($query) use ($booking) {
-                $query->where('city', $booking->pickup_city)
+        $pickup_city = City::where('name', $booking->pickup_city)->first()->id;
+        $driversInCity = User::where('role_id', Role::where('name', 'DRIVER')->first()->id)
+            ->whereHas('taxi', function ($query) use ($booking, $pickup_city) {
+                $query->where('city_id', $pickup_city)
                     ->where('type', $booking->taxi_type);
             })->get();
 

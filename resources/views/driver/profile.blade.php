@@ -137,115 +137,116 @@
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user()->taxi != null)
+                        <!-- Taxi Information -->
+                        <div class="form-card">
+                            <h4><i class="fas fa-taxi"></i> Vehicle Information</h4>
 
-                    <!-- Taxi Information -->
-                    <div class="form-card">
-                        <h4><i class="fas fa-taxi"></i> Vehicle Information</h4>
-
-                        <div class="form-group {{ $errors->has('license_plate') ? 'has-error' : '' }}">
-                            <label for="license_plate">
-                                <i class="fas fa-id-card"></i> License Plate *
-                            </label>
-                            <input type="text" name="license_plate" id="license_plate"
-                                value="{{ old('license_plate', $taxi->license_plate ?? '') }}" placeholder="ABC-1234"
-                                style="text-transform: uppercase;" required>
-                            @error('license_plate')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group {{ $errors->has('model') ? 'has-error' : '' }}">
-                            <label for="model">
-                                <i class="fas fa-car"></i> Vehicle Model *
-                            </label>
-                            <input type="text" name="model" id="model"
-                                value="{{ old('model', $taxi->model ?? '') }}"
-                                placeholder="e.g., Toyota Prius, Honda Civic" required>
-                            @error('model')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group half {{ $errors->has('type') ? 'has-error' : '' }}">
-                                <label for="type">
-                                    <i class="fas fa-tags"></i> Vehicle Type *
+                            <div class="form-group {{ $errors->has('license_plate') ? 'has-error' : '' }}">
+                                <label for="license_plate">
+                                    <i class="fas fa-id-card"></i> License Plate *
                                 </label>
-                                <select name="type" id="type" required>
-                                    <option value="">Select vehicle type</option>
-                                    <option value="standard"
-                                        {{ old('type', $taxi->type ?? '') == 'standard' ? 'selected' : '' }}>
-                                        🚗 Standard
-                                    </option>
-                                    <option value="van"
-                                        {{ old('type', $taxi->type ?? '') == 'van' ? 'selected' : '' }}>
-                                        🚐 Van
-                                    </option>
-                                    <option value="luxe"
-                                        {{ old('type', $taxi->type ?? '') == 'luxe' ? 'selected' : '' }}>
-                                        🚙 Luxury
-                                    </option>
+                                <input type="text" name="license_plate" id="license_plate"
+                                    value="{{ old('license_plate', $taxi->license_plate ?? '') }}" placeholder="ABC-1234"
+                                    style="text-transform: uppercase;" required>
+                                @error('license_plate')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group {{ $errors->has('model') ? 'has-error' : '' }}">
+                                <label for="model">
+                                    <i class="fas fa-car"></i> Vehicle Model *
+                                </label>
+                                <input type="text" name="model" id="model"
+                                    value="{{ old('model', $taxi->model ?? '') }}"
+                                    placeholder="e.g., Toyota Prius, Honda Civic" required>
+                                @error('model')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half {{ $errors->has('type') ? 'has-error' : '' }}">
+                                    <label for="type">
+                                        <i class="fas fa-tags"></i> Vehicle Type *
+                                    </label>
+                                    <select name="type" id="type" required>
+                                        <option value="">Select vehicle type</option>
+                                        <option value="standard"
+                                            {{ old('type', $taxi->type ?? '') == 'standard' ? 'selected' : '' }}>
+                                            🚗 Standard
+                                        </option>
+                                        <option value="van"
+                                            {{ old('type', $taxi->type ?? '') == 'van' ? 'selected' : '' }}>
+                                            🚐 Van
+                                        </option>
+                                        <option value="luxe"
+                                            {{ old('type', $taxi->type ?? '') == 'luxe' ? 'selected' : '' }}>
+                                            🚙 Luxury
+                                        </option>
+                                    </select>
+                                    @error('type')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group half {{ $errors->has('capacity') ? 'has-error' : '' }}">
+                                    <label for="capacity">
+                                        <i class="fas fa-users"></i> Passenger Capacity *
+                                    </label>
+                                    <input type="number" name="capacity" id="capacity"
+                                        value="{{ old('capacity', $taxi->capacity ?? '') }}" min="1"
+                                        max="8" placeholder="4" required>
+                                    @error('capacity')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half {{ $errors->has('year') ? 'has-error' : '' }}">
+                                    <label for="year">
+                                        <i class="fas fa-calendar"></i> Vehicle Year
+                                    </label>
+                                    <input type="number" name="year" id="year"
+                                        value="{{ old('year', $taxi->year ?? '') }}" min="2000"
+                                        max="{{ date('Y') + 1 }}" placeholder="{{ date('Y') }}">
+                                    @error('year')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group half {{ $errors->has('color') ? 'has-error' : '' }}">
+                                    <label for="color">
+                                        <i class="fas fa-palette"></i> Vehicle Color
+                                    </label>
+                                    <input type="text" name="color" id="color"
+                                        value="{{ old('color', $taxi->color ?? '') }}"
+                                        placeholder="e.g., White, Black, Silver">
+                                    @error('color')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group {{ $errors->has('city') ? 'has-error' : '' }}">
+                                <label for="city">
+                                    <i class="fas fa-map-marker-alt"></i> Operating City *
+                                </label>
+                                <select name="city" id="city" required>
+                                    <option value="">Select your operating city</option>
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city }}"
+                                            {{ old('city', $taxi->city->name ?? '') == $city ? 'selected' : '' }}>
+                                            📍 {{ $city }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                @error('type')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group half {{ $errors->has('capacity') ? 'has-error' : '' }}">
-                                <label for="capacity">
-                                    <i class="fas fa-users"></i> Passenger Capacity *
-                                </label>
-                                <input type="number" name="capacity" id="capacity"
-                                    value="{{ old('capacity', $taxi->capacity ?? '') }}" min="1" max="8"
-                                    placeholder="4" required>
-                                @error('capacity')
+                                @error('city')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="form-group half {{ $errors->has('year') ? 'has-error' : '' }}">
-                                <label for="year">
-                                    <i class="fas fa-calendar"></i> Vehicle Year
-                                </label>
-                                <input type="number" name="year" id="year"
-                                    value="{{ old('year', $taxi->year ?? '') }}" min="2000"
-                                    max="{{ date('Y') + 1 }}" placeholder="{{ date('Y') }}">
-                                @error('year')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group half {{ $errors->has('color') ? 'has-error' : '' }}">
-                                <label for="color">
-                                    <i class="fas fa-palette"></i> Vehicle Color
-                                </label>
-                                <input type="text" name="color" id="color"
-                                    value="{{ old('color', $taxi->color ?? '') }}"
-                                    placeholder="e.g., White, Black, Silver">
-                                @error('color')
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group {{ $errors->has('city') ? 'has-error' : '' }}">
-                            <label for="city">
-                                <i class="fas fa-map-marker-alt"></i> Operating City *
-                            </label>
-                            <select name="city" id="city" required>
-                                <option value="">Select your operating city</option>
-                                @foreach ($cities as $city)
-                                    <option value="{{ $city }}"
-                                        {{ old('city', $taxi->city ?? '') == $city ? 'selected' : '' }}>
-                                        📍 {{ $city }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('city')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
+                    @endif
                 </div>
 
                 <div class="form-actions">

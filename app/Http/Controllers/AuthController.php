@@ -12,10 +12,10 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    
+
     public function showLoginForm()
     {
-        return view('auth.login'); 
+        return view('auth.login');
     }
 
 
@@ -41,25 +41,25 @@ class AuthController extends Controller
         ]);
     }
 
-   
+
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-   
+
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'user_type' => 'required|in:client,driver',
+            'user_type' => 'required|in:client,driver,agency',
             'terms' => 'accepted',
         ]);
 
         // Determine role_id based on user_type
-        $role = Role::where('name', $request->user_type)->first();
+        $role = Role::where('name', strtoupper($request->user_type))->first();
         if (!$role) {
             return back()->withInput()->withErrors(['user_type' => 'Invalid user type selected.']);
         }
@@ -71,7 +71,6 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->id,
-            'user_type' => strtoupper($request->user_type),
             'is_active' => true,
         ]);
 

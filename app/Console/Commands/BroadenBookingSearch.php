@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Booking;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\NewBookingAvailable;
 use Illuminate\Console\Command;
@@ -38,8 +39,9 @@ class BroadenBookingSearch extends Command
             // Find drivers in the new tier and notify them
             $citiesToSearch = $this->getCitiesForTier($booking->pickup_city, $newTier);
             Log::info('Search cities ::::::::: ', $citiesToSearch);
-
-            $driversToNotify = User::where('user_type', 'DRIVER')
+           
+            $driverRoleId = Role::where('name', 'DRIVER')->first()->id;
+            $driversToNotify = User::where('role_id', $driverRoleId)
                 ->whereHas('taxi', function ($query) use ($citiesToSearch, $booking) {
                     $query->whereIn('city', $citiesToSearch)
                         ->where('type', $booking->taxi_type);

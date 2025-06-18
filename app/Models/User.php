@@ -19,7 +19,6 @@ class User extends Authenticatable
         'firstname',
         'lastname',
         'role_id',
-        'user_type',
         'is_active',
     ];
 
@@ -55,5 +54,15 @@ class User extends Authenticatable
     public function applications()
     {
         return $this->hasMany(BookingApplication::class, 'driver_id');
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
+
+    public function hasRole(string $roleName): bool
+    {
+        return $this->role()->where('name', $roleName)->exists();
     }
 }

@@ -13,7 +13,8 @@ class Taxi extends Model
         'license_plate',
         'model',
         'type',
-        'city',
+        'city_id',
+        'agency_id',
         'capacity',
         'driver_id',
         'is_available',
@@ -31,5 +32,14 @@ class Taxi extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'assigned_taxi_id');
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

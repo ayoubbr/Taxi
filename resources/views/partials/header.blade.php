@@ -11,14 +11,14 @@
             <ul class="nav-menu">
                 <li><a href="{{ route('home') }}" class="{{ Request::routeIs('home') ? 'active' : '' }}">Home</a></li>
                 @auth
-                    @if (Auth::user()->user_type == 'CLIENT')
+                    @if (Auth::user()->hasRole('CLIENT'))
                         <li><a href="{{ route('client.bookings.index') }}"
                                 class="{{ Request::routeIs('client.bookings.index') ? 'active' : '' }}">Bookings</a></li>
 
                         <li><a href="{{ route('client.profile') }}"
                                 class="{{ Request::routeIs('client.profile') ? 'active' : '' }}">Profile</a></li>
                     @endif
-                    @if (Auth::user()->user_type == 'DRIVER')
+                    @if (Auth::user()->hasRole('DRIVER'))
                         <li><a href="{{ route('driver.dashboard') }}"
                                 class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     @endif

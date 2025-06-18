@@ -17,7 +17,7 @@ class EnsureUserIsClient
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->user_type !== 'CLIENT') {
+        if (!Auth::check() || Auth::user()->role->name !== 'CLIENT') {
             // abort(403, 'Unauthorized. You must be a client to access this page.');
             return back()->with('error', 'Unauthorized. You must be a client to access this page.');
         }

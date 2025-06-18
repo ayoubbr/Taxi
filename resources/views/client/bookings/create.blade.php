@@ -20,7 +20,7 @@
         <!-- Main Content -->
         <main class="dashboard-content">
             <div class="container">
-                @if (Auth::check() && Auth::user()->user_type != 'DRIVER' && Auth::user()->user_type != 'ADMIN')
+                @if (Auth::check() && !Auth::user()->hasRole('DRIVER') && !Auth::user()->hasRole('AGENCY_ADMIN'))
                     <section id="booking" class="booking-section">
                         <div class="booking-card-wrapper">
                             <div class="booking-card">

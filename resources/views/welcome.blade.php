@@ -14,7 +14,11 @@
             <div class="hero-content">
                 <h2>Book Your Taxi <span>Instantly</span></h2>
                 <p>Fast, reliable and secure taxi service at your fingertips</p>
-                <a href="{{ route('client.bookings.create') }}" class="btn btn-primary">Book Now</a>
+                @auth
+                    @if (Auth::user()->hasRole('CLIENT'))
+                        <a href="{{ route('client.bookings.create') }}" class="btn btn-primary">Book Now</a>
+                    @endif
+                @endauth
             </div>
             <div class="hero-image">
                 <img src="{{ asset('images/taxi-2.webp') }}" alt="Taxi illustration">
@@ -109,9 +113,12 @@
             <div class="cta-content">
                 <h2>Ready to Book Your Taxi?</h2>
                 <p>Fast, reliable and secure taxi service at your fingertips</p>
-                {{-- <a href="#booking" class="btn btn-primary">Book Now</a> --}}
-                <li class="flex-center"><a href="{{ route('client.bookings.create') }}"
-                        class="btn-login {{ Request::routeIs('client.bookings.create') ? 'active' : '' }}">Book Now</a>
+                @auth
+                    @if (Auth::user()->hasRole('CLIENT'))
+                        <li class="flex-center"><a href="{{ route('client.bookings.create') }}"
+                                class="btn-login {{ Request::routeIs('client.bookings.create') ? 'active' : '' }}">Book Now</a>
+                    @endif
+                @endauth
                 </li>
             </div>
         </div>

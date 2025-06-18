@@ -14,7 +14,7 @@ class TaxiSeeder extends Seeder
      */
     public function run(): void
     {
-        $driver1 = User::where('user_type', 'DRIVER')->first();
+        $driver1 = User::where('username', 'alex.driver')->first();
         $driver2 = User::where('username', 'another.driver')->first();
 
         Taxi::create([
@@ -22,7 +22,7 @@ class TaxiSeeder extends Seeder
             'model' => 'Toyota Camry',
             'type' => 'standard',
             'capacity' => 4,
-            'city' => 'Marrakech',
+            'city_id' => 1,
             'driver_id' => $driver1 ? $driver1->id : null,
             'is_available' => true,
         ]);
@@ -42,7 +42,7 @@ class TaxiSeeder extends Seeder
             'model' => 'Mercedes Sprinter',
             'type' => 'van',
             'capacity' => 7,
-            'city' => 'Casablanca',
+            'city_id' => 2,
             'driver_id' => $driver2 ? $driver2->id : null,
             'is_available' => true,
         ]);

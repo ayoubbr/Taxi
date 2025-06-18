@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
@@ -13,9 +14,11 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'client']);
-        Role::create(['name' => 'driver']);
-        Role::create(['name' => 'operator']); // Renamed from HOTEL_STAFF for clarity in role name
+        DB::table('roles')->insert([
+            ['name' => 'SUPER_ADMIN'],
+            ['name' => 'AGENCY_ADMIN'],
+            ['name' => 'DRIVER'],
+            ['name' => 'CLIENT'],
+        ]);
     }
 }

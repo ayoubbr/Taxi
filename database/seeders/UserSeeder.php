@@ -15,10 +15,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::where('name', 'admin')->first();
-        $clientRole = Role::where('name', 'client')->first();
-        $driverRole = Role::where('name', 'driver')->first();
-        $operatorRole = Role::where('name', 'operator')->first();
+        $superAdminRole = Role::where('name', 'SUPER_ADMIN')->first();
+        $agencyAdminRole = Role::where('name', 'AGENCY_ADMIN')->first();
+        $clientRole = Role::where('name', 'CLIENT')->first();
+        $driverRole = Role::where('name', 'DRIVER')->first();
 
         User::create([
             'username' => 'super.admin',
@@ -26,8 +26,17 @@ class UserSeeder extends Seeder
             'email' => 'admin@email.com',
             'firstname' => 'Super',
             'lastname' => 'Admin',
-            'role_id' => $adminRole->id,
-            'user_type' => 'ADMIN', 
+            'role_id' => $superAdminRole->id,
+            'is_active' => true,
+        ]);
+
+        User::create([
+            'username' => 'agency.admin',
+            'password' => Hash::make('password'),
+            'email' => 'agency.admin@email.com',
+            'firstname' => 'Agency',
+            'lastname' => 'Admin',
+            'role_id' => $agencyAdminRole->id,
             'is_active' => true,
         ]);
 
@@ -38,7 +47,6 @@ class UserSeeder extends Seeder
             'firstname' => 'John',
             'lastname' => 'Client',
             'role_id' => $clientRole->id,
-            'user_type' => 'CLIENT',
             'is_active' => true,
         ]);
 
@@ -49,7 +57,6 @@ class UserSeeder extends Seeder
             'firstname' => 'Alex',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
-            'user_type' => 'DRIVER',
             'is_active' => true,
         ]);
 
@@ -60,18 +67,6 @@ class UserSeeder extends Seeder
             'firstname' => 'Another',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
-            'user_type' => 'DRIVER',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'username' => 'one.operator',
-            'password' => Hash::make('password'),
-            'email' => 'one.operator@email.com',
-            'firstname' => 'One',
-            'lastname' => 'Operator',
-            'role_id' => $operatorRole->id,
-            'user_type' => 'OPPERATOR',
             'is_active' => true,
         ]);
     }

@@ -17,7 +17,7 @@ class DriverController extends Controller
         // Ensure only authenticated users with 'driver' role can access these routes
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
-            if (Auth::user()->user_type !== 'DRIVER') {
+            if (Auth::user()->role->name !== 'DRIVER') {
                 abort(403, 'Unauthorized action.'); // Or redirect
             }
             return $next($request);
@@ -159,10 +159,11 @@ class DriverController extends Controller
         $driver = Auth::user();
         $driverTaxi = $driver->taxi;
         $driverId = Auth::id();
+        $bookings = [];
 
         // dd($request->all());
         if (!$driverTaxi) {
-            return view('driver.available-bookings')->with('error', 'You must have a taxi assigned to view available bookings.');
+            return view('driver.available-bookings', compact('bookings'))->with('error', 'You must have a taxi assigned to view available bookings.');
         }
 
 
@@ -193,10 +194,8 @@ class DriverController extends Controller
         }
 
 
-        $bookings = $query->where('pickup_city', $driverTaxi->city)->orderBy('pickup_datetime', 'asc')
+        $bookings = $query->where('pickup_city', $driverTaxi->city->name)->orderBy('pickup_datetime', 'asc')
             ->paginate(6); // Paginate with 10 items per page
-
-        // dd($bookings);
 
         return view('driver.available-bookings', compact('bookings'));
     }

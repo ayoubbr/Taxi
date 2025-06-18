@@ -16,7 +16,7 @@ class BookingApplicationController extends Controller
         $driver = Auth::user();
 
         // Validation
-        if ($driver->user_type !== 'DRIVER') {
+        if ($driver->role->name !== 'DRIVER') {
             return back()->with('error', 'Only drivers can apply for bookings.');
         }
 

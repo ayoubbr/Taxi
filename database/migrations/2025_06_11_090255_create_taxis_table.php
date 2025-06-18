@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('license_plate', 50)->unique();
             $table->string('model', 100)->nullable();
             $table->enum('type', ['standard', 'van', 'luxe']);
-            $table->string('city', 100)->nullable();
             $table->integer('capacity');
+            $table->foreignId('agency_id')->nullable()->constrained('agencies')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->foreignId('driver_id')->nullable()->constrained('users')->onDelete('set null');
             $table->boolean('is_available')->default(true);
-
             $table->timestamps();
         });
     }

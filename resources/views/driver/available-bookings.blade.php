@@ -163,7 +163,9 @@
 
             {{-- Pagination Links --}}
             <div class="pagination-links">
-                {{ $bookings->links() }}
+                @if ( count($bookings) > 0)
+                    {{ $bookings->links() }}
+                @endif
             </div>
         </div>
     </main>
