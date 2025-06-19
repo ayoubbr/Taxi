@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Taxi;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class TaxiSeeder extends Seeder
 {
@@ -14,8 +15,8 @@ class TaxiSeeder extends Seeder
      */
     public function run(): void
     {
-        $driver1 = User::where('username', 'alex.driver')->first();
-        $driver2 = User::where('username', 'another.driver')->first();
+        $driver1 = User::where('username', 'alex.driver')->first()->id;
+        $driver2 = User::where('username', 'another.driver')->first()->id;
 
         Taxi::create([
             'license_plate' => 'ABC-123',
@@ -23,7 +24,18 @@ class TaxiSeeder extends Seeder
             'type' => 'standard',
             'capacity' => 4,
             'city_id' => 1,
-            'driver_id' => $driver1 ? $driver1->id : null,
+            'driver_id' => $driver1 ?? null,
+            'is_available' => true,
+        ]);
+
+
+        Taxi::create([
+            'license_plate' => 'XYZ-789',
+            'model' => 'Mercedes Sprinter',
+            'type' => 'van',
+            'capacity' => 7,
+            'city_id' => 2,
+            'driver_id' => $driver2 ?? null,
             'is_available' => true,
         ]);
 
@@ -36,16 +48,6 @@ class TaxiSeeder extends Seeder
         //     'driver_id' => $driver1 ? $driver1->id : null,
         //     'is_available' => true,
         // ]);
-
-        Taxi::create([
-            'license_plate' => 'XYZ-789',
-            'model' => 'Mercedes Sprinter',
-            'type' => 'van',
-            'capacity' => 7,
-            'city_id' => 2,
-            'driver_id' => $driver2 ? $driver2->id : null,
-            'is_available' => true,
-        ]);
 
         // Taxi::create([
         //     'license_plate' => 'LXC-456',

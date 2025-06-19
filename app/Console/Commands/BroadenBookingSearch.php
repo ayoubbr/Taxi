@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Booking;
+use App\Models\City;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\NewBookingAvailable;
@@ -24,11 +25,14 @@ class BroadenBookingSearch extends Command
         $bookings = Booking::withCount('applications')
             ->where('status', 'PENDING')
             ->where('search_tier', '<', $maxTiers)
-            ->where('created_at', '<', now()->addMinutes(15))
+            ->where('created_at', '>', now()->subMinutes(30))
             ->having('applications_count', '=', 0)
             ->get();
 
-        Log::info($bookings);
+        foreach ($bookings as $key => $value) {
+            Log::info("booking uuid :::::: $value->booking_uuid |||| ");
+            Log::info("booking uuid :::::: $value->taxi_type ||||||| ");
+        }
 
         foreach ($bookings as $booking) {
             $booking->increment('search_tier');
@@ -39,17 +43,40 @@ class BroadenBookingSearch extends Command
             // Find drivers in the new tier and notify them
             $citiesToSearch = $this->getCitiesForTier($booking->pickup_city, $newTier);
             Log::info('Search cities ::::::::: ', $citiesToSearch);
-           
+
             $driverRoleId = Role::where('name', 'DRIVER')->first()->id;
+
+
+            $citiesIds = [];
+            foreach ($citiesToSearch as $key => $value) {
+                $city = City::where('name', $value)->first();
+                if ($city) {
+                    $cityId = $city->id;
+                    array_push($citiesIds, $cityId);
+                }
+            }
+
+            Log::info('Search cities ids ::::: ', $citiesIds);
+
+            // $driversToNotify = User::where('role_id', $driverRoleId)
+            //     ->whereHas('taxi', function ($query) use ($citiesToSearch, $booking) {
+            //         $query->whereIn('city', $citiesToSearch)
+            //             ->where('type', $booking->taxi_type);
+            //     })->get();
+
+
             $driversToNotify = User::where('role_id', $driverRoleId)
-                ->whereHas('taxi', function ($query) use ($citiesToSearch, $booking) {
-                    $query->whereIn('city', $citiesToSearch)
+                ->whereHas('taxi', function ($query) use ($citiesIds, $booking) {
+                    $query->whereIn('city_id', $citiesIds)
                         ->where('type', $booking->taxi_type);
                 })->get();
 
+            Log::info('Drivers :::::::::::::::  ', $driversToNotify->toArray());
+
+
             // Exclude drivers who have already been notified in a previous tier
             // (More complex logic needed here if you want to avoid re-notifying)
-            Notification::send($driversToNotify, new NewBookingAvailable($booking));
+            // Notification::send($driversToNotify, new NewBookingAvailable($booking));
         }
 
         $this->info('Done.');
