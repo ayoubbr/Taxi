@@ -298,7 +298,7 @@ class AgencyController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('client_name', 'like', "%{$search}%")
                     ->orWhere('pickup_location', 'like', "%{$search}%")
-                    ->orWhere('destination', 'like', "%{$search}%")
+                    // ->orWhere('destination', 'like', "%{$search}%")
                     ->orWhere('booking_uuid', 'like', "%{$search}%")
                     ->orWhereHas('client', function ($cq) use ($search) {
                         $cq->where('firstname', 'like', "%{$search}%")

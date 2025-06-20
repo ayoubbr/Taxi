@@ -13,6 +13,7 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/super-admin-agency-details.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
 @section('content')
@@ -93,11 +94,13 @@
         <div class="filters-section">
             <form method="GET" class="filters-form">
                 <div class="filter-group search-box">
-                    <input type="text" name="search" placeholder="Rechercher par client, destination..."
+                    <label for="search">Recherche</label>
+                    <input id="search" type="text" name="search" placeholder="Rechercher par client, destination..."
                         value="{{ request('search') }}" class="form-control">
                 </div>
                 <div class="filter-group">
-                    <select name="status" class="form-control">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control">
                         <option value="">Tous les statuts</option>
                         <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>En attente</option>
                         <option value="ASSIGNED" {{ request('status') == 'ASSIGNED' ? 'selected' : '' }}>Assignée</option>
@@ -109,7 +112,8 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <select name="taxi_type" class="form-control">
+                    <label for="taxi_type">Taxi type</label>
+                    <select name="taxi_type" id="taxi_type" class="form-control">
                         <option value="">Tous les types</option>
                         <option value="standard" {{ request('taxi_type') == 'standard' ? 'selected' : '' }}>Standard
                         </option>
@@ -118,10 +122,14 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control">
+                    <label for="date_from">Start Date</label>
+                    <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}"
+                        class="form-control datepicker" placeholder="Date de début">
                 </div>
                 <div class="filter-group">
-                    <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control">
+                    <label for="date_to">End Date</label>
+                    <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}"
+                        class="form-control datepicker" placeholder="Date de fin">
                 </div>
                 <div class="filter-actions">
                     <button type="submit" class="btn btn-primary">
@@ -259,5 +267,25 @@
     </div>
 
 @endsection
+@section('js')
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <script>
+        flatpickr("#date_from", {
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+
+        flatpickr("#date_to", {
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+    </script>
+
+@endsection
 {{-- <script src="{{ asset('js/super-admin-agency-show.js') }}"></script> --}}
