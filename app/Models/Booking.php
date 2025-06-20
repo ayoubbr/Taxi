@@ -14,15 +14,15 @@ class Booking extends Model
         'client_id',
         'client_name',
         'pickup_location',
-        'pickup_city',
-        'destination',
+        'pickup_city_id',
+        'destination_city_id',
         'pickup_datetime',
         'status',
         'assigned_taxi_id',
         'assigned_driver_id',
         'estimated_fare',
         'qr_code_data',
-        'search_tier', // Add this to the fillable properties
+        'search_tier',
         'taxi_type',
     ];
 
@@ -54,6 +54,16 @@ class Booking extends Model
     public function driver()
     {
         return $this->belongsTo(User::class, 'assigned_driver_id');
+    }
+
+    public function pickupCity()
+    {
+        return $this->belongsTo(City::class, 'pickup_city_id');
+    }
+
+    public function destinationCity()
+    {
+        return $this->belongsTo(City::class, 'destination_city_id');
     }
 
     public function applications()

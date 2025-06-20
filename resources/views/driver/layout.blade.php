@@ -25,13 +25,16 @@
     <div class="driver-dashboard">
         <aside class="dashboard-sidebar">
             <div class="driver-profile">
-                <div class="driver-avatar">
-                    <span>{{ strtoupper(substr(Auth::user()->firstname, 0, 1)) }}</span>
-                </div>
-                <div class="driver-info">
-                    <h3>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h3>
-                    <span class="driver-status online">Online</span>
-                </div>
+                @auth
+                    <div class="driver-avatar">
+
+                        <span>{{ strtoupper(substr(Auth::user()->firstname, 0, 1)) }}</span>
+                    </div>
+                    <div class="driver-info">
+                        <h3>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h3>
+                        <span class="driver-status online">Online</span>
+                    </div>
+                @endauth
             </div>
 
             <nav class="sidebar-nav">

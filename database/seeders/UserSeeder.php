@@ -23,11 +23,11 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'super.admin',
             'password' => Hash::make('password'),
-            'email' => 'admin@email.com',
+            'email' => 'super.admin@email.com',
             'firstname' => 'Super',
             'lastname' => 'Admin',
             'role_id' => $superAdminRole->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
 
         User::create([
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Agency',
             'lastname' => 'Admin',
             'role_id' => $agencyAdminRole->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
 
         User::create([
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'firstname' => 'John',
             'lastname' => 'Client',
             'role_id' => $clientRole->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
 
         User::create([
@@ -57,7 +57,8 @@ class UserSeeder extends Seeder
             'firstname' => 'Alex',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
-            'is_active' => true,
+            'status' => 'active',
+            'agency_id' => 1
         ]);
 
         User::create([
@@ -67,7 +68,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Another',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
-            'is_active' => true,
+            'status' => 'inactive',
         ]);
     }
 }

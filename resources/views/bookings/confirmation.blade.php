@@ -17,7 +17,7 @@
                 <ul>
                     <li><strong>Client Name:</strong> {{ $booking->client_name }}</li>
                     <li><strong>Pickup Location:</strong> {{ $booking->pickup_location }}, {{ $booking->pickup_city }}</li>
-                    <li><strong>Destination:</strong> {{ $booking->destination }}</li>
+                    <li><strong>Destination:</strong> {{ $booking->destinationCity->name }}</li>
                     <li><strong>Date & Time:</strong>
                         {{ \Carbon\Carbon::parse($booking->pickup_datetime)->format('d M Y H:i') }}</li>
                     <li><strong>Status:</strong> <span

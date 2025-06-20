@@ -13,4 +13,14 @@ class City extends Model
     {
         return $this->hasMany(Taxi::class);
     }
+
+    public function bookings_pickup()
+    {
+        return $this->hasMany(Booking::class, 'pickup_city_id');
+    }
+
+    public function bookings_destination()
+    {
+        return $this->hasMany(Booking::class, 'destination_city_id');
+    }
 }

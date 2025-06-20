@@ -55,9 +55,9 @@
                                             <select id="pickup_city" name="pickup_city" required>
                                                 <option value="">Select a city</option>
                                                 @foreach ($cities as $city)
-                                                    <option value="{{ $city }}"
-                                                        {{ old('pickup_city') == $city ? 'selected' : '' }}>
-                                                        {{ $city }}</option>
+                                                    <option value="{{ $city->name }}"
+                                                        {{ old('pickup_city') == $city->name ? 'selected' : '' }}>
+                                                        {{ $city->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('pickup_city')
@@ -71,9 +71,9 @@
                                             <select id="destination" name="destination" required>
                                                 <option value="">Select a city</option>
                                                 @foreach ($cities as $city)
-                                                    <option value="{{ $city }}"
-                                                        {{ old('destination') == $city ? 'selected' : '' }}>
-                                                        {{ $city }}</option>
+                                                    <option value="{{ $city->name }}"
+                                                        {{ old('destination') == $city->name ? 'selected' : '' }}>
+                                                        {{ $city->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('destination')

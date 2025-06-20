@@ -19,8 +19,10 @@ return new class extends Migration
             $table->foreignId('client_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('client_name', 100);
             $table->string('pickup_location');
-            $table->string('pickup_city', 100)->nullable();
-            $table->string('destination');
+            // $table->string('pickup_city', 100)->nullable();
+            $table->foreignId('pickup_city_id')->constrained('cities')->onDelete('cascade');
+            $table->foreignId('destination_city_id')->constrained('cities')->onDelete('cascade');
+            // $table->string('destination');
             $table->dateTime('pickup_datetime');
             $table->enum('status', ['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'NO_TAXI_FOUND'])->default('PENDING');
             $table->foreignId('assigned_taxi_id')->nullable()->constrained('taxis')->onDelete('set null');

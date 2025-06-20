@@ -42,11 +42,6 @@ class BroadenBookingSearch extends Command
             return;
         }
 
-        // foreach ($bookings as $key => $value) {
-        //     Log::info("booking uuid :::::: $value->booking_uuid |||| ");
-        //     Log::info("booking taxi type :::::: $value->taxi_type |||| ");
-        // }
-
         foreach ($bookings as $booking) {
             // Check if pickupCity relationship is loaded to avoid errors
             if (!$booking->pickupCity) {
@@ -55,11 +50,7 @@ class BroadenBookingSearch extends Command
             }
 
             $booking->increment('search_tier');
-            // $newTier = $booking->search_tier;
             Log::info("Broadening search for Booking #{$booking->id} to Tier {$booking->search_tier}");
-
-            // Find drivers in the new tier and notify them
-            // $citiesToSearch = $this->getCitiesForTier($booking->pickup_city, $newTier);
 
             // 1. Get city names for the new tier
             $cityNamesToSearch = $this->getCitiesForTier($booking->pickupCity->name, $booking->search_tier);
@@ -68,32 +59,9 @@ class BroadenBookingSearch extends Command
             }
             Log::info('Search cities ::::::::: ', $cityNamesToSearch);
 
-            // $driverRoleId = Role::where('name', 'DRIVER')->first()->id;
-
             // 2. Convert city names to IDs in one query
             $cityIds = City::whereIn('name', $cityNamesToSearch)->pluck('id');
-            // foreach ($citiesToSearch as $key => $value) {
-            //     $city = City::where('name', $value)->first();
-            //     if ($city) {
-            //         $cityId = $city->id;
-            //         array_push($citiesIds, $cityId);
-            //     }
-            // }
-            Log::info('Search cities ids ::::: ', $cityIds);
-
-
-            // $driversToNotify = User::where('role_id', $driverRoleId)
-            //     ->whereHas('taxi', function ($query) use ($citiesToSearch, $booking) {
-            //         $query->whereIn('city', $citiesToSearch)
-            //             ->where('type', $booking->taxi_type);
-            //     })->get();
-
-
-            // $driversToNotify = User::where('role_id', $driverRoleId)
-            //     ->whereHas('taxi', function ($query) use ($citiesIds, $booking) {
-            //         $query->whereIn('city_id', $citiesIds)
-            //             ->where('type', $booking->taxi_type);
-            //     })->get();
+            Log::info('Search cities ids ::::: ', $cityIds->toArray());
 
             // 3. Find drivers in those cities
             $driversToNotify = User::where('role_id', $driverRoleId)
@@ -105,7 +73,6 @@ class BroadenBookingSearch extends Command
 
             Log::info("Found " . $driversToNotify->count() . " drivers to notify for booking #{$booking->id}.");
             Log::info('Drivers :::::::::::::::  ', $driversToNotify->toArray());
-
 
             // Exclude drivers who have already been notified in a previous tier
             // (More complex logic needed here if you want to avoid re-notifying)
@@ -149,27 +116,4 @@ class BroadenBookingSearch extends Command
         }
         return $currentTierCities;
     }
-
-    //   protected function getCitiesForTier(string $startCity, int $tier): array
-    // {
-    //     // This function logic remains the same as it works with names
-    //     $proximityMap = config('cities.proximity_map');
-    //     if (!isset($proximityMap[$startCity])) return [];
-
-    //     if ($tier === 0) return [$startCity];
-    //     if ($tier === 1) return $proximityMap[$startCity];
-
-    //     // For more complex tiers (>=2), a full graph traversal is needed.
-    //     // The previous logic for that was fine. For simplicity, this handles up to tier 1.
-    //     $tierOneCities = $proximityMap[$startCity];
-    //     $tierTwoCities = [];
-    //     foreach($tierOneCities as $city) {
-    //         if(isset($proximityMap[$city])) {
-    //             $tierTwoCities = array_merge($tierTwoCities, $proximityMap[$city]);
-    //         }
-    //     }
-    //     $allNeighbors = array_unique(array_merge($tierOneCities, $tierTwoCities));
-
-    //     return array_values(array_diff($allNeighbors, [$startCity]));
-    // }
 }

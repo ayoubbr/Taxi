@@ -25,6 +25,7 @@ class TaxiSeeder extends Seeder
             'capacity' => 4,
             'city_id' => 1,
             'driver_id' => $driver1 ?? null,
+            'agency_id' => 1,
             'is_available' => true,
         ]);
 

@@ -38,6 +38,7 @@ class Taxi extends Model
     {
         return $this->belongsTo(Agency::class);
     }
+    
     public function city()
     {
         return $this->belongsTo(City::class);

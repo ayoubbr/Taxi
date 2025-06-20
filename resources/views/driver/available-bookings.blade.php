@@ -110,15 +110,15 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                         <span>Pickup: {{ $booking->pickup_location }}</span>
                                     </div>
-                                    <span class="city">{{ $booking->pickup_city }}</span>
+                                    <span class="city">{{ $booking->pickupCity->name }}</span>
                                 </div>
                                 <div class="arrow-icon"><i class="fas fa-arrow-right"></i></div>
                                 <div class="route-point destination">
                                     <div class="point-details">
                                         <i class="fas fa-location-arrow"></i>
-                                        <span>Destination: {{ $booking->destination }}</span>
+                                        <span>Destination: {{ $booking->destinationCity->name }}</span>
                                     </div>
-                                    <span class="city">{{ $booking->destination_city }}</span>
+                                    <span class="city">{{ $booking->destinationCity->name }}</span>
                                 </div>
                             </div>
                             <div class="booking-details">

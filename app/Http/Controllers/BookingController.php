@@ -60,8 +60,8 @@ class BookingController extends Controller
 
         // Mark booking as cancelled
         $booking->status = 'CANCELLED';
-        $booking->assigned_driver_id = NULL;
-        $booking->assigned_taxi_id = NULL;
+        // $booking->assigned_driver_id = NULL;
+        // $booking->assigned_taxi_id = NULL;
 
         $booking->save();
 
@@ -75,9 +75,8 @@ class BookingController extends Controller
 
     public function create()
     {
-        $cities = array_keys(config('cities.proximity_map'));
-        sort($cities);
-
+        $cities = City::all();
+        // dd($cities);
         return view('client.bookings.create', compact('cities'));
     }
 
@@ -116,14 +115,16 @@ class BookingController extends Controller
             'destination' => $request->destination,
             'pickupDateTime' => $pickupDateTime,
         ];
+        $pickup_city_id = City::where('name', $request->pickup_city)->first()->id;
+        $destination_city_id = City::where('name', $request->destination)->first()->id;
 
         $booking = Booking::create([
             'booking_uuid' => $bookingUuid,
             'client_id' => Auth::id(),
             'client_name' => $request->client_name,
             'pickup_location' => $request->pickup_location,
-            'pickup_city' => $request->pickup_city,
-            'destination' => $request->destination,
+            'pickup_city_id' => $pickup_city_id,
+            'destination_city_id' => $destination_city_id,
             'pickup_datetime' => $pickupDateTime,
             'status' => 'PENDING',
             'estimated_fare' => rand(20, 100),
@@ -131,12 +132,12 @@ class BookingController extends Controller
             'search_tier' => 0, // Start at tier 0
             'taxi_type' => $request->taxi_type,
         ]);
+        // dd($pickup_city_id);
 
         // Notify drivers in the same city
-        $pickup_city = City::where('name', $booking->pickup_city)->first()->id;
         $driversInCity = User::where('role_id', Role::where('name', 'DRIVER')->first()->id)
-            ->whereHas('taxi', function ($query) use ($booking, $pickup_city) {
-                $query->where('city_id', $pickup_city)
+            ->whereHas('taxi', function ($query) use ($booking, $pickup_city_id) {
+                $query->where('city_id', $pickup_city_id)
                     ->where('type', $booking->taxi_type);
             })->get();
 

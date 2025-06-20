@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('lastname', 100)->nullable();
             $table->foreignId('agency_id')->nullable()->constrained('agencies')->onDelete('set null');
             $table->foreignId('role_id')->constrained('roles')->onDelete('restrict');
-            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['active', 'inactive', 'banned']);
             $table->rememberToken();
             $table->timestamps();
         });

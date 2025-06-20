@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('agencies', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
+            $table->string('logo')->nullable();
             $table->text('address')->nullable();
-            $table->boolean('is_active')->default(true); // Pour la fonction de bannissement
+            $table->enum('status', ['active', 'inactive', 'suspendu']);
             $table->timestamps();
         });
     }

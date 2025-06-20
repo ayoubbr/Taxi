@@ -58,8 +58,9 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'driver' => \App\Http\Middleware\EnsureUserIsDriver::class, // Your custom middleware
-        'client' => \App\Http\Middleware\EnsureUserIsClient::class, // Your custom middleware
+        // 'driver' => \App\Http\Middleware\EnsureUserIsDriver::class, // Your custom middleware
+        // 'client' => \App\Http\Middleware\EnsureUserIsClient::class, // Your custom middleware
+        'role' => \App\Http\Middleware\EnsureUserHasRole::class, // <-- AJOUTEZ CETTE LIGNE
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
