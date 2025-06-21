@@ -156,7 +156,7 @@
                                         </div>
                                     </div>
                                     <div class="upload-preview" id="uploadPreview" style="display: none;">
-                                        <img id="previewImage" src="/placeholder.svg" alt="Aperçu du logo">
+                                        <img id="previewImage" src="" alt="Aperçu du logo">
                                         <div class="preview-overlay">
                                             <button type="button" class="remove-image" id="removeImage">
                                                 <i class="fas fa-times"></i>
@@ -240,7 +240,6 @@
     </div>
 @endsection
 @section('js')
-    <script src="{{ asset('js/super-admin-forms.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Character counter

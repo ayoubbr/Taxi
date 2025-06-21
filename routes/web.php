@@ -142,5 +142,5 @@ Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('sup
     Route::get('/agencies/{agency}/bookings', [AgencyController::class, 'bookings'])->name('agencies.bookings');
 
     Route::resource('/users', UserController::class);
-    Route::get('/bookings', [DashboardController::class, 'bookings'])->name('bookings.index');
+    Route::get('/bookings', [Booki::class, 'bookings'])->name('bookings.index');
 });

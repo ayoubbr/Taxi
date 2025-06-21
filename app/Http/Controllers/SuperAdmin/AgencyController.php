@@ -125,9 +125,20 @@ class AgencyController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:150',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'address' => 'nullable|string',
-            'is_active' => 'boolean',
+            'status' => 'required|in:active,inactive,suspendu',
         ]);
+
+        // Gérer l'upload du logo si un nouveau fichier est fourni
+        if ($request->hasFile('logo')) {
+            // Supprimer l'ancien logo
+            if ($agency->logo && Storage::disk('public')->exists($agency->logo)) {
+                Storage::disk('public')->delete($agency->logo);
+            }
+            $logoPath = $request->file('logo')->store('agencies/logos', 'public');
+            $validated['logo'] = $logoPath;
+        }
 
         $agency->update($validated);
 
@@ -169,24 +180,6 @@ class AgencyController extends Controller
         $agency->update(['status' => 'suspendu']);
         return back()->with('success', 'Agence suspendu avec succès!');
     }
-
-    // public function users(Agency $agency)
-    // {
-    //     $users = $agency->users();
-    //     return view('super-admin.agencies.users', compact('users'));
-    // }
-
-    // public function taxis(Agency $agency)
-    // {
-    //     $taxis = $agency->taxis();
-    //     return view('super-admin.agencies.taxis', compact('taxis'));
-    // }
-
-    // public function bookings(Agency $agency)
-    // {
-    //     $bookings = $agency->bookings();
-    //     return view('super-admin.agencies.bookings', compact('bookings'));
-    // }
 
     // NOUVELLES MÉTHODES OPTIMISÉES
     public function users(Request $request, Agency $agency)
