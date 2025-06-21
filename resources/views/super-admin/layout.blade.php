@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('css/super-admin-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flash-messages.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/super-admin-forms.css') }}">
     @yield('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>

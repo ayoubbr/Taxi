@@ -110,9 +110,10 @@ img {
     height: 40px;
 }
 
-.btn i {
-    margin-right: 8px;
-}
+/* removed because icons in buttons dont stay in center */
+/* .btn i { */
+    /* margin-right: 8px; */
+/* } */
 
 .btn-primary {
     background-color: var(--primary-color);

@@ -6,6 +6,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\AgencyController;
+use App\Http\Controllers\SuperAdmin\BookingController as SuperAdminBookingController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\UserController;
 use App\Models\User;
@@ -142,5 +143,8 @@ Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('sup
     Route::get('/agencies/{agency}/bookings', [AgencyController::class, 'bookings'])->name('agencies.bookings');
 
     Route::resource('/users', UserController::class);
-    Route::get('/bookings', [Booki::class, 'bookings'])->name('bookings.index');
+    Route::resource('/bookings', SuperAdminBookingController::class);
+    Route::patch('/bookings/{booking}/assign-driver', [SuperAdminBookingController::class, 'assignDriver'])->name('bookings.assign-driver');
+    Route::patch('/bookings/{booking}/change-status', [SuperAdminBookingController::class, 'changeStatus'])->name('bookings.change-status');
+    Route::get('/bookings/{booking}/applications', [SuperAdminBookingController::class, 'applications'])->name('bookings.applications');
 });

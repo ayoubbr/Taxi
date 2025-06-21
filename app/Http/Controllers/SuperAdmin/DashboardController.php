@@ -90,8 +90,4 @@ class DashboardController extends Controller
             'recentUsers'
         ));
     }
-    public function bookings()
-    {
-        dd('bookings');
-    }
 }
