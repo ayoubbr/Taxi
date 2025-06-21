@@ -90,6 +90,7 @@ class BookingController extends Controller
             'destinationCity',
             'applications.driver.taxi',
             'applications.taxi'
+            
         ]);
 
         return view('super-admin.bookings.show', compact('booking'));

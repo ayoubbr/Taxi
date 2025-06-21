@@ -289,14 +289,14 @@
     color: var(--text-muted);
 }
 
-.route-line {
+/* .route-line {
     position: absolute;
     left: 19px;
-    top: 40px;
+    top: 80px;
     width: 2px;
     height: 20px;
     background: var(--border-color);
-}
+} */
 
 /* Driver & Taxi Info */
 .driver-taxi-info {

@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             TaxiSeeder::class,
+            BookingSeeder::class,
+            BookingApplicationSeeder::class,
         ]);
     }
 }
