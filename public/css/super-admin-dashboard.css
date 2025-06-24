@@ -950,6 +950,15 @@
     transform: translateY(-2px);
 }
 
+.btn-close-modal {
+    font-size: 16px !important;
+    background-color: #6e6e6e1c !important;
+}
+
+.btn-close-modal:hover{
+    background-color: #6e6e6e62 !important;
+}
+
 .btn-success {
     background: var(--success-color);
     color: white;

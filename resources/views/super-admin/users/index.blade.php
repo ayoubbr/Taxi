@@ -89,8 +89,10 @@
                                 <option value="CLIENT" {{ request('role') === 'CLIENT' ? 'selected' : '' }}>Client</option>
                                 <option value="DRIVER" {{ request('role') === 'DRIVER' ? 'selected' : '' }}>Chauffeur
                                 </option>
-                                <option value="AGENCY_ADMIN" {{ request('role') === 'AGENCY_ADMIN' ? 'selected' : '' }}>Admin</option>
-                                <option value="SUPER_ADMIN" {{ request('role') === 'SUPER_ADMIN' ? 'selected' : '' }}>Super Admin</option>
+                                <option value="AGENCY_ADMIN" {{ request('role') === 'AGENCY_ADMIN' ? 'selected' : '' }}>
+                                    Admin</option>
+                                <option value="SUPER_ADMIN" {{ request('role') === 'SUPER_ADMIN' ? 'selected' : '' }}>Super
+                                    Admin</option>
                             </select>
                         </div>
 
@@ -271,7 +273,7 @@
                 <p><strong>Cette action empêchera l'utilisateur d'accéder à la plateforme.</strong></p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Annuler</button>
+                <button class="btn btn-close-modal close-modal">Annuler</button>
                 <button class="btn btn-danger" id="confirmBan">Oui, bannir</button>
             </div>
         </div>

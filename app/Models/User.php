@@ -18,6 +18,7 @@ class User extends Authenticatable
         'email',
         'firstname',
         'lastname',
+        'status',
         'role_id',
         'is_active',
         'agency_id',
@@ -65,5 +66,10 @@ class User extends Authenticatable
     public function hasRole(string $roleName): bool
     {
         return $this->role()->where('name', $roleName)->exists();
+    }
+
+    public function bookings()
+    {
+        return $this->clientBookings->merge($this->assignedDriverBookings);
     }
 }

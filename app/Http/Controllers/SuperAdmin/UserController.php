@@ -68,7 +68,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load(['agency', 'bookings' => function ($query) {
+        $user->load(['agency' => function ($query) {
             $query->latest()->take(10);
         }]);
 
@@ -165,13 +165,16 @@ class UserController extends Controller
 
     public function ban(User $user)
     {
+        // dd('Ban method triggered');
+
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Vous ne pouvez pas bannir votre propre compte.');
         }
 
-        $user->update(['status' => 'banned']);
+        $user->update(['status' => 'suspended']);
+        // dd($user);
 
-        return back()->with('success', 'Utilisateur banni avec succès!');
+        return back()->with('success', 'Utilisateur suspendu avec succès!');
     }
 
     public function unban(User $user)
