@@ -145,6 +145,6 @@ Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('sup
     Route::resource('/users', UserController::class);
     Route::resource('/bookings', SuperAdminBookingController::class);
     Route::patch('/bookings/{booking}/assign-driver', [SuperAdminBookingController::class, 'assignDriver'])->name('bookings.assign-driver');
-    Route::patch('/bookings/{booking}/change-status', [SuperAdminBookingController::class, 'changeStatus'])->name('bookings.change-status');
+    Route::patch('/bookings/{booking}/change-status', [SuperAdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::get('/bookings/{booking}/applications', [SuperAdminBookingController::class, 'applications'])->name('bookings.applications');
 });

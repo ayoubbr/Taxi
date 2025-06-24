@@ -287,6 +287,10 @@
                                                 class="btn btn-sm btn-secondary" title="Modifier">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                            {{-- <a href="{{ route('super-admin.bookings.destroy', $booking) }}"
+                                                class="btn btn-sm btn-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </a> --}}
                                         </div>
                                     </td>
                                 </tr>

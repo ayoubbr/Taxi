@@ -47,7 +47,7 @@
 
 .status-PENDING {
     background: #fef3c7;
-    color: #92400e;
+    color: #92400e !important;
 }
 
 .status-ASSIGNED {
