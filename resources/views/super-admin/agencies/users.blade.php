@@ -163,7 +163,7 @@
                                     </td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <span class="role-badge role-{{ strtolower($user->role->name) }}">
+                                        <span class="role-badge role-{{ $user->role->name }}">
                                             {{ $user->role->name }}
                                         </span>
                                     </td>

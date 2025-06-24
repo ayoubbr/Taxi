@@ -192,7 +192,7 @@
                                         <div class="user-email">{{ $user->email }}</div>
                                     </div>
                                     <div class="user-badges">
-                                        <span class="role-badge role-{{ strtolower($user->role->name ?? 'user') }}">
+                                        <span class="role-badge role-{{ $user->role->name ?? 'user' }}">
                                             {{ $user->role->name ?? 'USER' }}
                                         </span>
                                         <span class="status-badge status-{{ $user->status }}">

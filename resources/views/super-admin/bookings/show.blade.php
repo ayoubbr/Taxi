@@ -21,7 +21,7 @@
             <div class="booking-info">
                 <div class="booking-main">
                     <h1>Réservation #{{ substr($booking->booking_uuid, 0, 8) }}</h1>
-                    <span class="status-badge status-{{ strtolower($booking->status) }}">
+                    <span class="status-badge status-{{ $booking->status }}">
                         {{ $booking->status }}
                     </span>
                 </div>

@@ -20,6 +20,7 @@
 
 .role-DRIVER {
     background: var(--warning-color);
+    color: white;
 }
 
 .role-AGENCY_ADMIN {
@@ -69,7 +70,19 @@
     color: #991b1b;
 }
 
-/*===============================================================================*/
+/*==============================================*/
+
+.status-available {
+    background: var(--success-light);
+    color: #166534;
+}
+
+.status-unavailable {
+    background: var(--warning-light);
+    color: #92400e;
+}
+
+/* ============================================ */
 /* .status-PENDING {
     background-color: var(--info-color);
     color: white;
@@ -161,15 +174,7 @@
     color: var(--danger);
 }
 
-.status-available {
-    background: var(--success-light);
-    color: var(--success-color);
-}
 
-.status-unavailable {
-    background: var(--warning-light);
-    color: var(--warning-color);
-}
 
 .status-pending {
     background: var(--warning-light);

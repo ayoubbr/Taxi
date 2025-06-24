@@ -69,7 +69,7 @@ class BookingController extends Controller
             }
         }
 
-        $bookings = $query->latest('pickup_datetime')->paginate(15);
+        $bookings = $query->latest('pickup_datetime')->paginate(10);
 
         // Statistiques globales
         $stats = $this->getGlobalStats();
