@@ -209,32 +209,6 @@
     background: var(--gray-color);
     border-radius: var(--border-radius-sm);
 }
-
-.status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--border-radius);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    min-width: 60px;
-    text-align: center;
-}
-
-.status-badge.status-active {
-    background: rgba(0, 200, 83, 0.1);
-    color: var(--success-color);
-}
-
-.status-badge.status-inactive {
-    background: rgba(158, 158, 158, 0.1);
-    color: var(--text-lighter);
-}
-
-.status-badge.status-banned {
-    background: rgba(255, 61, 0, 0.1);
-    color: var(--danger-color);
-}
-
 .upload-requirements {
     list-style: none;
     padding: 0;

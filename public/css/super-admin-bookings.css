@@ -767,47 +767,6 @@
     font-size: 12px;
 }
 
-/* Status Badges */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.status-badge.status-pending {
-    background: var(--warning-light);
-    color: var(--warning-color);
-}
-
-.status-badge.status-assigned {
-    background: var(--info-light);
-    color: var(--info-color);
-}
-
-.status-badge.status-in_progress {
-    background: var(--primary-light);
-    color: var(--primary-color);
-}
-
-.status-badge.status-completed {
-    background: var(--success-light);
-    color: var(--success-color);
-}
-
-.status-badge.status-cancelled {
-    background: var(--danger-light);
-    color: var(--danger-color);
-}
-
-.status-badge.status-no_taxi_found {
-    background: var(--muted-light);
-    color: var(--text-muted);
-}
-
 .driver-info {
     display: flex;
     flex-direction: column;

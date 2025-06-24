@@ -305,8 +305,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span
-                                                        class="booking-status status-{{ strtolower($booking->status) }}">
+                                                    <span class="status-badge status-{{ $booking->status }}">
                                                         {{ $booking->status }}
                                                     </span>
                                                 </td>

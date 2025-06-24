@@ -106,39 +106,6 @@
     font-size: 1.5rem;
 }
 
-.status-badge {
-    padding: 8px 15px;
-    border-radius: var(--border-radius);
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.status-PENDING {
-    background-color: var(--info-color);
-    color: white;
-}
-
-.status-ASSIGNED {
-    background-color: var(--warning-color);
-    color: white;
-}
-
-.status-IN_PROGRESS {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-.status-COMPLETED {
-    background-color: var(--success-color);
-    color: white;
-}
-
-.status-CANCELLED {
-    background-color: var(--danger-color);
-    color: white;
-}
-
 /* Status Timeline */
 .status-timeline {
     position: relative;

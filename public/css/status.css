@@ -1,0 +1,281 @@
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/*=============================================*/
+.role-SUPER_ADMIN {
+    background: #3c0681;
+}
+
+.role-CLIENT {
+    background: var(--accent-color);
+}
+
+.role-DRIVER {
+    background: var(--warning-color);
+}
+
+.role-AGENCY_ADMIN {
+    background: var(--danger-color);
+}
+
+/*==============================================*/
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-inactive {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-suspendu {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/*==============================================*/
+
+.status-PENDING {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-ASSIGNED {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-IN_PROGRESS {
+    background: #e0f5ff;
+    color: #156182;
+}
+
+.status-COMPLETED {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-CANCELLED {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/*===============================================================================*/
+/* .status-PENDING {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.status-ASSIGNED {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.status-IN_PROGRESS {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.status-COMPLETED {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-CANCELLED {
+    background-color: var(--danger-color);
+    color: white;
+} */
+
+/*===============================================================================*/
+/* .status-PENDING {
+    background-color: var(--info-color);
+}
+
+.status-ASSIGNED {
+    background-color: var(--warning-color);
+
+}
+
+.status-IN_PROGRESS {
+    background-color: var(--accent-color);
+}
+
+.status-COMPLETED {
+    background-color: var(--success-color);
+}
+
+.status-CANCELLED {
+    background-color: var(--danger-color);
+} */
+
+/*===============================================================================*/
+/* 
+.status-ASSIGNED {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.status-PENDING {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.status-IN_PROGRESS {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.status-COMPLETED {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-CANCELLED {
+    background-color: var(--danger-color);
+    color: white;
+} */
+
+/*===============================================================================*/
+
+/* .status-active {
+    background: var(--success-light);
+    color: var(--success-color);
+}
+
+.status-inactive {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.status-banned {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.status-available {
+    background: var(--success-light);
+    color: var(--success-color);
+}
+
+.status-unavailable {
+    background: var(--warning-light);
+    color: var(--warning-color);
+}
+
+.status-pending {
+    background: var(--warning-light);
+    color: var(--warning-color);
+}
+
+.status-assigned {
+    background: var(--info-light);
+    color: var(--info-color);
+}
+
+.status-in_progress {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.status-completed {
+    background: var(--success-light);
+    color: var(--success-color);
+}
+
+.status-cancelled {
+    background: var(--danger-light);
+    color: var(--danger-color);
+} */
+
+/*===============================================================================*/
+/* .status-badge.status-active {
+    background: rgba(0, 200, 83, 0.1);
+    color: var(--success-color);
+}
+
+.status-badge.status-inactive {
+    background: rgba(158, 158, 158, 0.1);
+    color: var(--text-lighter);
+}
+
+.status-badge.status-banned {
+    background: rgba(255, 61, 0, 0.1);
+    color: var(--danger-color);
+}
+ */
+
+/* .status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.status-active {
+    background: rgba(0, 200, 83, 0.1);
+    color: var(--success-color);
+}
+
+.status-badge.status-inactive {
+    background: rgba(158, 158, 158, 0.1);
+    color: var(--text-lighter);
+}
+
+.status-badge.status-banned {
+    background: rgba(255, 61, 0, 0.1);
+    color: var(--danger-color);
+} */
+
+
+
+/*===============================================================================*/
+/* .status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-badge.status-pending {
+    background: var(--warning-light);
+    color: var(--warning-color);
+}
+
+.status-badge.status-assigned {
+    background: var(--info-light);
+    color: var(--info-color);
+}
+
+.status-badge.status-in_progress {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.status-badge.status-completed {
+    background: var(--success-light);
+    color: var(--success-color);
+}
+
+.status-badge.status-cancelled {
+    background: var(--danger-light);
+    color: var(--danger-color);
+}
+
+.status-badge.status-no_taxi_found {
+    background: var(--muted-light);
+    color: var(--text-muted);
+} */
+/*===============================================================================*/

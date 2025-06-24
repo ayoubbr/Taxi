@@ -99,7 +99,7 @@
                                 <span class="label">Booking ID:</span>
                                 <span class="value">{{ substr($booking->booking_uuid, 0, 8) }}</span>
                             </div>
-                            <div class="booking-status status-PENDING">
+                            <div class="status-badge status-PENDING">
                                 PENDING
                             </div>
                         </div>

@@ -11,7 +11,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/status.css') }}">
     <link rel="stylesheet" href="{{ asset('css/super-admin-layout.css') }}">
     <link rel="stylesheet" href="{{ asset('css/super-admin-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flash-messages.css') }}">
@@ -327,7 +330,7 @@
     <!-- Mobile Overlay -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
 
-   
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // Sidebar functionality
@@ -595,7 +598,7 @@
             });
         });
     </script>
-     @yield('js')
+    @yield('js')
 </body>
 
 </html>

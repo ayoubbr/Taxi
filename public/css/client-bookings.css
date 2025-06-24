@@ -232,26 +232,6 @@
     color: white;
 }
 
-.status-PENDING {
-    background-color: var(--info-color);
-}
-
-.status-ASSIGNED {
-    background-color: var(--warning-color);
-
-}
-
-.status-IN_PROGRESS {
-    background-color: var(--accent-color);
-}
-
-.status-COMPLETED {
-    background-color: var(--success-color);
-}
-
-.status-CANCELLED {
-    background-color: var(--danger-color);
-}
 
 .booking-info {
     flex: 1;

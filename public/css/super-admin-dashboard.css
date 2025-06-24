@@ -75,6 +75,7 @@
     margin: 0.5rem 0 0;
     opacity: 0.8;
     font-size: 1.1rem;
+    color: var(--gray-color);
 }
 
 .admin-info {
@@ -156,6 +157,7 @@
     margin: 0;
     font-size: 1.75rem;
     font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .header-info p {
@@ -455,12 +457,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    /* color: white; */
     font-size: 1rem;
     flex-shrink: 0;
 }
 
-.activity-icon.status-PENDING {
+/* .activity-icon.status-PENDING {
     background: var(--info-color);
 }
 
@@ -478,22 +480,13 @@
 
 .activity-icon.status-CANCELLED {
     background: var(--danger-color);
-}
+} */
 
-.activity-icon.role-SUPER_ADMIN {
-    background: var(--accent-color);
-}
-
-.activity-icon.role-CLIENT {
-    background: var(--accent-color);
-}
-
-.activity-icon.role-DRIVER {
-    background: var(--warning-color);
-}
-
+.activity-icon.role-SUPER_ADMIN,
+.activity-icon.role-CLIENT,
+.activity-icon.role-DRIVER,
 .activity-icon.role-AGENCY_ADMIN {
-    background: var(--danger-color);
+    color: white;
 }
 
 .activity-details {
@@ -525,7 +518,7 @@
     text-transform: uppercase;
 }
 
-.activity-status.status-PENDING {
+/* .activity-status.status-PENDING {
     background: rgba(41, 121, 255, 0.1);
     color: var(--info-color);
 }
@@ -563,7 +556,7 @@
 .activity-status.status-banned {
     background: rgba(255, 61, 0, 0.1);
     color: var(--danger-color);
-}
+} */
 
 /* Agencies Grid */
 .agencies-grid {
@@ -891,29 +884,6 @@
 .no-agency {
     color: var(--text-lighter);
     font-style: italic;
-}
-
-.status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.status-badge.status-active {
-    background: rgba(0, 200, 83, 0.1);
-    color: var(--success-color);
-}
-
-.status-badge.status-inactive {
-    background: rgba(158, 158, 158, 0.1);
-    color: var(--text-lighter);
-}
-
-.status-badge.status-banned {
-    background: rgba(255, 61, 0, 0.1);
-    color: var(--danger-color);
 }
 
 .date {

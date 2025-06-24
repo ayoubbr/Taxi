@@ -82,7 +82,7 @@
                 <div class="bookings-list">
                     @forelse ($bookings as $booking)
                         <div class="booking-card" data-status="{{ $booking->status }}">
-                            <div class="booking-status status-{{ $booking->status }}">
+                            <div class="status-badge status-{{ $booking->status }}">
                                 {{ str_replace('_', ' ', $booking->status) }}
                             </div>
 
