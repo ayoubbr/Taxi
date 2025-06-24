@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('super-admin.layout')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/super-admin-dashboard.css') }}">
@@ -86,10 +86,11 @@
                         <div class="filter-group">
                             <select name="role">
                                 <option value="">Tous les rôles</option>
-                                <option value="client" {{ request('role') === 'client' ? 'selected' : '' }}>Client</option>
-                                <option value="driver" {{ request('role') === 'driver' ? 'selected' : '' }}>Chauffeur
+                                <option value="CLIENT" {{ request('role') === 'CLIENT' ? 'selected' : '' }}>Client</option>
+                                <option value="DRIVER" {{ request('role') === 'DRIVER' ? 'selected' : '' }}>Chauffeur
                                 </option>
-                                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="AGENCY_ADMIN" {{ request('role') === 'AGENCY_ADMIN' ? 'selected' : '' }}>Admin</option>
+                                <option value="SUPER_ADMIN" {{ request('role') === 'SUPER_ADMIN' ? 'selected' : '' }}>Super Admin</option>
                             </select>
                         </div>
 
@@ -158,7 +159,7 @@
                                                 </div>
                                                 <div class="user-details">
                                                     <h4>{{ $user->firstname }} {{ $user->lastname }}</h4>
-                                                    <span class="username">@{{ $user - > username }}</span>
+                                                    <span class="username">&commat;{{ $user->username }}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -177,8 +178,8 @@
                                         <td>
                                             <span class="role-badge role-{{ $user->role }}">
                                                 <i
-                                                    class="fas fa-{{ $user->role === 'driver' ? 'taxi' : ($user->role === 'admin' ? 'user-shield' : 'user') }}"></i>
-                                                {{ ucfirst($user->role) }}
+                                                    class="fas fa-{{ $user->role->name === 'DRIVER' ? 'taxi' : ($user->role->name === 'SUPER_ADMIN' ? 'user-shield' : ($user->role->name === 'AGENCY_ADMIN' ? 'user-tie' : 'user')) }}"></i>
+                                                {{ ucfirst($user->role->name) }}
                                             </span>
                                         </td>
                                         <td>

@@ -22,18 +22,20 @@ class UserController extends Controller
         // Recherche
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('firstname', 'like', "%{$search}%")
-                  ->orWhere('lastname', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('lastname', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%");
+                //   ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
         // Filtre par rôle
         if ($request->filled('role')) {
-            $query->where('role', $request->role);
+            $query->whereHas('role', function ($q) use ($request) {
+                $q->where('name', $request->role);
+            });
         }
 
         // Filtre par statut
@@ -46,14 +48,18 @@ class UserController extends Controller
             $query->where('agency_id', $request->agency);
         }
 
-        $users = $query->latest()->paginate(15);
-        
+        $users = $query->latest()->paginate(10);
+
         $agencies = Agency::orderBy('name')->get();
 
         $stats = [
             'total_users' => User::count(),
-            'drivers' => User::where('role', 'driver')->count(),
-            'clients' => User::where('role', 'client')->count(),
+            'drivers' => User::whereHas('role', function ($q) {
+                $q->where('name', 'DRIVER');
+            })->count(),
+            'clients' => User::whereHas('role', function ($q) {
+                $q->where('name', 'CLIENT');
+            })->count(),
             'banned_users' => User::where('status', 'banned')->count(),
         ];
 
@@ -62,7 +68,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load(['agency', 'bookings' => function($query) {
+        $user->load(['agency', 'bookings' => function ($query) {
             $query->latest()->take(10);
         }]);
 
@@ -70,10 +76,10 @@ class UserController extends Controller
             'total_bookings' => $user->bookings()->count(),
             'completed_bookings' => $user->bookings()->where('status', 'COMPLETED')->count(),
             'cancelled_bookings' => $user->bookings()->where('status', 'CANCELLED')->count(),
-            'total_spent' => $user->role === 'client' 
+            'total_spent' => $user->role === 'client'
                 ? $user->bookings()->where('status', 'COMPLETED')->sum('estimated_fare')
                 : 0,
-            'total_earned' => $user->role === 'driver' 
+            'total_earned' => $user->role === 'driver'
                 ? $user->driverBookings()->where('status', 'COMPLETED')->sum('estimated_fare')
                 : 0,
         ];
@@ -185,7 +191,7 @@ class UserController extends Controller
         $user->update(['status' => $newStatus]);
 
         $message = $newStatus === 'active' ? 'Utilisateur activé' : 'Utilisateur désactivé';
-        
+
         return back()->with('success', $message . ' avec succès!');
     }
 }

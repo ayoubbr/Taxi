@@ -429,32 +429,32 @@
             }
 
             // Loading overlay functions
-            window.showLoading = () => {
-                const loadingOverlay = document.getElementById("loadingOverlay")
-                if (loadingOverlay) {
-                    loadingOverlay.classList.add("active")
-                }
-            }
+            // window.showLoading = () => {
+            //     const loadingOverlay = document.getElementById("loadingOverlay")
+            //     if (loadingOverlay) {
+            //         loadingOverlay.classList.add("active")
+            //     }
+            // }
 
-            window.hideLoading = () => {
-                const loadingOverlay = document.getElementById("loadingOverlay")
-                if (loadingOverlay) {
-                    loadingOverlay.classList.remove("active")
-                }
-            }
+            // window.hideLoading = () => {
+            //     const loadingOverlay = document.getElementById("loadingOverlay")
+            //     if (loadingOverlay) {
+            //         loadingOverlay.classList.remove("active")
+            //     }
+            // }
 
             // Auto-hide loading on page load
-            window.addEventListener("load", () => {
-                hideLoading()
-            })
+            // window.addEventListener("load", () => {
+            //     hideLoading()
+            // })
 
             // Show loading on form submissions
-            const forms = document.querySelectorAll("form")
-            forms.forEach((form) => {
-                form.addEventListener("submit", () => {
-                    showLoading()
-                })
-            })
+            // const forms = document.querySelectorAll("form")
+            // forms.forEach((form) => {
+            //     form.addEventListener("submit", () => {
+            //         showLoading()
+            //     })
+            // })
 
             // Show loading on navigation links
             const navLinks = document.querySelectorAll(".nav-link, .action-card")

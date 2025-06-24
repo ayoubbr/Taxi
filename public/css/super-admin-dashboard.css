@@ -927,6 +927,7 @@
 .btn-sm {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
+    min-width: 20px;
 }
 
 .btn-primary {
