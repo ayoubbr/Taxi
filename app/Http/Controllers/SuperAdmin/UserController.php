@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Agency;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -90,7 +91,8 @@ class UserController extends Controller
     public function create()
     {
         $agencies = Agency::where('status', 'active')->orderBy('name')->get();
-        return view('super-admin.users.create', compact('agencies'));
+        $roles = Role::all();
+        return view('super-admin.users.create', compact('agencies', 'roles'));
     }
 
     public function store(Request $request)
@@ -100,15 +102,15 @@ class UserController extends Controller
             'lastname' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|email|unique:users',
-            'phone' => 'nullable|string|max:20',
+            // 'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:client,driver,admin',
+            'role_id' => 'required|exists:roles,id',
             'agency_id' => 'nullable|exists:agencies,id',
-            'status' => 'required|in:active,inactive,banned',
+            'status' => 'required|in:active,inactive,suspended',
         ]);
-
         $validated['password'] = Hash::make($validated['password']);
-
+        
+        // dd($request->all());
         $user = User::create($validated);
 
         return redirect()->route('super-admin.users.index')

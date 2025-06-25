@@ -99,7 +99,7 @@
                             <i class="fas fa-calendar-alt"></i>
                             <span>Réservations</span>
                             <span
-                                class="nav-badge">{{ \App\Models\Booking::whereDate('created_at', today())->count() }}</span>
+                                class="nav-badge">{{ \App\Models\Booking::count() }}</span>
                         </a>
                     </li>
                 </ul>
