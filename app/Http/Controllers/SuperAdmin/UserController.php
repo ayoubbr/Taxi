@@ -76,11 +76,11 @@ class UserController extends Controller
             'total_bookings' => $user->bookings()->count(),
             'completed_bookings' => $user->bookings()->where('status', 'COMPLETED')->count(),
             'cancelled_bookings' => $user->bookings()->where('status', 'CANCELLED')->count(),
-            'total_spent' => $user->role === 'client'
-                ? $user->bookings()->where('status', 'COMPLETED')->sum('estimated_fare')
+            'total_spent' => $user->role->name === 'CLIENT'
+                ? $user->clientBookings()->where('status', 'COMPLETED')->sum('estimated_fare')
                 : 0,
-            'total_earned' => $user->role === 'driver'
-                ? $user->driverBookings()->where('status', 'COMPLETED')->sum('estimated_fare')
+            'total_earned' => $user->role->name === 'DRIVER'
+                ? $user->assignedDriverBookings()->where('status', 'COMPLETED')->sum('estimated_fare')
                 : 0,
         ];
 
@@ -181,7 +181,7 @@ class UserController extends Controller
     {
         $user->update(['status' => 'active']);
 
-        return back()->with('success', 'Utilisateur débanni avec succès!');
+        return back()->with('success', 'Utilisateur activé avec succès!');
     }
 
     public function toggleStatus(User $user)

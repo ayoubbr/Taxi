@@ -144,6 +144,8 @@ Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('sup
 
     Route::resource('/users', UserController::class);
     Route::patch('/users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
+    Route::patch('/users/{user}/unban', [UserController::class, 'unban'])->name('users.unban');
+    Route::patch('/users/{user}/toggleStatus', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
 
     Route::resource('/bookings', SuperAdminBookingController::class);
     Route::patch('/bookings/{booking}/assign-driver', [SuperAdminBookingController::class, 'assignDriver'])->name('bookings.assign-driver');

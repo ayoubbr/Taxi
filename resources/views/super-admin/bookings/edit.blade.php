@@ -358,7 +358,7 @@
                         <div class="form-group">
                             <label for="estimated_fare" class="form-label">
                                 <i class="fas fa-calculator"></i>
-                                Tarif Estimé (DH)
+                                Tarif Estimé (€)
                             </label>
                             <input type="number" id="estimated_fare" name="estimated_fare"
                                 class="form-input @error('estimated_fare') error @enderror"
@@ -375,7 +375,7 @@
                         {{-- <div class="form-group">
                             <label for="final_fare" class="form-label">
                                 <i class="fas fa-receipt"></i>
-                                Tarif Final (DH)
+                                Tarif Final (€)
                             </label>
                             <input type="number" id="final_fare" name="final_fare"
                                 class="form-input @error('final_fare') error @enderror"

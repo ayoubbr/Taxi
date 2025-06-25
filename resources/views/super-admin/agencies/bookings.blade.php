@@ -84,7 +84,7 @@
                     <i class="fas fa-dollar-sign"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{ number_format($stats['total_revenue'], 0, ',', ' ') }} DH</h3>
+                    <h3>{{ number_format($stats['total_revenue'], 0, ',', ' ') }} €</h3>
                     <p>Revenus Total</p>
                 </div>
             </div>
@@ -233,7 +233,7 @@
                                         @if ($booking->estimated_fare)
                                             <strong
                                                 class="fare">{{ number_format($booking->estimated_fare, 0, ',', ' ') }}
-                                                DH</strong>
+                                                €</strong>
                                         @else
                                             <span class="no-fare">Non estimé</span>
                                         @endif

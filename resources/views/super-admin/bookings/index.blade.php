@@ -83,7 +83,7 @@
                     <i class="fas fa-coins"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{ number_format($stats['total_revenue'], 2) }} DH</h3>
+                    <h3>{{ number_format($stats['total_revenue'], 2) }} €</h3>
                     <p>Revenus Total</p>
                 </div>
             </div>
@@ -113,7 +113,7 @@
                     <i class="fas fa-calculator"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>{{ number_format($stats['average_fare'] ?? 0, 0) }} DH</h3>
+                    <h3>{{ number_format($stats['average_fare'] ?? 0, 0) }} €</h3>
                     <p>Tarif Moyen</p>
                 </div>
             </div>
@@ -272,7 +272,7 @@
                                     <td>
                                         @if ($booking->estimated_fare)
                                             <span class="fare">{{ number_format($booking->estimated_fare, 2) }}
-                                                DH</span>
+                                                €</span>
                                         @else
                                             <span class="no-fare">Non défini</span>
                                         @endif

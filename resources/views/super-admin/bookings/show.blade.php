@@ -123,7 +123,7 @@
                         <div class="info-row">
                             <label>Tarif estimé:</label>
                             @if ($booking->estimated_fare)
-                                <span class="fare">{{ number_format($booking->estimated_fare, 2) }} DH</span>
+                                <span class="fare">{{ number_format($booking->estimated_fare, 2) }} €</span>
                             @else
                                 <span class="text-muted">Non défini</span>
                             @endif

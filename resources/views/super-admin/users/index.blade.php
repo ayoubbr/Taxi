@@ -103,7 +103,7 @@
                                 </option>
                                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactif
                                 </option>
-                                <option value="banned" {{ request('status') === 'banned' ? 'selected' : '' }}>Banni
+                                <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspendu
                                 </option>
                             </select>
                         </div>
@@ -210,7 +210,7 @@
                                                     class="btn btn-sm btn-secondary" title="Modifier">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                @if ($user->status === 'banned')
+                                                @if ($user->status === 'suspended')
                                                     <form action="{{ route('super-admin.users.unban', $user) }}"
                                                         method="POST" class="inline-form">
                                                         @csrf

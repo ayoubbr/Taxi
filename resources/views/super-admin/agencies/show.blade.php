@@ -152,7 +152,7 @@
                     <i class="fas fa-coins"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-number">{{ number_format($stats['revenue_total'], 2) }} DH</div>
+                    <div class="stat-number">{{ number_format($stats['revenue_total'], 2) }} €</div>
                     <div class="stat-label">Revenus Total</div>
                 </div>
             </div>
@@ -162,9 +162,9 @@
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-number">{{ number_format($stats['revenue_month'], 2) }} DH</div>
+                    <div class="stat-number">{{ number_format($stats['revenue_month'], 2) }} €</div>
                     <div class="stat-label">Ce Mois</div>
-                    <div class="stat-sub">{{ number_format($stats['revenue_today'], 2) }} DH aujourd'hui</div>
+                    <div class="stat-sub">{{ number_format($stats['revenue_today'], 2) }} € aujourd'hui</div>
                 </div>
             </div>
         </div>
@@ -312,7 +312,7 @@
                                                 <td>
                                                     @if ($booking->estimated_fare)
                                                         <div class="fare">
-                                                            {{ number_format($booking->estimated_fare, 2) }} DH</div>
+                                                            {{ number_format($booking->estimated_fare, 2) }} €</div>
                                                     @else
                                                         <span class="no-fare">-</span>
                                                     @endif

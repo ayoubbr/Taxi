@@ -81,7 +81,7 @@
                             <i class="fas fa-dollar-sign"></i>
                         </div>
                         <div class="stat-content">
-                            <h3>{{ number_format($stats['revenue_today'], 2) }} DH</h3>
+                            <h3>{{ number_format($stats['revenue_today'], 2) }} €</h3>
                             <p>Revenus Aujourd'hui</p>
                             <div class="stat-breakdown">
                                 <span>Mois: ${{ number_format($stats['revenue_month'], 2) }}</span>

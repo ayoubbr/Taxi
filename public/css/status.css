@@ -11,75 +11,78 @@
 
 /*=============================================*/
 .role-SUPER_ADMIN {
-    background: #3c0681;
+    background: #3c0681 !important;
+    color: white !important;
 }
 
 .role-CLIENT {
-    background: var(--accent-color);
+    background: var(--accent-color) !important;
+    color: white !important;
 }
 
 .role-DRIVER {
-    background: var(--warning-color);
-    color: white;
+    background: var(--warning-color) !important;
+    color: white !important;
 }
 
 .role-AGENCY_ADMIN {
-    background: var(--danger-color);
+    background: var(--danger-color) !important;
+    color: white !important;
 }
 
 /*==============================================*/
 .status-active {
-    background: #dcfce7;
-    color: #166534;
+    background: #dcfce7 !important;
+    color: #166534 !important;
 }
 
 .status-inactive {
-    background: #fef3c7;
-    color: #92400e;
+    background: #fef3c7 !important;
+    color: #92400e !important;
 }
 
 .status-suspended {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #fee2e2 !important;
+    color: #991b1b !important;
 }
 
 /*==============================================*/
 
 .status-PENDING {
-    background: #fef3c7;
+    background: #fef3c7 !important;
     color: #92400e !important;
 }
 
 .status-ASSIGNED {
-    background: #dbeafe;
-    color: #1e40af;
+    background: #dbeafe !important;
+    color: #1e40af !important;
 }
 
 .status-IN_PROGRESS {
-    background: #e0f5ff;
-    color: #156182;
+    background: #e0f5ff !important;
+    color: #156182 !important;
 }
 
 .status-COMPLETED {
-    background: #dcfce7;
-    color: #166534;
+    background: #dcfce7 !important;
+    color: #166534 !important;
 }
 
 .status-CANCELLED {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #fee2e2 !important;
+    color: #991b1b !important;
 }
 
 /*==============================================*/
 
 .status-available {
-    background: var(--success-light);
-    color: #166534;
+    background: var(--success-light) !important;
+    color: #166534 !important;
 }
 
 .status-unavailable {
-    background: var(--warning-light);
-    color: #92400e;
+    background: var(--warning-light) !important;
+    color: #92400e !important;
 }
 
 /* ============================================ */
