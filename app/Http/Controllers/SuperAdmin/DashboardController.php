@@ -27,7 +27,7 @@ class DashboardController extends Controller
             'active_agencies' => Agency::where('status', 'active')->count(),
             'total_users' => User::count(),
             'active_users' => User::where('status', 'active')->count(),
-            'banned_users' => User::where('status', 'banned')->count(),
+            'banned_users' => User::where('status', 'suspended')->count(),
             'total_drivers' => User::whereHas('role', function ($query) {
                 $query->where('name', 'DRIVER');
             })->count(),

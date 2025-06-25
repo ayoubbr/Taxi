@@ -8,10 +8,6 @@
     <span>Page actuelle</span>
 @endsection
 
-@section('css')
-    {{-- <link rel="stylesheet" href="{{ asset('css/super-admin-dashboard.css') }}"> --}}
-@endsection
-
 @section('content')
     <div class="super-admin-dashboard">
         <!-- Main Content -->
@@ -66,10 +62,10 @@
                         </div>
                         <div class="stat-content">
                             <h3>{{ number_format($stats['banned_users']) }}</h3>
-                            <p>Utilisateurs Bannis</p>
+                            <p>Utilisateurs Suspendus</p>
                             @if ($stats['banned_users'] > 0)
-                                {{-- {{ route('super-admin.users.index', ['status' => 'banned']) }} --}}
-                                <a href="" class="stat-link">
+                                <a href=" {{ route('super-admin.users.index', ['status' => 'suspended']) }}"
+                                    class="stat-link">
                                     Voir la liste
                                 </a>
                             @endif
@@ -81,10 +77,10 @@
                             <i class="fas fa-dollar-sign"></i>
                         </div>
                         <div class="stat-content">
-                            <h3>{{ number_format($stats['revenue_today'], 2) }} €</h3>
+                            <h3 data-type="money">{{ number_format($stats['revenue_today'], 2) }} €</h3>
                             <p>Revenus Aujourd'hui</p>
                             <div class="stat-breakdown">
-                                <span>Mois: ${{ number_format($stats['revenue_month'], 2) }}</span>
+                                <span>Mois: €{{ number_format($stats['revenue_month'], 2) }}</span>
                             </div>
                         </div>
                     </div>
@@ -212,7 +208,8 @@
                             <a href="{{ route('super-admin.agencies.index') }}" class="view-all">Voir tout</a>
                         </div>
                         <div class="card-content">
-                            <div class="agencies-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                            <div class="agencies-grid"
+                                style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
                                 @forelse($topAgencies as $agency)
                                     <div class="agency-card">
                                         <div class="agency-info">
@@ -220,7 +217,8 @@
                                                 style="display: flex; justify-content: center; align-items: start; gap: 14px; min-height: 90px;">
                                                 <div class="agency-logo">
                                                     @if ($agency->logo)
-                                                        <img src="{{ Storage::url($agency->logo) }}" alt="{{ $agency->name }}">
+                                                        <img src="{{ Storage::url($agency->logo) }}"
+                                                            alt="{{ $agency->name }}">
                                                     @else
                                                         <div class="logo-placeholder">
                                                             {{ strtoupper(substr($agency->name, 0, 2)) }}
@@ -262,23 +260,25 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Auto-refresh stats every 30 seconds
-            // setInterval(function() {
-            //     // Only refresh if user is still on the page
-            //     if (document.visibilityState === 'visible') {
-            //         location.reload();
-            //     }
-            // }, 30000);
+            setInterval(function() {
+                // Only refresh if user is still on the page
+                if (document.visibilityState === 'visible') {
+                    location.reload();
+                }
+            }, 30000);
 
             // Animate stat numbers on load
             const statNumbers = document.querySelectorAll('.stat-content h3');
             statNumbers.forEach(stat => {
-                const finalValue = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
-                if (finalValue > 0) {
-                    animateNumber(stat, finalValue);
+                const isMoney = stat.dataset.type === 'money';
+                const cleaned = stat.textContent.replace(/[^0-9.,]/g, '').replace(',', '.');
+                const finalValue = parseFloat(cleaned);
+                if (!isNaN(finalValue) && finalValue > 0) {
+                    animateNumber(stat, finalValue, isMoney);
                 }
             });
 
-            function animateNumber(element, target) {
+            function animateNumber(element, target, isMoney) {
                 let current = 0;
                 const increment = target / 50;
                 const timer = setInterval(() => {
@@ -287,7 +287,11 @@
                         current = target;
                         clearInterval(timer);
                     }
-                    element.textContent = Math.floor(current).toLocaleString();
+                    element.textContent = isMoney ? current.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) + ' €' :
+                        Math.floor(current).toLocaleString();
                 }, 20);
             }
         });
