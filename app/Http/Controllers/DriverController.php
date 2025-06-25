@@ -30,28 +30,33 @@ class DriverController extends Controller
         $driverId = Auth::id();
         $driverTaxi = Auth::user()->taxi;
 
-        $bookings = Booking::where('assigned_driver_id', $driverId)
-            ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED']) // Show relevant statuses
+        $cities = City::orderBy('name')->get();
+
+        $bookings = Booking::with(['pickupCity', 'destinationCity'])
+            ->where('assigned_driver_id', $driverId)
+            ->whereIn('status', ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
             ->when($request->filled('date'), function ($query) use ($request) {
                 $query->whereDate('pickup_datetime', $request->input('date'));
             })
-            ->when($request->filled('status') && $request->input('status') !== 'ALL', function ($query) use ($request) {
+            ->when($request->filled('status'), function ($query) use ($request) {
                 $query->where('status', $request->input('status'));
             })
             ->when($request->filled('client_name'), function ($query) use ($request) {
                 $query->where('client_name', 'like', '%' . $request->input('client_name') . '%');
             })
-            ->when($request->filled('pickup_city'), function ($query) use ($request) {
-                $query->where('pickup_city', 'like', '%' . $request->input('pickup_city') . '%');
+            ->when($request->filled('pickup_city_id'), function ($query) use ($request) {
+                $query->where('pickup_city_id', $request->input('pickup_city_id'));
             })
-            ->when($request->filled('destination'), function ($query) use ($request) {
-                $query->where('destination', 'like', '%' . $request->input('destination') . '%');
+            ->when($request->filled('destination_city_id'), function ($query) use ($request) {
+                $query->where('destination_city_id', $request->input('destination_city_id'));
             })
-            // ->where('pickup_city', $driverTaxi->city )
+            ->when($request->filled('taxi_type'), function ($query) use ($request) {
+                $query->where('taxi_type', $request->input('taxi_type'));
+            })
             ->orderBy('pickup_datetime', 'asc')
-            ->paginate(6); // Paginate with 10 items per page
+            ->paginate(6);
 
-        return view('driver.dashboard', compact('bookings'));
+        return view('driver.dashboard', compact('bookings', 'cities'));
     }
 
 

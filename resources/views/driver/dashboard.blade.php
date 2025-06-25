@@ -2,6 +2,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         .filter-form {
             background-color: #fff;
@@ -25,32 +26,137 @@
             margin-bottom: 8px;
             font-weight: bold;
             color: #333;
+            font-size: 14px;
         }
 
         .filter-form input[type="date"],
         .filter-form input[type="text"],
         .filter-form select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
+            padding: 12px 14px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
+            background: white;
         }
 
-        .filter-form button {
-            padding: 10px 20px;
+        .filter-form input:focus,
+        .filter-form select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .filter-form .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: fit-content;
+            justify-content: center;
+        }
+
+        .btn-primary {
             background-color: #007bff;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
         }
 
-        .filter-form button:hover {
+        .btn-primary:hover {
             background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+            transform: translateY(-1px);
+        }
+
+        .filter-summary {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-summary .active-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .filter-tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .filter-form {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .filter-form .form-group {
+                min-width: 100%;
+                flex: none;
+            }
+
+            .filter-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .filter-form .btn {
+                flex: 1;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .filter-form .btn {
+                width: 100%;
+            }
         }
     </style>
 @endsection
@@ -107,15 +213,21 @@
 
         <div class="dashboard-content">
             {{-- Filter Form --}}
-            <form action="{{ route('driver.dashboard') }}" method="GET" class="filter-form">
+            <form action="{{ route('driver.dashboard') }}" method="GET" class="filter-form" id="filterForm">
                 <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" value="{{ request('date') }}">
+                    <label for="date">
+                        <i class="fas fa-calendar-alt"></i> Date
+                    </label>
+                    <input type="text" id="date" name="date" value="{{ request('date') }}"
+                        placeholder="Select date" readonly>
                 </div>
+
                 <div class="form-group">
-                    <label for="status">Status</label>
+                    <label for="status">
+                        <i class="fas fa-info-circle"></i> Status
+                    </label>
                     <select id="status" name="status">
-                        <option value="ALL" {{ request('status') == 'ALL' ? 'selected' : '' }}>All</option>
+                        <option value="">All Statuses</option>
                         <option value="ASSIGNED" {{ request('status') == 'ASSIGNED' ? 'selected' : '' }}>Assigned</option>
                         <option value="IN_PROGRESS" {{ request('status') == 'IN_PROGRESS' ? 'selected' : '' }}>In Progress
                         </option>
@@ -125,23 +237,114 @@
                         </option>
                     </select>
                 </div>
+
+
+
                 <div class="form-group">
-                    <label for="client_name">Client Name</label>
-                    <input type="text" id="client_name" name="client_name" placeholder="Client Name"
+                    <label for="pickup_city_id">
+                        <i class="fas fa-map-marker-alt"></i> Pickup City
+                    </label>
+                    <select id="pickup_city_id" name="pickup_city_id">
+                        <option value="">All Cities</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->id }}"
+                                {{ request('pickup_city_id') == $city->id ? 'selected' : '' }}>
+                                {{ $city->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="destination_city_id">
+                        <i class="fas fa-location-arrow"></i> Destination City
+                    </label>
+                    <select id="destination_city_id" name="destination_city_id">
+                        <option value="">All Cities</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->id }}"
+                                {{ request('destination_city_id') == $city->id ? 'selected' : '' }}>
+                                {{ $city->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="taxi_type">
+                        <i class="fas fa-taxi"></i> Taxi Type
+                    </label>
+                    <select id="taxi_type" name="taxi_type">
+                        <option value="">All Types</option>
+                        <option value="standard" {{ request('taxi_type') == 'standard' ? 'selected' : '' }}>Standard
+                        </option>
+                        <option value="van" {{ request('taxi_type') == 'van' ? 'selected' : '' }}>Van</option>
+                        <option value="luxe" {{ request('taxi_type') == 'luxe' ? 'selected' : '' }}>Luxe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="client_name">
+                        <i class="fas fa-user"></i> Client Name
+                    </label>
+                    <input type="text" id="client_name" name="client_name" placeholder="Search by client name"
                         value="{{ request('client_name') }}">
                 </div>
-                <div class="form-group">
-                    <label for="pickup_city">Pickup City</label>
-                    <input type="text" id="pickup_city" name="pickup_city" placeholder="Pickup City"
-                        value="{{ request('pickup_city') }}">
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Apply Filters
+                    </button>
+                    <a href="{{ route('driver.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-undo"></i> Reset
+                    </a>
                 </div>
-                <div class="form-group">
-                    <label for="destination">Destination</label>
-                    <input type="text" id="destination" name="destination" placeholder="Destination"
-                        value="{{ request('destination') }}">
-                </div>
-                <button type="submit">Apply Filters</button>
             </form>
+
+            {{-- Active Filters Summary --}}
+            @if (request()->hasAny(['date', 'status', 'client_name', 'pickup_city_id', 'destination_city_id', 'taxi_type']))
+                <div class="filter-summary">
+                    <i class="fas fa-filter"></i>
+                    <span>Active filters:</span>
+                    <div class="active-filters">
+                        @if (request('date'))
+                            <span class="filter-tag">
+                                Date: {{ request('date') }}
+                                <span class="remove" onclick="removeFilter('date')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('status'))
+                            <span class="filter-tag">
+                                Status: {{ request('status') }}
+                                <span class="remove" onclick="removeFilter('status')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('client_name'))
+                            <span class="filter-tag">
+                                Client: {{ request('client_name') }}
+                                <span class="remove" onclick="removeFilter('client_name')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('pickup_city_id'))
+                            <span class="filter-tag">
+                                Pickup: {{ $cities->find(request('pickup_city_id'))->name ?? 'Unknown' }}
+                                <span class="remove" onclick="removeFilter('pickup_city_id')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('destination_city_id'))
+                            <span class="filter-tag">
+                                Destination: {{ $cities->find(request('destination_city_id'))->name ?? 'Unknown' }}
+                                <span class="remove" onclick="removeFilter('destination_city_id')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('taxi_type'))
+                            <span class="filter-tag">
+                                Type: {{ ucfirst(request('taxi_type')) }}
+                                <span class="remove" onclick="removeFilter('taxi_type')">&times;</span>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @endif
 
             <div class="bookings-container">
                 @forelse ($bookings as $booking)
@@ -162,15 +365,15 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                         <span>Pickup: {{ $booking->pickup_location }}</span>
                                     </div>
-                                    <span class="city">{{ $booking->pickup_city }}</span>
+                                    <span class="city">{{ $booking->pickupCity->name ?? 'Unknown City' }}</span>
                                 </div>
                                 <div class="arrow-icon"><i class="fas fa-arrow-right"></i></div>
                                 <div class="route-point destination">
                                     <div class="point-details">
                                         <i class="fas fa-location-arrow"></i>
-                                        <span>Destination: {{ $booking->destination }}</span>
+                                        <span>Destination: {{ $booking->destinationCity->name ?? 'Unknown City' }}</span>
                                     </div>
-                                    <span class="city">{{ $booking->destination_city }}</span>
+                                    {{-- <span class="city">{{ $booking->destinationCity->name ?? 'Unknown City' }}</span> --}}
                                 </div>
                             </div>
                             <div class="booking-details">
@@ -205,7 +408,7 @@
                                 <form action="{{ route('driver.booking.update-status', $booking) }}" method="POST"
                                     style="width: -webkit-fill-available;">
                                     @csrf
-                                    @method('POST') {{-- Use POST for status update --}}
+                                    @method('POST')
                                     <input type="hidden" name="status" value="COMPLETED">
                                     <button type="submit" class="btn btn-success"
                                         style="min-width: -webkit-fill-available;">
@@ -237,8 +440,9 @@
                                 <i class="fas fa-calendar-times"></i>
                             </div>
                             <h3>No Bookings Found</h3>
-                            <p>You don't have any assigned bookings at the moment.</p>
-                            <p>Take a break or check back later!</p>
+                            <p>No bookings match your current filters.</p>
+                            <p>Try adjusting your search criteria or <a href="{{ route('driver.dashboard') }}">reset
+                                    filters</a>.</p>
                         </div>
                     </div>
                 @endforelse
@@ -246,8 +450,53 @@
 
             {{-- Pagination Links --}}
             <div class="pagination-links">
-                {{ $bookings->links() }}
+                {{ $bookings->appends(request()->query())->links() }}
             </div>
         </div>
     </main>
+@endsection
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Flatpickr
+            flatpickr("#date", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                placeholder: "Select date...",
+                locale: {
+                    firstDayOfWeek: 1 // Monday
+                }
+            });
+
+            // Remove individual filter function
+            window.removeFilter = function(filterName) {
+                const url = new URL(window.location);
+                url.searchParams.delete(filterName);
+                window.location.href = url.toString();
+            };
+
+            // Auto-submit form on select change (optional)
+            const selects = document.querySelectorAll('#status, #pickup_city_id, #destination_city_id, #taxi_type');
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // Uncomment the line below if you want auto-submit on change
+                    document.getElementById('filterForm').submit();
+                });
+            });
+
+            // Clear individual inputs with double-click
+            const inputs = document.querySelectorAll('input[type="text"], select');
+            inputs.forEach(input => {
+                input.addEventListener('dblclick', function() {
+                    if (this.type === 'text') {
+                        this.value = '';
+                    } else if (this.tagName === 'SELECT') {
+                        this.selectedIndex = 0;
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
