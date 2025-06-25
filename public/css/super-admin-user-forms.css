@@ -423,6 +423,11 @@
         flex-direction: row;
     }
 
+    .form-row.form-row-password{
+        flex-direction: column;
+        gap: 0;
+    }
+
     .form-row .form-group {
         flex: 1;
     }
@@ -445,6 +450,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .actions-left,
@@ -498,7 +504,7 @@
     }
 
     .current-info {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .form-actions {

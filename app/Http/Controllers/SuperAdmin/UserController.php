@@ -109,7 +109,7 @@ class UserController extends Controller
             'status' => 'required|in:active,inactive,suspended',
         ]);
         $validated['password'] = Hash::make($validated['password']);
-        
+
         // dd($request->all());
         $user = User::create($validated);
 
@@ -119,8 +119,9 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $roles = Role::all();
         $agencies = Agency::where('status', 'active')->orderBy('name')->get();
-        return view('super-admin.users.edit', compact('user', 'agencies'));
+        return view('super-admin.users.edit', compact('user', 'agencies', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -130,8 +131,8 @@ class UserController extends Controller
             'lastname' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'role' => 'required|in:client,driver,admin',
+            // 'phone' => 'nullable|string|max:20',
+            'role_id' => 'required|exists:roles,id',
             'agency_id' => 'nullable|exists:agencies,id',
             'status' => 'required|in:active,inactive,banned',
         ]);
