@@ -109,20 +109,42 @@
             flex-wrap: wrap;
         }
 
+        /* Active Filters */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            /* margin-bottom: 16px; */
+        }
+
         .filter-tag {
-            background: #007bff;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .filter-tag .remove {
+            background: none;
+            border: none;
+            color: #1976d2;
             cursor: pointer;
-            font-weight: bold;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-tag .remove:hover {
+            background: #1976d2;
+            color: white;
         }
 
         /* Mobile Responsive */
@@ -168,7 +190,7 @@
                 <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1>Driver Dashboard</h1>
+                <h1>Driver Rides</h1>
             </div>
         </header>
 
@@ -212,6 +234,53 @@
         </div>
 
         <div class="dashboard-content">
+
+            {{-- Active Filters Summary --}}
+            @if (request()->hasAny(['date', 'status', 'client_name', 'pickup_city_id', 'destination_city_id', 'taxi_type']))
+                <div class="filter-summary">
+                    <i class="fas fa-filter"></i>
+                    <span>Active filters:</span>
+                    <div class="active-filters">
+                        @if (request('date'))
+                            <span class="filter-tag">
+                                Date: {{ request('date') }}
+                                <span class="remove" onclick="removeFilter('date')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('status'))
+                            <span class="filter-tag">
+                                Status: {{ request('status') }}
+                                <span class="remove" onclick="removeFilter('status')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('client_name'))
+                            <span class="filter-tag">
+                                Client: {{ request('client_name') }}
+                                <span class="remove" onclick="removeFilter('client_name')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('pickup_city_id'))
+                            <span class="filter-tag">
+                                Pickup: {{ $cities->find(request('pickup_city_id'))->name ?? 'Unknown' }}
+                                <span class="remove" onclick="removeFilter('pickup_city_id')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('destination_city_id'))
+                            <span class="filter-tag">
+                                Destination: {{ $cities->find(request('destination_city_id'))->name ?? 'Unknown' }}
+                                <span class="remove" onclick="removeFilter('destination_city_id')">&times;</span>
+                            </span>
+                        @endif
+                        @if (request('taxi_type'))
+                            <span class="filter-tag">
+                                Type: {{ ucfirst(request('taxi_type')) }}
+                                <span class="remove" onclick="removeFilter('taxi_type')">&times;</span>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             {{-- Filter Form --}}
             <form action="{{ route('driver.dashboard') }}" method="GET" class="filter-form" id="filterForm">
                 <div class="form-group">
@@ -300,51 +369,7 @@
                 </div>
             </form>
 
-            {{-- Active Filters Summary --}}
-            @if (request()->hasAny(['date', 'status', 'client_name', 'pickup_city_id', 'destination_city_id', 'taxi_type']))
-                <div class="filter-summary">
-                    <i class="fas fa-filter"></i>
-                    <span>Active filters:</span>
-                    <div class="active-filters">
-                        @if (request('date'))
-                            <span class="filter-tag">
-                                Date: {{ request('date') }}
-                                <span class="remove" onclick="removeFilter('date')">&times;</span>
-                            </span>
-                        @endif
-                        @if (request('status'))
-                            <span class="filter-tag">
-                                Status: {{ request('status') }}
-                                <span class="remove" onclick="removeFilter('status')">&times;</span>
-                            </span>
-                        @endif
-                        @if (request('client_name'))
-                            <span class="filter-tag">
-                                Client: {{ request('client_name') }}
-                                <span class="remove" onclick="removeFilter('client_name')">&times;</span>
-                            </span>
-                        @endif
-                        @if (request('pickup_city_id'))
-                            <span class="filter-tag">
-                                Pickup: {{ $cities->find(request('pickup_city_id'))->name ?? 'Unknown' }}
-                                <span class="remove" onclick="removeFilter('pickup_city_id')">&times;</span>
-                            </span>
-                        @endif
-                        @if (request('destination_city_id'))
-                            <span class="filter-tag">
-                                Destination: {{ $cities->find(request('destination_city_id'))->name ?? 'Unknown' }}
-                                <span class="remove" onclick="removeFilter('destination_city_id')">&times;</span>
-                            </span>
-                        @endif
-                        @if (request('taxi_type'))
-                            <span class="filter-tag">
-                                Type: {{ ucfirst(request('taxi_type')) }}
-                                <span class="remove" onclick="removeFilter('taxi_type')">&times;</span>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-            @endif
+
 
             <div class="bookings-container">
                 @forelse ($bookings as $booking)
@@ -465,6 +490,7 @@
                 dateFormat: "Y-m-d",
                 allowInput: true,
                 placeholder: "Select date...",
+                disableMobile: true,
                 locale: {
                     firstDayOfWeek: 1 // Monday
                 }
@@ -482,7 +508,7 @@
             selects.forEach(select => {
                 select.addEventListener('change', function() {
                     // Uncomment the line below if you want auto-submit on change
-                    document.getElementById('filterForm').submit();
+                    // document.getElementById('filterForm').submit();
                 });
             });
 

@@ -156,6 +156,7 @@
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
                 minDate: "today",
+                disableMobile: true,
                 // When the date changes, we need to adjust the minimum time for the time picker
                 onChange: function(selectedDates, dateStr, instance) {
                     // If selected date is today, set minTime to now. Otherwise, remove the restriction.
@@ -173,6 +174,7 @@
                 noCalendar: true,
                 dateFormat: "H:i",
                 time_24hr: true,
+                disableMobile: true,
                 minuteIncrement: 15,
             });
 

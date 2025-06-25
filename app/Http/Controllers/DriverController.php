@@ -60,6 +60,75 @@ class DriverController extends Controller
     }
 
 
+    // public function availableBookings(Request $request)
+    // {
+    //     $driver = Auth::user();
+    //     $driverTaxi = $driver->taxi;
+    //     $driverId = $driver->id;
+
+    //     if (!$driverTaxi || !$driverTaxi->city_id) {
+    //         return view('driver.available-bookings', ['bookings' => collect()])
+    //             ->with('error', 'You must have a taxi with an assigned city to view bookings.');
+    //     }
+
+    //     // --- Tiered City Logic ---
+    //     $driverCityId = $driverTaxi->city_id;
+    //     $driverCityName = $driverTaxi->city->name;
+
+    //     // 1. Get the names of neighboring cities from the config
+    //     $proximityMap = config('cities.proximity_map');
+    //     $neighborCityNames = $proximityMap[$driverCityName] ?? [];
+
+    //     // 2. Get the IDs of those neighboring cities in one query
+    //     $neighborCityIds = !empty($neighborCityNames) ? City::whereIn('name', $neighborCityNames)->pluck('id') : collect();
+    //     // --- End Tiered City Logic ---
+
+    //     $query = Booking::query()
+    //         ->where('status', 'PENDING')
+    //         ->where('taxi_type', $driverTaxi->type)
+    //         ->whereDoesntHave('applications', function ($q) use ($driverId) {
+    //             $q->where('driver_id', $driverId);
+    //         })
+    //         ->where('pickup_datetime', '>', now());
+
+    //     // --- Main Filtering Logic ---
+    //     $query->where(function ($q) use ($driverCityId, $neighborCityIds) {
+    //         // Condition 1: Show bookings in the driver's own city (any tier)
+    //         $q->where('pickup_city_id', $driverCityId);
+
+    //         // Condition 2: OR show bookings in neighboring cities if tier >= 1
+    //         if ($neighborCityIds->isNotEmpty()) {
+    //             $q->orWhere(function ($subQ) use ($neighborCityIds) {
+    //                 $subQ->whereIn('pickup_city_id', $neighborCityIds)
+    //                     ->where('search_tier', '>=', 1);
+    //             });
+    //         }
+
+    //         // Condition 3: OR show any booking if tier is global (>= 2)
+    //         $q->orWhere('search_tier', '>=', 2);
+    //     });
+
+    //     // --- Search Filters from Request ---
+    //     if ($request->filled('date')) {
+    //         $query->whereDate('pickup_datetime', $request->input('date'));
+    //     }
+    //     if ($request->filled('pickup_city')) {
+    //         $query->where('pickup_city_id', $request->input('pickup_city'));
+    //     }
+    //     if ($request->filled('destination')) {
+    //         $query->where('destination', 'like', '%' . $request->input('destination') . '%');
+    //     }
+    //     if ($request->filled('client_name')) {
+    //         $query->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+    //     }
+
+    //     $bookings = $query->orderBy('pickup_datetime', 'asc')->paginate(6);
+
+    //     // Pass all cities to the view for the search filter dropdown
+    //     $cities = City::orderBy('name')->get();
+
+    //     return view('driver.available-bookings', compact('bookings', 'cities'));
+    // }
     public function availableBookings(Request $request)
     {
         $driver = Auth::user();
@@ -67,7 +136,7 @@ class DriverController extends Controller
         $driverId = $driver->id;
 
         if (!$driverTaxi || !$driverTaxi->city_id) {
-            return view('driver.available-bookings', ['bookings' => collect()])
+            return view('driver.available-bookings', ['bookings' => collect(), 'cities' => collect()])
                 ->with('error', 'You must have a taxi with an assigned city to view bookings.');
         }
 
@@ -76,14 +145,16 @@ class DriverController extends Controller
         $driverCityName = $driverTaxi->city->name;
 
         // 1. Get the names of neighboring cities from the config
-        $proximityMap = config('cities.proximity_map');
+        $proximityMap = config('cities.proximity_map', []);
         $neighborCityNames = $proximityMap[$driverCityName] ?? [];
 
         // 2. Get the IDs of those neighboring cities in one query
-        $neighborCityIds = !empty($neighborCityNames) ? City::whereIn('name', $neighborCityNames)->pluck('id') : collect();
+        $neighborCityIds = !empty($neighborCityNames)
+            ? City::whereIn('name', $neighborCityNames)->pluck('id')
+            : collect();
         // --- End Tiered City Logic ---
 
-        $query = Booking::query()
+        $query = Booking::with(['pickupCity', 'destinationCity'])
             ->where('status', 'PENDING')
             ->where('taxi_type', $driverTaxi->type)
             ->whereDoesntHave('applications', function ($q) use ($driverId) {
@@ -109,17 +180,30 @@ class DriverController extends Controller
         });
 
         // --- Search Filters from Request ---
+
+        // Date filter
         if ($request->filled('date')) {
             $query->whereDate('pickup_datetime', $request->input('date'));
         }
-        if ($request->filled('pickup_city')) {
-            $query->where('pickup_city_id', $request->input('pickup_city'));
+
+        // Pickup city filter (using city relationship)
+        if ($request->filled('pickup_city_id')) {
+            $query->where('pickup_city_id', $request->input('pickup_city_id'));
         }
-        if ($request->filled('destination')) {
-            $query->where('destination', 'like', '%' . $request->input('destination') . '%');
+
+        // Destination city filter (using city relationship)
+        if ($request->filled('destination_city_id')) {
+            $query->where('destination_city_id', $request->input('destination_city_id'));
         }
+
+        // Client name filter
         if ($request->filled('client_name')) {
             $query->where('client_name', 'like', '%' . $request->input('client_name') . '%');
+        }
+
+        // Taxi type filter
+        if ($request->filled('taxi_type')) {
+            $query->where('taxi_type', $request->input('taxi_type'));
         }
 
         $bookings = $query->orderBy('pickup_datetime', 'asc')->paginate(6);

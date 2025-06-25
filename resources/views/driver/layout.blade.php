@@ -45,10 +45,10 @@
                         <a href="{{ route('driver.profile') }}"><i class="fa-solid fa-user"></i> Profile</a>
                     </li>
                     <li class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">
-                        <a href="{{ route('driver.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                        <a href="{{ route('driver.dashboard') }}"><i class="fas fa-tachometer-alt"></i> My Rides</a>
                     </li>
                     <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">
-                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> Availble
+                        <a href="{{ route('driver.bookings.available') }}"><i class="fas fa-route"></i> Available
                             Rides</a>
                     </li>
                     {{-- <li class="{{ Request::routeIs('driver.bookings.available') ? 'active' : '' }}">

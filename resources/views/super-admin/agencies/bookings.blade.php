@@ -276,14 +276,16 @@
             altInput: true,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
-            allowInput: true
+            allowInput: true,
+            disableMobile: true
         });
 
         flatpickr("#date_to", {
             altInput: true,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
-            allowInput: true
+            allowInput: true,
+            disableMobile: true
         });
     </script>
 
