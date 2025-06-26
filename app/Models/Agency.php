@@ -62,7 +62,7 @@ class Agency extends Model
             'revenue_total' => $this->bookings()->where('status', 'COMPLETED')->sum('estimated_fare'),
             'revenue_month' => $this->bookings()
                 ->where('status', 'COMPLETED')
-                // ->whereMonth('created_at', now()->month)
+                ->whereMonth('bookings.created_at', now()->month)
                 ->sum('estimated_fare'),
         ];
     }

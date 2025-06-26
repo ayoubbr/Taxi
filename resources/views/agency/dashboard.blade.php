@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="agency-header-actions">
-                    <a href="{{ route('agency.bookings.create') }}" class="btn btn-primary">
+                    <a href="{{ route('agency.bookings.create') }}" class="btn btn-primary" style="gap: 10px;">
                         <i class="fas fa-plus"></i> Nouvelle Réservation
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                     <h3>{{ $stats['total_drivers'] ?? 0 }}</h3>
                     <p>Chauffeurs</p>
                     <div class="agency-stat-trend up">
-                        <i class="fas fa-arrow-up"></i>
+                        {{-- <i class="fas fa-arrow-up"></i> --}}
                         <span>{{ $stats['active_drivers'] ?? 0 }} actifs</span>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     <h3>{{ $stats['total_taxis'] ?? 0 }}</h3>
                     <p>Taxis</p>
                     <div class="agency-stat-trend up">
-                        <i class="fas fa-arrow-up"></i>
+                        {{-- <i class="fas fa-arrow-up"></i> --}}
                         <span>{{ $stats['available_taxis'] ?? 0 }} disponibles</span>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     <h3>{{ $stats['total_bookings'] ?? 0 }}</h3>
                     <p>Réservations</p>
                     <div class="agency-stat-trend up">
-                        <i class="fas fa-arrow-up"></i>
+                        {{-- <i class="fas fa-arrow-up"></i> --}}
                         <span>{{ $stats['completed_bookings'] ?? 0 }} terminées</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     <h3>{{ number_format($stats['revenue_total'] ?? 0, 0, ',', ' ') }}€</h3>
                     <p>Revenus Total</p>
                     <div class="agency-stat-trend up">
-                        <i class="fas fa-arrow-up"></i>
+                        {{-- <i class="fas fa-arrow-up"></i> --}}
                         <span>{{ number_format($stats['revenue_month'] ?? 0, 0, ',', ' ') }}€ ce mois</span>
                     </div>
                 </div>
@@ -141,30 +141,40 @@
         <div class="agency-recent-activity">
             <h2><i class="fas fa-clock"></i> Activité Récente</h2>
             <div class="agency-activity-list">
-                @forelse($recentActivities ?? [] as $activity)
-                    <div class="agency-activity-item">
-                        <div class="agency-activity-icon {{ $activity['type'] }}">
-                            <i class="fas fa-{{ $activity['icon'] }}"></i>
+                @forelse($recentActivities as $activity)
+                    {{-- L'élément est maintenant un lien cliquable --}}
+                    <a href="{{ $activity->link ?? '#' }}" class="agency-activity-item">
+                        {{-- L'icône et sa couleur sont dynamiques --}}
+                        <div class="agency-activity-icon color-{{ $activity->color }}">
+                            <i class="fas {{ $activity->icon }}"></i>
                         </div>
+
                         <div class="agency-activity-content">
-                            <p>{{ $activity['message'] }}</p>
-                            <small>{{ $activity['time'] }}</small>
+                            {{-- La description est générée depuis le contrôleur --}}
+                            <p>
+                                <strong>{{ $activity->type }}:</strong>
+                                {{ $activity->description }}
+                            </p>
+                            {{-- Le temps est affiché de manière lisible (ex: "il y a 5 minutes") --}}
+                            <small>{{ $activity->timestamp->diffForHumans() }}</small>
                         </div>
-                        <div class="agency-activity-time">
-                            {{ $activity['date'] }}
+
+                        {{-- La date est affichée dans sa propre section --}}
+                        <div class="agency-activity-time" title="{{ $activity->timestamp->format('d/m/Y H:i:s') }}">
+                            {{ $activity->timestamp->format('d M') }}
                         </div>
-                    </div>
+                    </a>
                 @empty
                     <div class="agency-activity-item">
-                        <div class="agency-activity-icon booking">
-                            <i class="fas fa-info"></i>
+                        <div class="agency-activity-icon info">
+                            <i class="fas fa-info-circle"></i>
                         </div>
                         <div class="agency-activity-content">
-                            <p>Aucune activité récente</p>
-                            <small>Commencez par ajouter des chauffeurs et des taxis</small>
+                            <p>Aucune activité récente à afficher.</p>
+                            <small>Les nouvelles actions apparaîtront ici.</small>
                         </div>
                         <div class="agency-activity-time">
-                            Maintenant
+                            --
                         </div>
                     </div>
                 @endforelse

@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\agency\BookingController as AgencyBookingController;
 use App\Http\Controllers\Agency\DashboardController as AgencyDashboardController;
 use App\Http\Controllers\Agency\DriverController as AgencyDriverController;
+use App\Http\Controllers\agency\ReportsController;
 use App\Http\Controllers\Agency\TaxiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingApplicationController;
@@ -170,18 +172,18 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
     Route::resource('/taxis', TaxiController::class);
 
     // Gestion des bookings (CRUD complet)
-    Route::resource('/bookings', TaxiController::class);
-    
+    Route::resource('/bookings', AgencyBookingController::class);
+
     // Gestion des reports (CRUD complet)
-    Route::resource('/reports', TaxiController::class);
+    Route::resource('/reports', ReportsController::class);
 
     // Gestion des revenue (CRUD complet)
-    Route::resource('/revenue', TaxiController::class);
+    // Route::resource('/revenue', TaxiController::class);
 
-    
+
     // Gestion des profile (CRUD complet)
-    Route::resource('/profile', TaxiController::class);
+    // Route::resource('/profile', TaxiController::class);
 
     // Gestion des settings (CRUD complet)
-    Route::resource('/settings', TaxiController::class);
+    // Route::resource('/settings', TaxiController::class);
 });

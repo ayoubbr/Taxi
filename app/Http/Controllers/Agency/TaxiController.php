@@ -30,8 +30,10 @@ class TaxiController extends Controller
     {
         $agency = Auth::user()->agency;
         // Ne lister que les chauffeurs de l'agence qui n'ont pas encore de taxi
-        $drivers = $agency->users()->whereDoesntHave('taxiAssigned')->get();
+        $drivers = $agency->drivers()->whereDoesntHave('taxi')->get();
         $cities = City::orderBy('name')->get();
+
+        // dd($drivers);
         return view('agency.taxis.create', compact('drivers', 'cities'));
     }
 
