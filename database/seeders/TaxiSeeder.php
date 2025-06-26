@@ -40,15 +40,14 @@ class TaxiSeeder extends Seeder
             'is_available' => true,
         ]);
 
-        // Taxi::create([
-        //     'license_plate' => 'DEF-555',
-        //     'model' => 'BYD Star',
-        //     'type' => 'luxe',
-        //     'capacity' => 4,
-        //     'city' => 'Marrakech',
-        //     'driver_id' => $driver1 ? $driver1->id : null,
-        //     'is_available' => true,
-        // ]);
+        Taxi::create([
+            'license_plate' => 'DEF-555',
+            'model' => 'BYD Star',
+            'type' => 'luxe',
+            'capacity' => 4,
+            'city_id' => 3,
+            'is_available' => true,
+        ]);
 
         // Taxi::create([
         //     'license_plate' => 'LXC-456',

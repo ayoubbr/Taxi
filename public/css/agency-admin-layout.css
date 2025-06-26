@@ -618,6 +618,20 @@
     }
 }
 
+@media (max-width: 522px) {
+    .agency-topbar {
+        padding: 0 1rem;
+    }
+
+    .agency-content {
+        padding: 0.75rem;
+    }
+
+    .agency-breadcrumb {
+        display: none;
+    }
+}
+
 /* Mobile Overlay */
 .agency-mobile-overlay {
     position: fixed;

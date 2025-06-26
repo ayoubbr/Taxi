@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Agency;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Taxi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -16,18 +18,6 @@ class DriverController extends Controller
     /**
      * Affiche la liste des chauffeurs de l'agence.
      */
-    // public function index()
-    // {
-    //     $agency = Auth::user()->agency;
-    //     $driverRole = Role::where('name', 'DRIVER')->first();
-
-    //     $drivers = $agency->users()
-    //         ->where('role_id', $driverRole->id)
-    //         ->latest()
-    //         ->paginate(10);
-
-    //     return view('agency.drivers.index', compact('drivers'));
-    // }
     public function index(Request $request)
     {
         $agency = Auth::user()->agency;
@@ -70,7 +60,8 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('agency.drivers.create');
+        $availableTaxis   = Taxi::where('is_available', true)->whereDoesntHave('driver')->get();
+        return view('agency.drivers.create', compact('availableTaxis'));
     }
 
     /**
@@ -89,7 +80,7 @@ class DriverController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        User::create([
+        $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'username' => $request->username,
@@ -97,8 +88,14 @@ class DriverController extends Controller
             'password' => Hash::make($request->password),
             'agency_id' => $agency->id,
             'role_id' => $driverRole->id,
-            'status' => 'active', // Ou 'inactive' par défaut si vous voulez une activation manuelle
+            'status' => $request->status // Ou 'inactive' par défaut si vous voulez une activation manuelle
         ]);
+
+        $taxi = Taxi::find($request->taxi_id);
+
+        if ($taxi && $user) {
+            $taxi->update(['driver_id' => $user->id]);
+        }
 
         return redirect()->route('agency.drivers.index')->with('success', 'Chauffeur créé avec succès.');
     }

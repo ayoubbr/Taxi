@@ -1,17 +1,38 @@
-@extends('agency-admin.layout')
+@extends('agency.layout')
 
 @section('title', 'Nouveau Chauffeur')
 
 @section('breadcrumb')
-    <a href="{{ route('agency-admin.dashboard') }}">Dashboard</a>
+    <a href="{{ route('agency.dashboard') }}">Dashboard</a>
     <i class="fas fa-chevron-right"></i>
-    <a href="{{ route('agency-admin.drivers.index') }}">Chauffeurs</a>
+    <a href="{{ route('agency.drivers.index') }}">Chauffeurs</a>
     <i class="fas fa-chevron-right"></i>
     <span>Nouveau</span>
 @endsection
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/agency-admin-forms.css') }}">
+    <style>
+        @media (max-width: 768px) {
+            .form-actions {
+                flex-direction: row;
+            }
+        }
+
+        @media (max-width: 472px) {
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+                /* align-items: stretch; */
+            }
+
+            .form-actions-left a,
+            .form-actions-right #submitBtn {
+                width: 100%;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -20,7 +41,7 @@
         <div class="form-header">
             <div class="form-header-content">
                 <div class="form-header-left">
-                    <a href="{{ route('agency-admin.drivers.index') }}" class="form-back-btn">
+                    <a href="{{ route('agency.drivers.index') }}" class="form-back-btn">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div class="form-header-info">
@@ -29,14 +50,14 @@
                     </div>
                 </div>
                 <div class="form-header-actions">
-                    <a href="{{ route('agency-admin.drivers.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('agency.drivers.index') }}" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Annuler
                     </a>
                 </div>
             </div>
         </div>
 
-        <form action="{{ route('agency-admin.drivers.store') }}" method="POST" id="driverForm">
+        <form action="{{ route('agency.drivers.store') }}" method="POST" id="driverForm">
             @csrf
 
             <!-- Form Grid -->
@@ -275,14 +296,14 @@
             <!-- Form Actions -->
             <div class="form-actions">
                 <div class="form-actions-left">
-                    <a href="{{ route('agency-admin.drivers.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('agency.drivers.index') }}" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Annuler
                     </a>
                 </div>
                 <div class="form-actions-right">
-                    <button type="button" id="previewBtn" class="btn btn-info">
+                    {{-- <button type="button" id="previewBtn" class="btn btn-info">
                         <i class="fas fa-eye"></i> Aperçu
-                    </button>
+                    </button> --}}
                     <button type="submit" class="btn btn-primary" id="submitBtn">
                         <i class="fas fa-save"></i> Créer le Chauffeur
                     </button>
@@ -297,7 +318,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('driverForm');
             const submitBtn = document.getElementById('submitBtn');
-            const previewBtn = document.getElementById('previewBtn');
 
             // Auto-generate username from first and last name
             const firstnameInput = document.getElementById('firstname');
@@ -339,29 +359,6 @@
                 form.classList.add('form-loading');
             });
 
-            // Preview functionality
-            previewBtn.addEventListener('click', function() {
-                const formData = new FormData(form);
-                let previewContent = '<h4>Aperçu du chauffeur :</h4><ul>';
-
-                previewContent +=
-                    `<li><strong>Nom complet :</strong> ${formData.get('firstname')} ${formData.get('lastname')}</li>`;
-                previewContent += `<li><strong>Email :</strong> ${formData.get('email')}</li>`;
-                previewContent +=
-                    `<li><strong>Nom d'utilisateur :</strong> ${formData.get('username')}</li>`;
-                previewContent += `<li><strong>Statut :</strong> ${formData.get('status')}</li>`;
-
-                const taxiSelect = document.getElementById('taxi_id');
-                const selectedTaxi = taxiSelect.options[taxiSelect.selectedIndex];
-                previewContent +=
-                    `<li><strong>Taxi assigné :</strong> ${selectedTaxi.value ? selectedTaxi.text : 'Aucun'}</li>`;
-
-                previewContent += '</ul>';
-
-                if (confirm(previewContent + '\n\nVoulez-vous continuer avec ces informations ?')) {
-                    // User confirmed, could submit or do other actions
-                }
-            });
 
             // Real-time validation feedback
             const inputs = form.querySelectorAll('.form-control');
