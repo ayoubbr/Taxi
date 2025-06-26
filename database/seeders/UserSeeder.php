@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agency;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -20,6 +21,8 @@ class UserSeeder extends Seeder
         $clientRole = Role::where('name', 'CLIENT')->first();
         $driverRole = Role::where('name', 'DRIVER')->first();
 
+        $autoMoto = Agency::where('name', 'AutoMo')->first();
+
         User::create([
             'username' => 'super.admin',
             'password' => Hash::make('password'),
@@ -37,6 +40,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Agency',
             'lastname' => 'Admin',
             'role_id' => $agencyAdminRole->id,
+            'agency_id' => $autoMoto->id,
             'status' => 'active',
         ]);
 
@@ -57,6 +61,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Alex',
             'lastname' => 'Driver',
             'role_id' => $driverRole->id,
+            'agency_id' => $autoMoto->id,
             'status' => 'active',
             'agency_id' => 1
         ]);

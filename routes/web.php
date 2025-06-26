@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Agency\DashboardController as AgencyDashboardController;
+use App\Http\Controllers\Agency\DriverController as AgencyDriverController;
+use App\Http\Controllers\Agency\TaxiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingApplicationController;
 use App\Http\Controllers\BookingController;
@@ -111,10 +114,10 @@ Route::middleware(['auth', 'role:DRIVER'])->group(function () {
 });
 
 // --- Agency Admin Routes ---
-Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency.')->group(function () {
-    // Exemple : Route::get('/dashboard', [AgencyDashboardController::class, 'index'])->name('dashboard');
-    // Exemple : Route::resource('/taxis', AgencyTaxiController::class);
-});
+// Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency.')->group(function () {
+//     // Exemple : Route::get('/dashboard', [AgencyDashboardController::class, 'index'])->name('dashboard');
+//     // Exemple : Route::resource('/taxis', AgencyTaxiController::class);
+// });
 
 // SUPER ADMIN ROUTES
 // Route::get('/superadmin/dashboard', [DashboardController::class, 'index'])->name('super-admin.dashboard');
@@ -151,4 +154,34 @@ Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('sup
     Route::patch('/bookings/{booking}/assign-driver', [SuperAdminBookingController::class, 'assignDriver'])->name('bookings.assign-driver');
     Route::patch('/bookings/{booking}/change-status', [SuperAdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::get('/bookings/{booking}/applications', [SuperAdminBookingController::class, 'applications'])->name('bookings.applications');
+});
+
+
+
+// --- Agency Admin Routes ---
+Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency.')->group(function () {
+    // Tableau de bord principal
+    Route::get('/dashboard', [AgencyDashboardController::class, 'index'])->name('dashboard');
+
+    // Gestion des chauffeurs (CRUD complet)
+    Route::resource('/drivers', AgencyDriverController::class);
+
+    // Gestion des taxis (CRUD complet)
+    Route::resource('/taxis', TaxiController::class);
+
+    // Gestion des bookings (CRUD complet)
+    Route::resource('/bookings', TaxiController::class);
+    
+    // Gestion des reports (CRUD complet)
+    Route::resource('/reports', TaxiController::class);
+
+    // Gestion des revenue (CRUD complet)
+    Route::resource('/revenue', TaxiController::class);
+
+    
+    // Gestion des profile (CRUD complet)
+    Route::resource('/profile', TaxiController::class);
+
+    // Gestion des settings (CRUD complet)
+    Route::resource('/settings', TaxiController::class);
 });
