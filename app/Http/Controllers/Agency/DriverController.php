@@ -15,9 +15,7 @@ use Illuminate\Validation\Rules\Password;
 
 class DriverController extends Controller
 {
-    /**
-     * Affiche la liste des chauffeurs de l'agence.
-     */
+
     public function index(Request $request)
     {
         $agency = Auth::user()->agency;
@@ -55,18 +53,12 @@ class DriverController extends Controller
         return view('agency.drivers.index', compact('drivers'));
     }
 
-    /**
-     * Affiche le formulaire pour créer un nouveau chauffeur.
-     */
     public function create()
     {
         $availableTaxis   = Taxi::where('is_available', true)->whereDoesntHave('driver')->get();
         return view('agency.drivers.create', compact('availableTaxis'));
     }
 
-    /**
-     * Enregistre un nouveau chauffeur dans la base de données.
-     */
     public function store(Request $request)
     {
         $agency = Auth::user()->agency;
@@ -100,49 +92,170 @@ class DriverController extends Controller
         return redirect()->route('agency.drivers.index')->with('success', 'Chauffeur créé avec succès.');
     }
 
-    /**
-     * Affiche le formulaire pour modifier un chauffeur.
-     */
     public function edit(User $driver)
     {
         // Sécurité : Vérifier que le chauffeur appartient bien à l'agence de l'admin
         if ($driver->agency_id !== Auth::user()->agency_id) {
-            abort(403);
+            abort(403, 'Vous n\'avez pas l\'autorisation d\'accéder à ce chauffeur.');
         }
-        return view('agency.drivers.edit', compact('driver'));
+
+        // Vérifier que l'utilisateur est bien un chauffeur
+        if (!$driver->hasRole('DRIVER')) {
+            abort(404, 'Chauffeur non trouvé.');
+        }
+
+        // Récupérer les taxis disponibles (sans chauffeur) + le taxi actuel du chauffeur
+        $availableTaxis = Taxi::where('agency_id', Auth::user()->agency_id)
+            ->where(function ($query) use ($driver) {
+                $query->where('is_available', true)
+                    ->whereNull('driver_id')
+                    ->orWhere('driver_id', $driver->id);
+            })
+            ->orderBy('license_plate')
+            ->get();
+
+        return view('agency.drivers.edit', compact('driver', 'availableTaxis'));
     }
 
-    /**
-     * Met à jour les informations d'un chauffeur.
-     */
     public function update(Request $request, User $driver)
     {
+        // Sécurité : Vérifier que le chauffeur appartient bien à l'agence de l'admin
         if ($driver->agency_id !== Auth::user()->agency_id) {
-            abort(403);
+            abort(403, 'Vous n\'avez pas l\'autorisation de modifier ce chauffeur.');
         }
 
-        $request->validate([
-            'firstname' => 'required|string|max:100',
-            'lastname' => 'required|string|max:100',
-            'username' => ['required', 'string', 'max:100', Rule::unique('users')->ignore($driver->id)],
-            'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($driver->id)],
+        // Vérifier que l'utilisateur est bien un chauffeur
+        if (!$driver->hasRole('DRIVER')) {
+            abort(404, 'Chauffeur non trouvé.');
+        }
+
+        // Validation des données
+        $validatedData = $request->validate([
+            'firstname' => 'required|string|max:100|regex:/^[a-zA-ZÀ-ÿ\s\-\']+$/',
+            'lastname' => 'required|string|max:100|regex:/^[a-zA-ZÀ-ÿ\s\-\']+$/',
+            'username' => [
+                'required',
+                'string',
+                'max:100',
+                'min:3',
+                'regex:/^[a-zA-Z0-9._-]+$/',
+                Rule::unique('users')->ignore($driver->id)
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:100',
+                Rule::unique('users')->ignore($driver->id)
+            ],
             'password' => ['nullable', 'confirmed', Password::min(8)],
             'status' => 'required|in:active,inactive,suspended',
+            'taxi_id' => [
+                'nullable',
+                'exists:taxis,id',
+                function ($attribute, $value, $fail) use ($driver) {
+                    if ($value) {
+                        $taxi = Taxi::find($value);
+                        // Vérifier que le taxi appartient à la même agence
+                        if ($taxi && $taxi->agency_id !== Auth::user()->agency_id) {
+                            $fail('Le taxi sélectionné n\'appartient pas à votre agence.');
+                        }
+                        // Vérifier que le taxi est disponible ou assigné au chauffeur actuel
+                        if ($taxi && $taxi->driver_id && $taxi->driver_id !== $driver->id) {
+                            $fail('Le taxi sélectionné est déjà assigné à un autre chauffeur.');
+                        }
+                    }
+                }
+            ],
+        ], [
+            'firstname.regex' => 'Le prénom ne peut contenir que des lettres, espaces, tirets et apostrophes.',
+            'lastname.regex' => 'Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes.',
+            'username.regex' => 'Le nom d\'utilisateur ne peut contenir que des lettres, chiffres, points, tirets et underscores.',
+            'username.min' => 'Le nom d\'utilisateur doit contenir au moins 3 caractères.',
         ]);
 
-        $driver->update([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'username' => $request->username,
-            'email' => $request->email,
-            'status' => $request->status,
-        ]);
+        try {
+            DB::beginTransaction();
 
-        if ($request->filled('password')) {
-            $driver->update(['password' => Hash::make($request->password)]);
+            // Sauvegarder l'ancien taxi_id pour la gestion des changements
+            $oldTaxiId = null;
+            if ($driver->taxi) {
+                $oldTaxiId = $driver->taxi->id;
+            }
+            $newTaxiId = $request->taxi_id;
+
+            // Mettre à jour les informations du chauffeur
+            $updateData = [
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'username' => $validatedData['username'],
+                'email' => $validatedData['email'],
+                'status' => $validatedData['status'],
+            ];
+
+
+            // Mettre à jour le mot de passe si fourni
+            if ($request->filled('password')) {
+                $updateData['password'] = Hash::make($validatedData['password']);
+            }
+
+            $driver->update($updateData);
+
+            // Gestion de l'attribution des taxis
+            $this->handleTaxiAssignment($driver, $oldTaxiId, $newTaxiId);
+
+            DB::commit();
+
+            // Message de succès personnalisé selon les changements
+            $message = 'Chauffeur mis à jour avec succès.';
+            if ($oldTaxiId !== $newTaxiId) {
+                if ($newTaxiId) {
+                    $taxi = Taxi::find($newTaxiId);
+                    $message .= " Taxi {$taxi->license_plate} assigné.";
+                } elseif ($oldTaxiId) {
+                    $message .= " Attribution de taxi supprimée.";
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->with('success', $message);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Une erreur est survenue lors de la mise à jour du chauffeur. Veuillez réessayer.');
+        }
+    }
+
+    private function handleTaxiAssignment(User $driver, $oldTaxiId, $newTaxiId)
+    {
+        // Si l'attribution n'a pas changé, ne rien faire
+        if ($oldTaxiId == $newTaxiId) {
+            return;
         }
 
-        return redirect()->route('agency.drivers.index')->with('success', 'Chauffeur mis à jour avec succès.');
+        // Libérer l'ancien taxi si il y en avait un
+        if ($oldTaxiId) {
+            $oldTaxi = Taxi::find($oldTaxiId);
+            if ($oldTaxi) {
+                $oldTaxi->update([
+                    'driver_id' => null
+                ]);
+            }
+        }
+
+        // Assigner le nouveau taxi si spécifié
+        if ($newTaxiId) {
+            $newTaxi = Taxi::find($newTaxiId);
+            if ($newTaxi && $newTaxi->agency_id === Auth::user()->agency_id) {
+                $newTaxi->update([
+                    'driver_id' => $driver->id
+                ]);
+            }
+        }
     }
 
     public function show(User $user)
@@ -150,9 +263,7 @@ class DriverController extends Controller
         return view('agency.drivers.show');
     }
 
-    /**
-     * Supprime un chauffeur.
-     */
+
     public function destroy(User $driver)
     {
         if ($driver->agency_id !== Auth::user()->agency_id) {
@@ -162,9 +273,7 @@ class DriverController extends Controller
         return redirect()->route('agency.drivers.index')->with('success', 'Chauffeur supprimé avec succès.');
     }
 
-    /**
-     * Bascule le statut d'un chauffeur (active/inactive).
-     */
+
     public function toggleStatus(User $driver)
     {
         // Sécurité : Vérifier que l'admin modifie un chauffeur de sa propre agence
