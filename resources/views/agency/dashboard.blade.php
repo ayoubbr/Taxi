@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="agency-header-actions">
-                    <a href="{{ route('agency.bookings.create') }}" class="btn btn-primary" style="gap: 10px;">
+                    <a href="{{ route('agency.bookings.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Nouvelle Réservation
                     </a>
                 </div>

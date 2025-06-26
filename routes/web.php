@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\agency\BookingController as AgencyBookingController;
+use App\Http\Controllers\Agency\BookingController as AgencyBookingController;
 use App\Http\Controllers\Agency\DashboardController as AgencyDashboardController;
 use App\Http\Controllers\Agency\DriverController as AgencyDriverController;
-use App\Http\Controllers\agency\ReportsController;
+use App\Http\Controllers\Agency\ReportsController;
 use App\Http\Controllers\Agency\TaxiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingApplicationController;
@@ -167,6 +167,8 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
 
     // Gestion des chauffeurs (CRUD complet)
     Route::resource('/drivers', AgencyDriverController::class);
+    Route::patch('/drivers/{driver}/toggleStatus', [AgencyDriverController::class, 'toggleStatus'])
+        ->name('drivers.toggle-status');
 
     // Gestion des taxis (CRUD complet)
     Route::resource('/taxis', TaxiController::class);

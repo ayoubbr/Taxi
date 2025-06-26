@@ -3,13 +3,14 @@
 @section('title', 'Gestion des Chauffeurs')
 
 @section('breadcrumb')
-    <a href="{{ route('agency-admin.dashboard') }}">Dashboard</a>
+    <a href="{{ route('agency.dashboard') }}">Dashboard</a>
     <i class="fas fa-chevron-right"></i>
     <span>Chauffeurs</span>
 @endsection
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/agency-admin-drivers.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
 @section('content')
@@ -27,7 +28,7 @@
                     </div>
                 </div>
                 <div class="agency-header-actions">
-                    <a href="{{ route('agency-admin.drivers.create') }}" class="btn btn-primary">
+                    <a href="{{ route('agency.drivers.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Nouveau Chauffeur
                     </a>
                 </div>
@@ -36,7 +37,8 @@
 
         <!-- Filters Section -->
         <div class="filters-section">
-            <form method="GET" class="filters-form">
+            <form method="GET" class="filters-form" action="{{ route('agency.drivers.index') }}">
+                @csrf
                 <div class="filter-group">
                     <label for="search">Recherche</label>
                     <input type="text" id="search" name="search" value="{{ request('search') }}"
@@ -54,13 +56,18 @@
                     </select>
                 </div>
 
+                <div class="filter-group">
+                    <label for="creation_date">Date d'ajout</label>
+                    <input type="text" id="creation_date" name="creation_date" value="{{ request('creation_date') }}"
+                        placeholder="Select Date" class="form-control">
+                </div>
+
                 <div class="filter-actions">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Filtrer
-                    </button>
-                    <a href="{{ route('agency-admin.drivers.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Reset
-                    </a>
+                    <button type="submit" class="btn btn-primary"
+                        style="background: var( --agency-primary); color:white;"><i class="fas fa-search"></i>
+                        Filtrer</button>
+                    <a href="{{ route('agency.drivers.index') }}" class="btn btn-secondary"><i class="fas fa-times"></i>
+                        Reset</a>
                 </div>
             </form>
         </div>
@@ -91,7 +98,7 @@
                             <div class="driver-info">
                                 <h3>{{ $driver->firstname }} {{ $driver->lastname }}</h3>
                                 <p class="driver-username">
-                                    <i class="fas fa-user"></i> {{ $driver->username }}
+                                    <i class="fas fa-user"></i> {{ '@' . $driver->username }}
                                 </p>
                                 <p class="driver-email">
                                     <i class="fas fa-envelope"></i> {{ $driver->email }}
@@ -121,14 +128,13 @@
                             </div>
 
                             <div class="driver-actions">
-                                <a href="{{ route('agency-admin.drivers.show', $driver) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('agency.drivers.show', $driver) }}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-eye"></i> Voir
                                 </a>
-                                <a href="{{ route('agency-admin.drivers.edit', $driver) }}"
-                                    class="btn btn-sm btn-secondary">
+                                <a href="{{ route('agency.drivers.edit', $driver) }}" class="btn btn-sm btn-secondary">
                                     <i class="fas fa-edit"></i> Modifier
                                 </a>
-                                <form action="{{ route('agency-admin.drivers.toggle-status', $driver) }}" method="POST"
+                                <form action="{{ route('agency.drivers.toggle-status', $driver) }}" method="POST"
                                     class="inline-form">
                                     @csrf
                                     @method('PATCH')
@@ -153,8 +159,8 @@
                     <h3>Aucun chauffeur trouvé</h3>
                     <p>{{ request()->hasAny(['search', 'status']) ? 'Aucun chauffeur ne correspond à vos critères.' : 'Aucun chauffeur enregistré pour le moment.' }}
                     </p>
-                    @if (!request()->hasAny(['search', 'status']))
-                        <a href="{{ route('agency-admin.drivers.create') }}" class="btn btn-primary">
+                    @if (!request()->hasAny(['search', 'status', 'creation_date']))
+                        <a href="{{ route('agency.drivers.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Ajouter le premier chauffeur
                         </a>
                     @endif
@@ -165,8 +171,15 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            flatpickr("#creation_date", {
+                dateFormat: "Y-m-d",
+                disableMobile: true,
+            });
+
             // Auto-submit form on filter change
             const filterSelects = document.querySelectorAll('.filter-group select');
             filterSelects.forEach(select => {
@@ -184,7 +197,7 @@
                     const action = button.textContent.trim();
 
                     if (confirm(
-                        `Êtes-vous sûr de vouloir ${action.toLowerCase()} ce chauffeur ?`)) {
+                            `Êtes-vous sûr de vouloir ${action.toLowerCase()} ce chauffeur ?`)) {
                         this.submit();
                     }
                 });

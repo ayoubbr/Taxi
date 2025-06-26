@@ -46,7 +46,7 @@ class User extends Authenticatable
     public function clientBookings()
     {
         return $this->hasMany(Booking::class, 'client_id');
-    }
+    }   
 
     public function assignedDriverBookings()
     {

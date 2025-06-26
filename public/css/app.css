@@ -109,6 +109,7 @@ img {
     transition: var(--transition);
     text-decoration: none;
     height: 40px;
+    gap: 10px;
 }
 
 /* removed because icons in buttons dont stay in center */
