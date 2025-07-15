@@ -60,13 +60,13 @@ class TaxiController extends Controller
         // Chauffeurs disponibles (sans taxi assigné et actifs)
         $availableDrivers = $agency->drivers()
             ->where('status', 'active')
-            ->whereDoesntHave('assignedTaxi')
+            ->whereDoesntHave('taxi')
             ->orderBy('firstname')
             ->get();
 
         $cities = City::orderBy('name')->get();
 
-        return view('agency-admin.taxis.create', compact('availableDrivers', 'cities'));
+        return view('agency.taxis.create', compact('availableDrivers', 'cities'));
     }
 
     /**
@@ -119,11 +119,6 @@ class TaxiController extends Controller
             // Assigner le chauffeur si spécifié
             if ($request->driver_id) {
                 $taxi->update(['driver_id' => $request->driver_id]);
-
-                // Marquer le taxi comme occupé si un chauffeur est assigné
-                if ($taxi->is_available) {
-                    $taxi->update(['is_available' => false]);
-                }
             }
 
             DB::commit();
