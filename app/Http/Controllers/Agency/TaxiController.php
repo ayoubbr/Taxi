@@ -151,7 +151,7 @@ class TaxiController extends Controller
 
         // Récupérer les courses récentes
         $recentBookings = $taxi->bookings()
-            ->with(['customer', 'assignedDriver'])
+            ->with(['client', 'driver'])
             ->latest()
             ->limit(10)
             ->get();
@@ -193,7 +193,7 @@ class TaxiController extends Controller
             'total_distance' => $totalDistance,
         ];
 
-        return view('agency-admin.taxis.show', compact('taxi', 'stats', 'recentBookings'));
+        return view('agency.taxis.show', compact('taxi', 'stats', 'recentBookings'));
     }
 
     /**

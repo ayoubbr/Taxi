@@ -85,6 +85,12 @@
     color: #92400e !important;
 }
 
+
+.status-occupied {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--agency-warning);
+}
+
 /* ============================================ */
 /* .status-PENDING {
     background-color: var(--info-color);
