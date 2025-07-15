@@ -212,7 +212,7 @@ class TaxiController extends Controller
         $availableDrivers = $agency->drivers()
             ->where('status', 'active')
             ->where(function ($query) use ($taxi) {
-                $query->whereDoesntHave('assignedTaxi')
+                $query->whereDoesntHave('taxi')
                     ->orWhere('id', $taxi->driver_id);
             })
             ->orderBy('firstname')
@@ -220,7 +220,7 @@ class TaxiController extends Controller
 
         $cities = City::orderBy('name')->get();
 
-        return view('agency-admin.taxis.edit', compact('taxi', 'availableDrivers', 'cities'));
+        return view('agency.taxis.edit', compact('taxi', 'availableDrivers', 'cities'));
     }
 
     /**
