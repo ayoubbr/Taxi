@@ -41,13 +41,10 @@
                             <i class="fas fa-clock"></i>
                             <span>Dernière activité {{ $driver->updated_at->diffForHumans() }}</span>
                         </div>
-                        <div class="driver-meta-item">
-                            <div class="driver-status-large status-{{ $driver->status }}">
-                                {{ ucfirst($driver->status) }}
-                            </div>
-                        </div>
                     </div>
-
+                    <div class="driver-status-large status-{{ $driver->status }}">
+                        {{ ucfirst($driver->status) }}
+                    </div>
                 </div>
             </div>
 
@@ -63,6 +60,15 @@
                         class="driver-action-btn {{ $driver->status === 'active' ? 'warning' : 'success' }}">
                         <i class="fas fa-{{ $driver->status === 'active' ? 'pause' : 'play' }}"></i>
                         {{ $driver->status === 'active' ? 'Désactiver' : 'Activer' }}
+                    </button>
+                </form>
+                <form action="{{ route('agency.drivers.destroy', $driver) }}" method="POST" style="display: inline;"
+                    class="delete-form">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="driver-action-btn"
+                        style="background: var(--agency-danger); color: white;">
+                        <i class="fas fa-trash"></i> Supprimer
                     </button>
                 </form>
                 <a href="{{ route('agency.drivers.index') }}" class="driver-action-btn secondary">
@@ -116,7 +122,7 @@
                 </div>
             </div>
 
-            {{-- <div class="driver-stat-card rating">
+            <div class="driver-stat-card rating">
                 <div class="driver-stat-header">
                     <div class="driver-stat-icon">
                         <i class="fas fa-star"></i>
@@ -129,7 +135,7 @@
                     <i class="fas fa-star"></i>
                     <span>{{ $stats['total_ratings'] }} évaluations</span>
                 </div>
-            </div> --}}
+            </div>
         </div>
 
         <!-- Content Grid -->
@@ -142,7 +148,7 @@
                         <h3><i class="fas fa-history"></i> Courses Récentes</h3>
                         <a href="{{ route('agency.bookings.index', ['driver_id' => $driver->id]) }}"
                             class="driver-action-btn primary">
-                            <i class="fas fa-eye" style="color: white;"></i> Voir Toutes
+                            <i class="fas fa-eye"></i> Voir Toutes
                         </a>
                     </div>
                     <div class="driver-info-body">
@@ -150,20 +156,12 @@
                             <div class="recent-bookings-list">
                                 @foreach ($recentBookings as $booking)
                                     <div class="booking-item">
-                                        <div class="booking-status-icon status-{{ $booking->status }}">
+                                        <div class="booking-status-icon {{ strtolower($booking->status) }}">
                                             <i
-                                                class="fas fa-{{ $booking->status === 'COMPLETED'
-                                                    ? 'check'
-                                                    : ($booking->status === 'IN_PROGRESS'
-                                                        ? 'car'
-                                                        : ($booking->status === 'CANCELLED'
-                                                            ? 'times'
-                                                            : 'clock')) }}"></i>
+                                                class="fas fa-{{ $booking->status === 'COMPLETED' ? 'check' : ($booking->status === 'IN_PROGRESS' ? 'car' : ($booking->status === 'CANCELLED' ? 'times' : 'clock')) }}"></i>
                                         </div>
                                         <div class="booking-details">
-                                            <h5>{{ $booking->pickup_location }} ({{ $booking->pickupCity->name }}) →
-                                                {{ $booking->destinationCity->name }}
-                                            </h5>
+                                            <h5>{{ $booking->pickup_location }} → {{ $booking->destination }}</h5>
                                             <p>
                                                 {{ $booking->created_at->format('d/m/Y H:i') }} •
                                                 {{ ucfirst(strtolower(str_replace('_', ' ', $booking->status))) }}
@@ -356,6 +354,21 @@
                     this.style.transform = 'translateY(-4px)';
                 });
             });
+
+            // Confirm driver deletion
+            const deleteForm = document.querySelector('.delete-form');
+            if (deleteForm) {
+                deleteForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const driverName = '{{ $driver->firstname }} {{ $driver->lastname }}';
+
+                    if (confirm(
+                            `Êtes-vous sûr de vouloir supprimer définitivement le chauffeur ${driverName} ?\n\nCette action est irréversible.`
+                            )) {
+                        this.submit();
+                    }
+                });
+            }
         });
     </script>
 @endsection

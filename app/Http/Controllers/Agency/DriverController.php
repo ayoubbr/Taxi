@@ -325,11 +325,53 @@ class DriverController extends Controller
 
     public function destroy(User $driver)
     {
+        // Sécurité : Vérifier que le chauffeur appartient bien à l'agence de l'admin
         if ($driver->agency_id !== Auth::user()->agency_id) {
-            abort(403);
+            abort(403, 'Vous n\'avez pas l\'autorisation de supprimer ce chauffeur.');
         }
-        $driver->delete();
-        return redirect()->route('agency.drivers.index')->with('success', 'Chauffeur supprimé avec succès.');
+
+        // Vérifier que l'utilisateur est bien un chauffeur
+        if (!$driver->hasRole('DRIVER')) {
+            abort(404, 'Chauffeur non trouvé.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Vérifier qu'il n'y a pas de courses en cours
+            $activeBookings = $driver->assignedDriverBookings()
+                ->whereIn('status', ['PENDING', 'CONFIRMED', 'IN_PROGRESS'])
+                ->count();
+
+            if ($activeBookings > 0) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Impossible de supprimer ce chauffeur car il a des courses en cours.');
+            }
+
+            // Libérer le taxi si assigné
+            if ($driver->taxi) {
+                $driver->taxi->update([
+                    'driver_id' => null,
+                    'is_available' => true
+                ]);
+            }
+
+            $driverName = $driver->firstname . ' ' . $driver->lastname;
+            $driver->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('agency.drivers.index')
+                ->with('success', "Chauffeur {$driverName} supprimé avec succès.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->back()
+                ->with('error', 'Une erreur est survenue lors de la suppression du chauffeur.');
+        }
     }
 
 

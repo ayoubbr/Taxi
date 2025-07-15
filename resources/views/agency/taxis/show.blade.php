@@ -47,7 +47,7 @@
                             <span>Ajouté le {{ $taxi->created_at->format('d/m/Y') }}</span>
                         </div>
                     </div>
-                    <div class="driver-status-large status-{{ $taxi->is_available ? 'active' : 'occupied' }}">
+                    <div class="driver-status-large status-{{ $taxi->is_available ? 'active' : 'warning' }}">
                         {{ $taxi->is_available ? 'Disponible' : 'Occupé' }}
                     </div>
                 </div>
@@ -69,6 +69,15 @@
                 <a href="{{ route('agency.taxis.index') }}" class="driver-action-btn secondary">
                     <i class="fas fa-list"></i> Retour à la Liste
                 </a>
+                <form action="{{ route('agency.taxis.destroy', $taxi) }}" method="POST" style="display: inline;"
+                    class="delete-form">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="driver-action-btn"
+                        style="background: var(--agency-danger); color: white;">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -117,7 +126,7 @@
                 </div>
             </div>
 
-            {{-- <div class="driver-stat-card rating">
+            <div class="driver-stat-card rating">
                 <div class="driver-stat-header">
                     <div class="driver-stat-icon">
                         <i class="fas fa-clock"></i>
@@ -129,7 +138,7 @@
                     <i class="fas fa-route"></i>
                     <span>{{ number_format($stats['total_distance'], 0) }} km total</span>
                 </div>
-            </div> --}}
+            </div>
         </div>
 
         <!-- Content Grid -->
@@ -142,7 +151,7 @@
                         <h3><i class="fas fa-history"></i> Courses Récentes</h3>
                         <a href="{{ route('agency.bookings.index', ['taxi_id' => $taxi->id]) }}"
                             class="driver-action-btn primary">
-                            <i class="fas fa-eye" style="color: white"></i> Voir Toutes
+                            <i class="fas fa-eye" style="color: white;"></i> Voir Toutes
                         </a>
                     </div>
                     <div class="driver-info-body">
@@ -312,6 +321,21 @@
                     console.log('Refreshing taxi stats...');
                 }
             }, 60000);
+
+            // Confirm taxi deletion
+            const deleteForm = document.querySelector('.delete-form');
+            if (deleteForm) {
+                deleteForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const taxiPlate = '{{ $taxi->license_plate }}';
+
+                    if (confirm(
+                            `Êtes-vous sûr de vouloir supprimer définitivement le taxi ${taxiPlate} ?\n\nCette action est irréversible.`
+                        )) {
+                        this.submit();
+                    }
+                });
+            }
         });
     </script>
 @endsection

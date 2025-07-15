@@ -364,6 +364,44 @@ class TaxiController extends Controller
     /**
      * Supprime un taxi.
      */
+    // public function destroy(Taxi $taxi)
+    // {
+    //     // Vérifier que le taxi appartient à l'agence
+    //     if ($taxi->agency_id !== Auth::user()->agency_id) {
+    //         abort(403, 'Vous n\'avez pas l\'autorisation de supprimer ce taxi.');
+    //     }
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         // Vérifier qu'il n'y a pas de courses en cours
+    //         $activeBookings = $taxi->bookings()
+    //             ->whereIn('status', ['PENDING', 'CONFIRMED', 'IN_PROGRESS'])
+    //             ->count();
+
+    //         if ($activeBookings > 0) {
+    //             return redirect()
+    //                 ->back()
+    //                 ->with('error', 'Impossible de supprimer ce taxi car il a des courses en cours.');
+    //         }
+
+    //         $licensePlate = $taxi->license_plate;
+    //         $taxi->delete();
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('agency.taxis.index')
+    //             ->with('success', "Taxi {$licensePlate} supprimé avec succès.");
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+
+    //         return redirect()
+    //             ->back()
+    //             ->with('error', 'Une erreur est survenue lors de la suppression du taxi.');
+    //     }
+    // }
+
     public function destroy(Taxi $taxi)
     {
         // Vérifier que le taxi appartient à l'agence
