@@ -1,0 +1,308 @@
+/* Agency Taxis Styles */
+.taxis-container {
+    padding: 0;
+}
+
+/* Filters Section */
+.filters-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--agency-shadow);
+}
+
+.filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--agency-dark);
+    font-size: 0.9rem;
+}
+
+.filter-group .form-control {
+    padding: 0.75rem;
+    border: 2px solid var(--agency-border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: var(--agency-transition);
+}
+
+.filter-group .form-control:focus {
+    outline: none;
+    border-color: var(--agency-primary);
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Content Section */
+.content-section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--agency-shadow);
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--agency-border);
+    background: var(--agency-gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header h2 {
+    margin: 0;
+    color: var(--agency-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.count-badge {
+    background: var(--agency-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+
+/* Taxis Grid */
+.taxis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.taxi-card {
+    background: white;
+    border: 2px solid var(--agency-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: var(--agency-transition);
+    position: relative;
+}
+
+.taxi-card:hover {
+    border-color: var(--agency-info);
+    transform: translateY(-4px);
+    box-shadow: var(--agency-shadow-lg);
+}
+
+.taxi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.taxi-plate {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--agency-dark);
+    background: var(--agency-gray-light);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--agency-border);
+}
+
+.taxi-plate i {
+    color: var(--agency-info);
+}
+
+.taxi-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.taxi-status.status-available {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--agency-accent);
+}
+
+.taxi-status.status-occupied {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--agency-warning);
+}
+
+.taxi-info {
+    margin-bottom: 1rem;
+}
+
+.taxi-info h3 {
+    margin: 0 0 0.75rem 0;
+    color: var(--agency-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.taxi-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.taxi-details p {
+    margin: 0;
+    color: var(--agency-gray);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.taxi-details p i {
+    width: 16px;
+    color: var(--agency-info);
+}
+
+.type-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.type-badge.type-standard {
+    background: rgba(23, 162, 184, 0.1);
+    color: var(--agency-info);
+}
+
+.type-badge.type-van {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--agency-warning);
+}
+
+.type-badge.type-luxe {
+    background: rgba(44, 90, 160, 0.1);
+    color: var(--agency-primary);
+}
+
+.no-driver {
+    color: var(--agency-danger) !important;
+    font-style: italic;
+}
+
+.taxi-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--agency-gray-light);
+    border-radius: 8px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--agency-info);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--agency-gray);
+}
+
+.taxi-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.taxi-actions .btn {
+    flex: 1;
+    min-width: auto;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.inline-form {
+    display: inline;
+    flex: 1;
+}
+
+.inline-form .btn {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .taxis-container {
+        padding: 0;
+    }
+
+    .taxis-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .taxi-actions {
+        flex-direction: column;
+    }
+
+    .taxi-actions .btn {
+        flex: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .taxi-card {
+        padding: 1rem;
+    }
+
+    .taxi-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .taxi-stats {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-number {
+        font-size: 1.2rem;
+    }
+}

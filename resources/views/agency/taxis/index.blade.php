@@ -1,114 +1,222 @@
-{{-- Vous devrez créer un layout principal pour l'agence : resources/views/agency/layout.blade.php --}}
 @extends('agency.layout')
 
 @section('title', 'Gestion des Taxis')
 
-@section('content')
-    <header class="p-4 sm:p-6 md:p-8 bg-white shadow-sm rounded-lg mb-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Gestion des Taxis</h1>
-                <p class="text-sm text-gray-500 mt-1">Gérez votre flotte de véhicules.</p>
-            </div>
-            <a href="{{ route('agency.taxis.create') }}"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 text-sm font-semibold">
-                <i class="fas fa-plus mr-1"></i> Ajouter un Taxi
-            </a>
-        </div>
-    </header>
+@section('breadcrumb')
+    <a href="{{ route('agency.dashboard') }}">Dashboard</a>
+    <i class="fas fa-chevron-right"></i>
+    <span>Taxis</span>
+@endsection
 
-    <div class="bg-white shadow-sm rounded-lg">
-        <!-- Vue Mobile: Liste de cartes -->
-        <div class="md:hidden">
-            @forelse ($taxis as $taxi)
-                <div class="p-4 border-b border-gray-200 last:border-b-0">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-bold text-gray-800">{{ $taxi->license_plate }}</p>
-                            <p class="text-sm text-gray-600">{{ $taxi->model }} - {{ ucfirst($taxi->type) }}</p>
-                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-city mr-1"></i> {{ $taxi->city->name }}
-                            </p>
-                        </div>
-                        <div class="text-right">
-                            <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full {{ $taxi->is_available ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                {{ $taxi->is_available ? 'Disponible' : 'En course' }}
-                            </span>
-                        </div>
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/agency-admin-taxis.css') }}">
+@endsection
+
+@section('content')
+    <div class="taxis-container">
+        <!-- Page Header -->
+        <div class="agency-page-header">
+            <div class="agency-header-content">
+                <div class="agency-header-left">
+                    <div class="agency-header-icon">
+                        <i class="fas fa-car"></i>
                     </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <p class="text-sm text-gray-500">
-                            <i class="fas fa-user-circle mr-1"></i>
-                            {{ $taxi->driver->firstname ?? 'Non assigné' }}
-                        </p>
-                        <div class="flex items-center space-x-2">
-                            <a href="{{ route('agency.taxis.edit', $taxi) }}" class="text-blue-500 hover:text-blue-700"><i
-                                    class="fas fa-edit"></i></a>
-                            <form action="{{ route('agency.taxis.destroy', $taxi) }}" method="POST"
-                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce taxi ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700"><i
-                                        class="fas fa-trash"></i></button>
-                            </form>
-                        </div>
+                    <div class="agency-header-info">
+                        <h1>Gestion des Taxis</h1>
+                        <p>Gérer la flotte de véhicules de votre agence</p>
                     </div>
                 </div>
-            @empty
-                <p class="p-4 text-center text-gray-500">Aucun taxi trouvé.</p>
-            @endforelse
+                <div class="agency-header-actions">
+                    <a href="{{ route('agency.taxis.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nouveau Taxi
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <!-- Vue Desktop: Tableau -->
-        <div class="hidden md:block">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">Plaque</th>
-                        <th scope="col" class="px-6 py-3">Modèle</th>
-                        <th scope="col" class="px-6 py-3">Chauffeur Assigné</th>
-                        <th scope="col" class="px-6 py-3">Ville</th>
-                        <th scope="col" class="px-6 py-3">Statut</th>
-                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($taxis as $taxi)
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $taxi->license_plate }}</th>
-                            <td class="px-6 py-4">{{ $taxi->model }}</td>
-                            <td class="px-6 py-4">{{ $taxi->driver->firstname ?? 'Non assigné' }}</td>
-                            <td class="px-6 py-4">{{ $taxi->city->name }}</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-2 py-1 font-semibold leading-tight rounded-full {{ $taxi->is_available ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $taxi->is_available ? 'Disponible' : 'En course' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right flex justify-end items-center space-x-3">
-                                <a href="{{ route('agency.taxis.edit', $taxi) }}"
-                                    class="font-medium text-blue-600 hover:underline">Modifier</a>
-                                <form action="{{ route('agency.taxis.destroy', $taxi) }}" method="POST"
-                                    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce taxi ?');">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <form method="GET" class="filters-form">
+                <div class="filter-group">
+                    <label for="search">Recherche</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        placeholder="Plaque, modèle..." class="form-control">
+                </div>
+
+                <div class="filter-group">
+                    <label for="type">Type</label>
+                    <select name="type" id="type" class="form-control">
+                        <option value="">Tous les types</option>
+                        <option value="standard" {{ request('type') === 'standard' ? 'selected' : '' }}>Standard</option>
+                        <option value="van" {{ request('type') === 'van' ? 'selected' : '' }}>Van</option>
+                        <option value="luxe" {{ request('type') === 'luxe' ? 'selected' : '' }}>Luxe</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="availability">Disponibilité</label>
+                    <select name="availability" id="availability" class="form-control">
+                        <option value="">Tous</option>
+                        <option value="available" {{ request('availability') === 'available' ? 'selected' : '' }}>Disponible
+                        </option>
+                        <option value="occupied" {{ request('availability') === 'occupied' ? 'selected' : '' }}>Occupé
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="city_id">Ville</label>
+                    <select name="city_id" id="city_id" class="form-control">
+                        <option value="">Toutes les villes</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
+                                {{ $city->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Filtrer
+                    </button>
+                    <a href="{{ route('agency.taxis.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Taxis Grid -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-car"></i>
+                    Liste des Taxis
+                </h2>
+                <span class="count-badge">{{ $taxis->total() }} taxis</span>
+            </div>
+
+            @if ($taxis->count() > 0)
+                <div class="taxis-grid">
+                    @foreach ($taxis as $taxi)
+                        <div class="taxi-card">
+                            <div class="taxi-header">
+                                <div class="taxi-plate">
+                                    <i class="fas fa-car"></i>
+                                    {{ $taxi->license_plate }}
+                                </div>
+                                <div class="taxi-status status-{{ $taxi->is_available ? 'available' : 'occupied' }}">
+                                    {{ $taxi->is_available ? 'Disponible' : 'Occupé' }}
+                                </div>
+                            </div>
+
+                            <div class="taxi-info">
+                                <h3>{{ $taxi->model }}</h3>
+                                <div class="taxi-details">
+                                    <p class="taxi-type">
+                                        <i class="fas fa-tag"></i>
+                                        <span
+                                            class="type-badge type-{{ $taxi->type }}">{{ ucfirst($taxi->type) }}</span>
+                                    </p>
+                                    <p class="taxi-city">
+                                        <i class="fas fa-map-marker-alt"></i> {{ $taxi->city->name }}
+                                    </p>
+                                    <p class="taxi-capacity">
+                                        <i class="fas fa-users"></i> {{ $taxi->capacity }} places
+                                    </p>
+                                    @if ($taxi->driver)
+                                        <p class="taxi-driver">
+                                            <i class="fas fa-user"></i> {{ $taxi->driver->firstname }}
+                                            {{ $taxi->driver->lastname }}
+                                        </p>
+                                    @else
+                                        <p class="taxi-driver no-driver">
+                                            <i class="fas fa-user-slash"></i> Aucun chauffeur assigné
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="taxi-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number">{{ $taxi->bookings()->count() }}</span>
+                                    <span class="stat-label">Courses</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span
+                                        class="stat-number">{{ $taxi->bookings()->where('status', 'COMPLETED')->count() }}</span>
+                                    <span class="stat-label">Terminées</span>
+                                </div>
+                            </div>
+
+                            <div class="taxi-actions">
+                                <a href="{{ route('agency.taxis.show', $taxi) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                                <a href="{{ route('agency.taxis.edit', $taxi) }}" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <form action="{{ route('agency.taxis.toggle-availability', $taxi) }}" method="POST"
+                                    class="inline-form">
                                     @csrf
-                                    @method('DELETE')
+                                    @method('PATCH')
                                     <button type="submit"
-                                        class="font-medium text-red-600 hover:underline">Supprimer</button>
+                                        class="btn btn-sm {{ $taxi->is_available ? 'btn-warning' : 'btn-success' }}">
+                                        <i class="fas fa-{{ $taxi->is_available ? 'pause' : 'play' }}"></i>
+                                        {{ $taxi->is_available ? 'Occuper' : 'Libérer' }}
+                                    </button>
                                 </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun taxi trouvé.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
 
-        <div class="p-4">
-            {{ $taxis->links() }}
+                <!-- Pagination -->
+                <div class="pagination-wrapper">
+                    {{ $taxis->appends(request()->query())->links() }}
+                </div>
+            @else
+                <div class="empty-state">
+                    <i class="fas fa-car"></i>
+                    <h3>Aucun taxi trouvé</h3>
+                    <p>{{ request()->hasAny(['search', 'type', 'availability', 'city_id']) ? 'Aucun taxi ne correspond à vos critères.' : 'Aucun taxi enregistré pour le moment.' }}
+                    </p>
+                    @if (!request()->hasAny(['search', 'type', 'availability', 'city_id']))
+                        <a href="{{ route('agency.taxis.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Ajouter le premier taxi
+                        </a>
+                    @endif
+                </div>
+            @endif
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-submit form on filter change
+            const filterSelects = document.querySelectorAll('.filter-group select');
+            filterSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    this.closest('form').submit();
+                });
+            });
+
+            // Confirm availability toggle
+            const availabilityForms = document.querySelectorAll('.inline-form');
+            availabilityForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const button = this.querySelector('button');
+                    const action = button.textContent.trim();
+
+                    if (confirm(`Êtes-vous sûr de vouloir ${action.toLowerCase()} ce taxi ?`)) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

@@ -172,6 +172,8 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
 
     // Gestion des taxis (CRUD complet)
     Route::resource('/taxis', TaxiController::class);
+    Route::patch('/taxis/{taxi}/toggleAvailability', [TaxiController::class, 'toggleAvailability'])
+        ->name('taxis.toggle-availability');
 
     // Gestion des bookings (CRUD complet)
     Route::resource('/bookings', AgencyBookingController::class);
