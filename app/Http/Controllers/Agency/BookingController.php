@@ -61,7 +61,7 @@ class BookingController extends Controller
             $query->whereDate('pickup_datetime', '<=', $request->date_to);
         }
 
-        $bookings = $query->latest('pickup_datetime')->paginate(15);
+        $bookings = $query->latest('pickup_datetime')->paginate(10);
 
         // Données pour les filtres
         $drivers = $agency->drivers()->orderBy('firstname')->get();
@@ -98,7 +98,7 @@ class BookingController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:PENDING,CONFIRMED,IN_PROGRESS,COMPLETED,CANCELLED'
+            'status' => 'required|in:PENDING,ASSIGNED,IN_PROGRESS,COMPLETED,CANCELLED'
         ]);
 
         try {
@@ -189,7 +189,7 @@ class BookingController extends Controller
             ]);
 
             // Si on assigne un taxi, le marquer comme occupé si la course est en cours
-            if ($request->assigned_taxi_id && in_array($booking->status, ['CONFIRMED', 'IN_PROGRESS'])) {
+            if ($request->assigned_taxi_id && in_array($booking->status, ['ASSIGNED', 'IN_PROGRESS'])) {
                 $taxi = Taxi::find($request->assigned_taxi_id);
                 $taxi->update(['is_available' => false]);
             }

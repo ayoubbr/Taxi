@@ -177,8 +177,8 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
 
     // Gestion des bookings (CRUD complet)
     Route::resource('/bookings', AgencyBookingController::class);
-    Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
-    Route::patch('/bookings/{booking}/assign', [BookingController::class, 'assign'])->name('bookings.assign');
+    Route::patch('/bookings/{booking}/status', [AgencyBookingController::class, 'updateStatus'])->name('bookings.update-status');
+    Route::patch('/bookings/{booking}/assign', [AgencyBookingController::class, 'assign'])->name('bookings.assign');
 
 
     // Gestion des reports (CRUD complet)

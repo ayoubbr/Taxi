@@ -251,11 +251,15 @@
                                         <div class="vehicle-info">
                                             <div class="vehicle-model">
                                                 <i class="fas fa-car"></i>
-                                                <span>{{ $booking->driver->taxi->model }}</span>
+                                                @if ($booking->driver->taxi)
+                                                    <span>{{ $booking->driver->taxi->model }}</span>
+                                                @endif
                                             </div>
                                             <div class="vehicle-plate">
                                                 <i class="fas fa-id-card"></i>
-                                                <span>{{ $booking->driver->taxi->license_plate }}</span>
+                                                @if ($booking->driver->taxi)
+                                                    <span>{{ $booking->driver->taxi->license_plate }}</span>
+                                                @endif
                                             </div>
                                         </div>
 

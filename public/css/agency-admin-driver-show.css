@@ -502,3 +502,248 @@
         font-size: 2rem;
     }
 }
+
+/* Info grid styles for booking details */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-item label {
+  font-size: 0.8rem;
+  color: var(--agency-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  font-size: 0.9rem;
+  color: var(--agency-dark);
+  font-weight: 500;
+}
+
+/* Type badges for taxi types */
+.type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.type-badge.type-standard {
+  background: rgba(108, 117, 125, 0.1);
+  color: var(--agency-gray);
+}
+
+.type-badge.type-premium {
+  background: rgba(255, 193, 7, 0.1);
+  color: var(--agency-warning);
+}
+
+.type-badge.type-luxury {
+  background: rgba(138, 43, 226, 0.1);
+  color: #8a2be2;
+}
+
+.type-badge.type-van {
+  background: rgba(23, 162, 184, 0.1);
+  color: var(--agency-info);
+}
+
+/* Route info styles */
+.route-info {
+  background: var(--agency-gray-light);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--agency-primary);
+}
+
+.pickup,
+.destination {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pickup:last-child,
+.destination:last-child {
+  margin-bottom: 0;
+}
+
+.pickup i,
+.destination i {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+.pickup div,
+.destination div {
+  flex: 1;
+}
+
+.pickup strong,
+.destination strong {
+  display: block;
+  color: var(--agency-dark);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.pickup small,
+.destination small {
+  color: var(--agency-gray);
+  font-size: 0.8rem;
+}
+
+/* Form styles for assignment */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: var(--agency-dark);
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  padding: 0.75rem;
+  border: 2px solid var(--agency-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: var(--agency-transition);
+  background: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--agency-primary);
+  box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--agency-transition);
+  border: none;
+  cursor: pointer;
+  height: auto;
+}
+
+.btn.btn-primary {
+  background: var(--agency-primary);
+  color: white;
+}
+
+.btn.btn-primary:hover {
+  background: var(--agency-primary-dark);
+}
+
+/* Status badges for various statuses */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-badge.status-active {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--agency-accent);
+}
+
+.status-badge.status-inactive {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--agency-danger);
+}
+
+.status-badge.status-warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: var(--agency-warning);
+}
+
+.status-badge.status-pending {
+  background: rgba(255, 193, 7, 0.1);
+  color: var(--agency-warning);
+}
+
+/* Taxi assignment card improvements */
+.taxi-assignment-card h4,
+.taxi-assignment-card h5 {
+  margin: 0 0 0.5rem 0;
+  color: var(--agency-dark);
+  font-weight: 600;
+}
+
+.taxi-assignment-card small {
+  color: var(--agency-gray);
+  font-size: 0.8rem;
+}
+
+/* Additional responsive improvements */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .route-info {
+    padding: 0.75rem;
+  }
+
+  .pickup,
+  .destination {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .driver-profile-meta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .driver-actions-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .driver-action-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

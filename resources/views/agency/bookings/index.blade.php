@@ -180,7 +180,7 @@
                                     <td>
                                         @if ($booking->taxi)
                                             <div class="taxi-info">
-                                                <strong>{{ $booking->taxi->license_plate }}</strong>
+                                                <strong style="width: max-content;">{{ $booking->taxi->license_plate }}</strong>
                                                 <small>{{ $booking->taxi->model }}</small>
                                             </div>
                                         @else
@@ -188,8 +188,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <span class="status-badge status-{{ strtolower($booking->status) }}">
-                                            {{ ucfirst(strtolower(str_replace('_', ' ', $booking->status))) }}
+                                        <span class="status-badge status-{{ $booking->status }}">
+                                            {{ ucfirst(strtolower($booking->status)) }}
                                         </span>
                                     </td>
                                     <td>
