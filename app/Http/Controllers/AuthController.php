@@ -64,6 +64,7 @@ class AuthController extends Controller
             return back()->withInput()->withErrors(['user_type' => 'Invalid user type selected.']);
         }
 
+        // dd($request->all());
         $user = User::create([
             'username' => strtolower(str_replace(' ', '', $request->name)) . rand(100, 999), // Simple username generation
             'firstname' => explode(' ', $request->name, 2)[0],
@@ -71,7 +72,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
 
         Auth::login($user);
