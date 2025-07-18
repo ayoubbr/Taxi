@@ -22,6 +22,14 @@
                         <li><a href="{{ route('driver.dashboard') }}"
                                 class="{{ Request::routeIs('driver.dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     @endif
+                    @if (Auth::user()->hasRole('AGENCY_ADMIN'))
+                        <li><a href="{{ route('agency.dashboard') }}"
+                                class="{{ Request::routeIs('agency.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    @endif
+                    @if (Auth::user()->hasRole('SUPER_ADMIN'))
+                        <li><a href="{{ route('super-admin.dashboard') }}"
+                                class="{{ Request::routeIs('super-admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    @endif
                     <li class="flex-center" style="justify-content: start">
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                             @csrf

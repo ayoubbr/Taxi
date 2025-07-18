@@ -9,9 +9,27 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AuthController extends Controller
 {
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/home';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
 
     public function showLoginForm()
     {
@@ -31,14 +49,71 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
 
-            // Redirect based on user type (you'll expand this later)
-            // For now, simple redirect to home or a dashboard
-            return redirect()->intended(route('home'))->with('success', 'You are logged in!');
+            $user = Auth::user();
+
+            // Check if user is active
+            if ($user->status != 'active') {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => ['Your account has been deactivated. Please contact support.'],
+                ]);
+            }
+
+            // Redirect based on user role
+            $redirectUrl = $this->getRedirectUrlByRole($user);
+
+            return redirect()->intended($redirectUrl)->with('success', 'Welcome back, ' . $user->firstname . '!');
         }
 
         throw ValidationException::withMessages([
             'email' => [trans('auth.failed')],
         ]);
+    }
+
+
+    protected function getRedirectUrlByRole($user)
+    {
+        // Load the role relationship if not already loaded
+        if (!$user->relationLoaded('role')) {
+            $user->load('role');
+        }
+
+        $roleName = $user->role->name ?? null;
+
+        switch ($roleName) {
+            case 'SUPER_ADMIN':
+                return route('super-admin.dashboard');
+
+            case 'AGENCY_ADMIN':
+                // Check if user has an agency
+                if (!$user->agency_id) {
+                    Auth::logout();
+                    throw ValidationException::withMessages([
+                        'email' => ['Your account is not associated with any agency. Please contact support.'],
+                    ]);
+                }
+                return route('agency.dashboard');
+
+            case 'DRIVER':
+                // Check if driver has an agency
+                if (!$user->agency_id) {
+                    Auth::logout();
+                    throw ValidationException::withMessages([
+                        'email' => ['Your driver account is not associated with any agency. Please contact support.'],
+                    ]);
+                }
+                return route('driver.dashboard');
+
+            case 'CLIENT':
+                return route('home');
+
+            default:
+                // Fallback for users without proper roles
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => ['Your account does not have a valid role assigned. Please contact support.'],
+                ]);
+        }
     }
 
 

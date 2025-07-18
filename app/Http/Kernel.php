@@ -60,7 +60,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         // 'driver' => \App\Http\Middleware\EnsureUserIsDriver::class, // Your custom middleware
         // 'client' => \App\Http\Middleware\EnsureUserIsClient::class, // Your custom middleware
-        'role' => \App\Http\Middleware\EnsureUserHasRole::class, // <-- AJOUTEZ CETTE LIGNE
+        'role' => \App\Http\Middleware\EnsureUserHasRole::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,

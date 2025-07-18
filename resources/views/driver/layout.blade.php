@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="{{ asset('css/flash-messages.css') }}">
     <link rel="stylesheet" href="{{ asset('css/driver-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/status.css') }}">
-    
+
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
 </head>
@@ -67,6 +68,9 @@
             </nav>
 
             <div class="sidebar-footer">
+                <a href="{{ route('home') }}" class="btn-logout" title="Retour au site" style="margin-bottom: 5px">
+                    <i class="fas fa-home"></i> Home
+                </a>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn-logout">

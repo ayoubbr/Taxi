@@ -194,3 +194,9 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
     // Gestion des settings (CRUD complet)
     // Route::resource('/settings', TaxiController::class);
 });
+
+
+// Fallback route
+// Route::get('/home', function () {
+//     return redirect()->route('login');
+// })->name('home');
