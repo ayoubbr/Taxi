@@ -180,7 +180,8 @@
                                     <td>
                                         @if ($booking->taxi)
                                             <div class="taxi-info">
-                                                <strong style="width: max-content;">{{ $booking->taxi->license_plate }}</strong>
+                                                <strong
+                                                    style="width: max-content;">{{ $booking->taxi->license_plate }}</strong>
                                                 <small>{{ $booking->taxi->model }}</small>
                                             </div>
                                         @else
@@ -203,12 +204,6 @@
                                                 class="btn btn-sm btn-primary">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            @if (!in_array($booking->status, ['COMPLETED', 'CANCELLED']))
-                                                <button type="button" class="btn btn-sm btn-secondary"
-                                                    onclick="openAssignModal({{ $booking->id }})">
-                                                    <i class="fas fa-user-plus"></i>
-                                                </button>
-                                            @endif
                                             <form action="{{ route('agency.bookings.destroy', $booking) }}"
                                                 method="POST" style="display: inline;" class="delete-booking-form">
                                                 @csrf
@@ -240,45 +235,6 @@
         </div>
     </div>
 
-    <!-- Assignment Modal -->
-    <div id="assignModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Assigner Chauffeur/Taxi</h3>
-                <span class="close">&times;</span>
-            </div>
-            <form id="assignForm" method="POST">
-                @csrf
-                @method('PATCH')
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="modal_driver_id">Chauffeur</label>
-                        <select id="modal_driver_id" name="assigned_driver_id" class="form-control">
-                            <option value="">Sélectionner un chauffeur</option>
-                            @foreach ($drivers as $driver)
-                                <option value="{{ $driver->id }}">{{ $driver->firstname }} {{ $driver->lastname }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal_taxi_id">Taxi</label>
-                        <select id="modal_taxi_id" name="assigned_taxi_id" class="form-control">
-                            <option value="">Sélectionner un taxi</option>
-                            @foreach ($taxis as $taxi)
-                                <option value="{{ $taxi->id }}">{{ $taxi->license_plate }} - {{ $taxi->model }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close-modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Assigner</button>
-                </div>
-            </form>
-        </div>
-    </div>
 @endsection
 
 @section('js')
@@ -317,29 +273,6 @@
                     }
                 });
             });
-
-            // Modal functionality
-            const modal = document.getElementById('assignModal');
-            const closeButtons = document.querySelectorAll('.close, .close-modal');
-
-            closeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    modal.style.display = 'none';
-                });
-            });
-
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
         });
-
-        function openAssignModal(bookingId) {
-            const modal = document.getElementById('assignModal');
-            const form = document.getElementById('assignForm');
-            form.action = `/agency/bookings/${bookingId}/assign`;
-            modal.style.display = 'block';
-        }
     </script>
 @endsection
