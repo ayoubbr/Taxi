@@ -78,13 +78,15 @@ class AgencyController extends Controller
             'revenue_total' => $agency->bookings()->where('status', 'COMPLETED')->sum('estimated_fare'),
             'revenue_month' => $agency->bookings()
                 ->where('status', 'COMPLETED')
-                // ->whereMonth('created_at', now()->month)
-                // ->whereYear('created_at', now()->year)
+                ->whereMonth('bookings.created_at', now()->month)
+                ->whereYear('bookings.created_at', now()->year)
                 ->sum('estimated_fare'),
+
             'revenue_today' => $agency->bookings()
                 ->where('status', 'COMPLETED')
-                // ->whereDate('created_at', today())
+                ->whereDate('bookings.created_at', today())
                 ->sum('estimated_fare'),
+
         ];
 
         return view('super-admin.agencies.show', compact('agency', 'stats'));
@@ -335,7 +337,7 @@ class AgencyController extends Controller
             'total_revenue' => $agency->bookings()->where('status', 'COMPLETED')->sum('estimated_fare'),
             'revenue_month' => $agency->bookings()
                 ->where('status', 'COMPLETED')
-                // ->whereMonth('created_at', now()->month)
+                ->whereMonth('bookings.created_at', now()->month)
                 ->sum('estimated_fare'),
         ];
 
