@@ -136,7 +136,7 @@ class DriverController extends Controller
         $driverId = $driver->id;
 
         if (!$driverTaxi || !$driverTaxi->city_id) {
-            return view('driver.available-bookings', ['bookings' => collect(), 'cities' => collect()])
+            return redirect()->back()
                 ->with('error', 'You must have a taxi with an assigned city to view bookings.');
         }
 
@@ -207,7 +207,6 @@ class DriverController extends Controller
         }
 
         $bookings = $query->orderBy('pickup_datetime', 'asc')->paginate(6);
-
         // Pass all cities to the view for the search filter dropdown
         $cities = City::orderBy('name')->get();
 

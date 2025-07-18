@@ -299,8 +299,10 @@
             </div>
             <div class="header-right">
                 <div class="booking-count">
-                    <span class="count">{{ $bookings->total() }}</span>
-                    <span class="label">Available</span>
+                    @if (Auth::user()->taxi)
+                        <span class="count">{{ $bookings->total() }}</span>
+                        <span class="label">Available</span>
+                    @endif
                 </div>
             </div>
         </header>
