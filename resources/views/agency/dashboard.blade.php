@@ -24,11 +24,6 @@
                         <p>Vue d'ensemble de votre agence {{ Auth::user()->agency->name ?? '' }}</p>
                     </div>
                 </div>
-                <div class="agency-header-actions">
-                    <a href="{{ route('agency.bookings.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nouvelle Réservation
-                    </a>
-                </div>
             </div>
         </div>
 
@@ -122,16 +117,6 @@
                     <div class="agency-action-content">
                         <h4>Voir Réservations</h4>
                         <p>Gérer les réservations</p>
-                    </div>
-                </a>
-
-                <a href="{{ route('agency.reports.index') }}" class="agency-action-card settings">
-                    <div class="agency-action-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="agency-action-content">
-                        <h4>Rapports</h4>
-                        <p>Voir les statistiques détaillées</p>
                     </div>
                 </a>
             </div>
