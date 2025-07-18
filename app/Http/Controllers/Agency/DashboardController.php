@@ -13,17 +13,6 @@ class DashboardController extends Controller
     /**
      * Affiche le tableau de bord principal de l'agence.
      */
-    // public function index()
-    // {
-    //     $agency = Auth::user()->agency;
-
-    //     // Récupérer les statistiques
-    //     $stats = $agency->getStats();
-    //     $recentActivities = [];
-
-    //     return view('agency.dashboard', compact('stats', 'recentActivities'));
-    // }
-
     public function index()
     {
         $agency = Auth::user()->agency;
@@ -42,7 +31,6 @@ class DashboardController extends Controller
 
         // 1. Nouveaux chauffeurs ajoutés
         $recentDrivers = $agency->drivers()
-            // ->where('role_id', $driverRoleId)
             ->latest()
             ->take(5)
             ->get()
@@ -90,7 +78,7 @@ class DashboardController extends Controller
                     'timestamp' => $booking->updated_at,
                     'icon' => $booking->status === 'COMPLETED' ? 'fa-check-circle' : 'fa-times-circle',
                     'color' => $booking->status === 'COMPLETED' ? 'green' : 'red',
-                    'link' => '#' // Mettre un lien vers la page de détails de la réservation si elle existe
+                    'link' =>  route('agency.bookings.show', $booking->id) // Mettre un lien vers la page de détails de la réservation si elle existe
                 ];
             });
 

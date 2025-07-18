@@ -1,5 +1,3 @@
-
-
 /* Stats Grid */
 .agency-stats-grid {
     display: grid;
@@ -273,4 +271,24 @@
     .agency-stat-content h3 {
         font-size: 1.5rem;
     }
+}
+
+.color-red {
+    color: white;
+    background-color: var(--agency-danger);
+}
+
+.color-blue {
+    color: white;
+    background-color: var(--agency-primary);
+}
+
+.color-yellow {
+    color: white;
+    background-color: var(--agency-warning);
+}
+
+.color-green {
+    color: white;
+    background-color: var(--agency-accent);
 }
