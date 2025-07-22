@@ -40,32 +40,6 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-
-
-// Example protected route (for logged-in users)
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return "Welcome to your dashboard!";
-    })->name('dashboard');
-});
-
-// Client-side booking application management
-// Route::middleware('auth', 'client')->group(function () {
-//     Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
-//     Route::get('/bookings/create', [BookingController::class, 'create'])->name('client.bookings.create');
-//     Route::get('/bookings/{uuid}', [BookingController::class, 'show'])->name('client.bookings.show');
-//     Route::post('/bookings', [BookingController::class, 'store'])->name('client.bookings.store');
-//     Route::get('/bookings/{uuid}/confirmation', [BookingController::class, 'showConfirmation'])->name('client.bookings.confirmation');
-//     Route::get('/bookings/{booking}/applications', [BookingController::class, 'showApplications'])->name('client.bookings.applications');
-//     Route::post('/bookings/{booking}/applications/{application}/accept', [BookingController::class, 'acceptApplication'])->name('client.bookings.accept_application');
-//     Route::put('/bookings/{uuid}/cancel', [BookingController::class, 'cancel'])->name('client.bookings.cancel');
-
-//     Route::get('/client/profile', [ProfileController::class, 'clientProfile'])->name('client.profile');
-//     Route::put('/client/profile', [ProfileController::class, 'updateClientProfile'])->name('client.profile.update');
-// });
-
-
 // --- Client Routes ---
 Route::middleware(['auth', 'role:CLIENT'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index'])->name('client.bookings.index');
@@ -80,24 +54,6 @@ Route::middleware(['auth', 'role:CLIENT'])->group(function () {
     Route::get('/client/profile', [ProfileController::class, 'clientProfile'])->name('client.profile');
     Route::put('/client/profile', [ProfileController::class, 'updateClientProfile'])->name('client.profile.update');
 });
-
-
-
-// Driver Specific Routes
-// Route::middleware(['auth', 'driver'])->group(function () { // Use your custom 'driver' middleware
-//     Route::get('/driver/dashboard', [DriverController::class, 'assignedBookings'])->name('driver.dashboard');
-//     Route::get('/driver/scan-qr/{booking_uuid}', [DriverController::class, 'scanQrCodeForm'])->name('driver.scan.qr.form');
-//     Route::post('/driver/scan-qr', [DriverController::class, 'processQrCodeScan'])->name('driver.scan.qr.process');
-//     Route::post('/driver/bookings/{booking}/update-status', [DriverController::class, 'updateBookingStatus'])->name('driver.booking.update-status');
-
-//     // New routes for available bookings
-//     Route::get('/driver/bookings/available', [DriverController::class, 'availableBookings'])->name('driver.bookings.available');
-//     Route::post('/bookings/{booking}/apply', [BookingApplicationController::class, 'store'])->name('driver.bookings.apply');
-
-//     // Driver Profile Routes
-//     Route::get('/driver/profile', [ProfileController::class, 'driverPorfile'])->name('driver.profile');
-//     Route::put('/driver/profile', [ProfileController::class, 'updateDriverProfile'])->name('driver.profile.update');
-// });
 
 // --- Driver Routes ---
 Route::middleware(['auth', 'role:DRIVER'])->group(function () {
@@ -115,30 +71,10 @@ Route::middleware(['auth', 'role:DRIVER'])->group(function () {
     Route::put('/driver/profile', [ProfileController::class, 'updateDriverProfile'])->name('driver.profile.update');
 });
 
-// --- Agency Admin Routes ---
-// Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency.')->group(function () {
-//     // Exemple : Route::get('/dashboard', [AgencyDashboardController::class, 'index'])->name('dashboard');
-//     // Exemple : Route::resource('/taxis', AgencyTaxiController::class);
-// });
-
-// SUPER ADMIN ROUTES
-// Route::get('/superadmin/dashboard', [DashboardController::class, 'index'])->name('super-admin.dashboard');
-// Route::get('/superadmin/agencies', [AgencyController::class, 'index'])->name('super-admin.agencies.index');
-// Route::get('/superadmin/agencies/create', [AgencyController::class, 'create'])->name('super-admin.agencies.create');
-// Route::get('/superadmin/users', [UserController::class, 'index'])->name('super-admin.users.index');
-// Route::get('/superadmin/users/create', [UserController::class, 'create'])->name('super-admin.users.create');
-// Route::get('/superadmin/dashboard/bookings', [DashboardController::class, 'bookings'])->name('super-admin.bookings.index');
 
 // --- Super Admin Routes ---
 Route::middleware(['auth', 'role:SUPER_ADMIN'])->prefix('superadmin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('super-admin.dashboard');
-    // Route::get('/superadmin/agencies', [AgencyController::class, 'index'])->name('super-admin.agencies.index');
-    // Route::get('/superadmin/agencies/create', [AgencyController::class, 'create'])->name('super-admin.agencies.create');
-    // Route::get('/superadmin/users', [UserController::class, 'index'])->name('super-admin.users.index');
-    // Route::get('/superadmin/users/create', [UserController::class, 'create'])->name('super-admin.users.create');
-    // Route::get('/superadmin/dashboard/bookings', [DashboardController::class, 'bookings'])->name('super-admin.bookings.index');
-
     Route::resource('/agencies', AgencyController::class);
     Route::patch('/agencies/{agency}/toggle', [AgencyController::class, 'toggleStatus'])->name('agencies.toggle-status');
     Route::patch('/agencies/{agency}/suspend', [AgencyController::class, 'suspend'])->name('agencies.suspend');
@@ -179,24 +115,4 @@ Route::middleware(['auth', 'role:AGENCY_ADMIN'])->prefix('agency')->name('agency
     Route::resource('/bookings', AgencyBookingController::class);
     Route::patch('/bookings/{booking}/status', [AgencyBookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::patch('/bookings/{booking}/assign', [AgencyBookingController::class, 'assign'])->name('bookings.assign');
-
-
-    // Gestion des reports (CRUD complet)
-    Route::resource('/reports', ReportsController::class);
-
-    // Gestion des revenue (CRUD complet)
-    // Route::resource('/revenue', TaxiController::class);
-
-
-    // Gestion des profile (CRUD complet)
-    // Route::resource('/profile', TaxiController::class);
-
-    // Gestion des settings (CRUD complet)
-    // Route::resource('/settings', TaxiController::class);
 });
-
-
-// Fallback route
-// Route::get('/home', function () {
-//     return redirect()->route('login');
-// })->name('home');
