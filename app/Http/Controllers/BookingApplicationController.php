@@ -42,7 +42,7 @@ class BookingApplicationController extends Controller
 
         // --- 3. Notify the client that a new driver has applied ---
         if ($booking->client) {
-            // Notification::send($booking->client, new DriverAppliedNotification($booking, $driver));
+            Notification::send($booking->client, new DriverAppliedNotification($booking, $driver));
         }
 
         return redirect()->route('driver.bookings.available')->with('success', 'You have successfully applied for the booking.');

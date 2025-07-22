@@ -50,7 +50,7 @@ class BookingController extends Controller
         // If the booking was assigned, notify the driver
         if ($booking->status === 'ASSIGNED' && $booking->assigned_driver_id) {
             $driver = User::find($booking->assigned_driver_id);
-            // Notification::send($driver, new BookingCancelledNotification($booking, 'client'));
+            Notification::send($driver, new BookingCancelledNotification($booking, 'client'));
 
             // Make the taxi available again
             if ($booking->taxi) {
@@ -60,8 +60,6 @@ class BookingController extends Controller
 
         // Mark booking as cancelled
         $booking->status = 'CANCELLED';
-        // $booking->assigned_driver_id = NULL;
-        // $booking->assigned_taxi_id = NULL;
 
         $booking->save();
 
@@ -76,7 +74,6 @@ class BookingController extends Controller
     public function create()
     {
         $cities = City::all();
-        // dd($cities);
         return view('client.bookings.create', compact('cities'));
     }
 
@@ -132,7 +129,6 @@ class BookingController extends Controller
             'search_tier' => 0, // Start at tier 0
             'taxi_type' => $request->taxi_type,
         ]);
-        // dd($pickup_city_id);
 
         // Notify drivers in the same city
         $driversInCity = User::where('role_id', Role::where('name', 'DRIVER')->first()->id)
@@ -141,7 +137,7 @@ class BookingController extends Controller
                     ->where('type', $booking->taxi_type);
             })->get();
 
-        // Notification::send($driversInCity, new NewBookingAvailable($booking));
+        Notification::send($driversInCity, new NewBookingAvailable($booking));
 
         session()->flash('success', 'Your booking has been received and is now available for drivers to apply. You will be notified once a driver is assigned.');
 
@@ -158,7 +154,6 @@ class BookingController extends Controller
 
         if (!$qrCodeSvg || !$bookingDetails || $bookingDetails['booking_uuid'] !== $uuid) {
             // If direct access or session expired, regenerate QR code (for simplicity)
-            // In a real app, you might save QR code images or use a more robust retrieval
             $qrData = $booking->qr_code_data;
             $qrCodeSvg = QrCode::size(250)->generate(json_encode($qrData));
             $bookingDetails = $booking->toArray();
@@ -200,7 +195,7 @@ class BookingController extends Controller
         $application->taxi->update(['is_available' => false]);
 
         // Notify the assigned driver
-        // Notification::send($application->driver, new BookingAssignedNotification($booking));
+        Notification::send($application->driver, new BookingAssignedNotification($booking));
 
         // Delete other applications for this booking
         $booking->applications()->where('id', '!=', $application->id)->delete();

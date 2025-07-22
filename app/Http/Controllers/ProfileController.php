@@ -32,9 +32,7 @@ class ProfileController extends Controller
     {
         $driver = Auth::user();
         $taxi = $driver->taxi;
-        // dd($request->all());
-        // // dd($driver);
-        // dd($taxi);
+      
         $rules = [
             // User fields validation
             'firstname' => 'required|string|max:100',
