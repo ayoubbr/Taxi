@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        // $this->middleware(['auth', 'role:super_admin']);
-    }
 
     public function index(Request $request)
     {
@@ -110,7 +106,6 @@ class UserController extends Controller
         ]);
         $validated['password'] = Hash::make($validated['password']);
 
-        // dd($request->all());
         $user = User::create($validated);
 
         return redirect()->route('super-admin.users.index')
@@ -168,14 +163,11 @@ class UserController extends Controller
 
     public function ban(User $user)
     {
-        // dd('Ban method triggered');
-
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Vous ne pouvez pas bannir votre propre compte.');
         }
 
         $user->update(['status' => 'suspended']);
-        // dd($user);
 
         return back()->with('success', 'Utilisateur suspendu avec succès!');
     }

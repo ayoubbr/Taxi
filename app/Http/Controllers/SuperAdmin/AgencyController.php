@@ -4,8 +4,6 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
-use App\Models\City;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -183,7 +181,6 @@ class AgencyController extends Controller
         return back()->with('success', 'Agence suspendu avec succès!');
     }
 
-    // NOUVELLES MÉTHODES OPTIMISÉES
     public function users(Request $request, Agency $agency)
     {
         $query = $agency->users()->with('role');

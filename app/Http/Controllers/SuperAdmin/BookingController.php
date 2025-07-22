@@ -5,14 +5,11 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\User;
-use App\Models\Taxi;
 use App\Models\City;
-use App\Models\Agency;
 use App\Notifications\BookingAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 class BookingController extends Controller
 {
@@ -123,39 +120,6 @@ class BookingController extends Controller
 
     public function update(Request $request, Booking $booking)
     {
-        // dd($request->all());
-        // $validated = $request->validate([
-        //     'status' => 'required|in:PENDING,ASSIGNED,IN_PROGRESS,COMPLETED,CANCELLED,NO_TAXI_FOUND',
-        //     'assigned_driver_id' => 'nullable|exists:users,id',
-        //     'estimated_fare' => 'nullable|numeric|min:0',
-        //     'admin_notes' => 'nullable|string|max:1000',
-        // ]);
-
-        // // Si on assigne un chauffeur, récupérer son taxi
-        // if ($validated['assigned_driver_id']) {
-        //     $driver = User::with('taxi')->find($validated['assigned_driver_id']);
-        //     if ($driver && $driver->taxi) {
-        //         $validated['assigned_taxi_id'] = $driver->taxi->id;
-
-        //         // Marquer le taxi comme non disponible
-        //         $driver->taxi->update(['is_available' => false]);
-        //     }
-        // }
-
-        // // Si on change le statut vers COMPLETED, marquer le taxi comme disponible
-        // if ($validated['status'] === 'COMPLETED' && $booking->taxi) {
-        //     $booking->taxi->update(['is_available' => true]);
-        // }
-
-        // // Si on annule, libérer le taxi
-        // if ($validated['status'] === 'CANCELLED' && $booking->taxi) {
-        //     $booking->taxi->update(['is_available' => true]);
-        // }
-
-        // $booking->update($validated);
-
-        // return redirect()->route('super-admin.bookings.show', $booking)
-        //     ->with('success', 'Réservation mise à jour avec succès!');
         try {
             $request->validate([
                 'client_name' => 'required|string|max:255',
@@ -166,14 +130,6 @@ class BookingController extends Controller
                 'status' => 'required|in:PENDING,ASSIGNED,IN_PROGRESS,COMPLETED,CANCELLED,NO_TAXI_FOUND',
                 'assigned_driver_id' => 'nullable|exists:users,id',
                 'estimated_fare' => 'nullable|numeric|min:0',
-                // 'client_phone' => 'required|string|max:20',
-                // 'passenger_count' => 'required|integer|min:1|max:8',
-                // 'final_fare' => 'nullable|numeric|min:0',
-                // 'payment_method' => 'nullable|in:cash,card,mobile',
-                // 'payment_status' => 'required|in:PENDING,PAID,FAILED',
-                // 'admin_notes' => 'nullable|string|max:1000',
-                // 'cancellation_reason' => 'nullable|string|max:255',
-                // 'cancellation_notes' => 'nullable|string|max:500',
             ]);
 
             DB::beginTransaction();
@@ -183,6 +139,27 @@ class BookingController extends Controller
             $originalStatus = $booking->status;
             $originalDriverId = $booking->assigned_driver_id;
 
+            // If status is changed to PENDING, clear driver and taxi assignment
+            $assignedDriverId = $request->status === 'PENDING' ? null : $request->assigned_driver_id;
+            $assignedTaxiId = null;
+
+            // Make previously assigned taxi available again if status is being set to PENDING
+            if ($request->status === 'PENDING') {
+                if ($booking->assigned_taxi_id) {
+                    $previousTaxi = \App\Models\Taxi::find($booking->assigned_taxi_id);
+                    if ($previousTaxi) {
+                        $previousTaxi->is_available = true;
+                        $previousTaxi->save();
+                    }
+                }
+            } else {
+                // If assigning a driver, find the taxi of that driver
+                if ($request->assigned_driver_id) {
+                    $driver = \App\Models\User::find($request->assigned_driver_id);
+                    $assignedTaxiId = $driver?->taxi?->id;
+                }
+            }
+
             // Update booking
             $booking->update([
                 'client_name' => $request->client_name,
@@ -191,36 +168,18 @@ class BookingController extends Controller
                 'pickup_datetime' => $request->pickup_datetime,
                 'taxi_type' => $request->taxi_type,
                 'status' => $request->status,
-                'assigned_driver_id' => $request->assigned_driver_id,
+                'assigned_driver_id' => $assignedDriverId,
+                'assigned_taxi_id' => $assignedTaxiId,
                 'estimated_fare' => $request->estimated_fare,
-                // 'client_phone' => $request->client_phone,
-                // 'passenger_count' => $request->passenger_count,
-                // 'final_fare' => $request->final_fare,
-                // 'payment_method' => $request->payment_method,
-                // 'payment_status' => $request->payment_status,
-                // 'admin_notes' => $request->admin_notes,
-                // 'cancellation_reason' => $request->cancellation_reason,
-                // 'cancellation_notes' => $request->cancellation_notes,
-                // 'cancelled_at' => $request->status === 'CANCELLED' ? now() : null,
             ]);
 
-            // Handle driver assignment changes
-            if ($originalDriverId != $request->assigned_driver_id) {
-                if ($request->assigned_driver_id) {
-                    // Assign new driver
-                    $driver = User::find($request->assigned_driver_id);
-                    if ($driver) {
-                        $booking->update([
-                            'assigned_driver_id' => $driver->id,
-                            'assigned_taxi_id' => $driver->taxi_id,
-                        ]);
-
-                        // Notify driver
-                        // $driver->notify(new BookingAssignedNotification($booking));
-                    }
+            // Notify driver if a new driver was assigned (and not pending)
+            if ($originalDriverId != $assignedDriverId && $assignedDriverId !== null) {
+                $driver = User::find($assignedDriverId);
+                if ($driver) {
+                    $driver->notify(new BookingAssignedNotification($booking));
                 }
             }
-
 
             // Handle status changes
             if ($originalStatus !== $request->status) {
@@ -236,11 +195,8 @@ class BookingController extends Controller
                     'status',
                     'assigned_driver_id',
                     'estimated_fare',
-                    // 'final_fare',
-                    // 'payment_status'
                 ])
             ]);
-            // dd($request->all());
 
             DB::commit();
 
@@ -349,41 +305,5 @@ class BookingController extends Controller
         $completed = Booking::where('status', 'COMPLETED')->count();
 
         return $total > 0 ? round(($completed / $total) * 100, 1) : 0;
-    }
-
-    private function handleStatusChange($booking, $originalStatus, $newStatus)
-    {
-        // Notify relevant parties about status change
-        // if ($booking->client) {
-        //     $booking->client->notify(new BookingStatusUpdated($booking));
-        // }
-
-        // if ($booking->driver) {
-        //     $booking->driver->notify(new BookingStatusUpdated($booking));
-        // }
-
-        // Handle specific status changes
-        switch ($newStatus) {
-            case 'COMPLETED':
-                // Mark taxi as available
-                if ($booking->taxi) {
-                    $booking->taxi->update(['status' => 'ACTIVE']);
-                }
-                break;
-
-            case 'CANCELLED':
-                // Free up the assigned driver/taxi
-                if ($booking->driver && $booking->taxi) {
-                    $booking->taxi->update(['status' => 'ACTIVE']);
-                }
-                break;
-        }
-
-        Log::info('Booking status changed', [
-            'booking_id' => $booking->id,
-            'from_status' => $originalStatus,
-            'to_status' => $newStatus,
-            'changed_by' => auth()->id()
-        ]);
     }
 }

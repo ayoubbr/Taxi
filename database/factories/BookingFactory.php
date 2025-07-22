@@ -13,8 +13,10 @@ class BookingFactory extends Factory
     public function definition()
     {
         $taxi = \App\Models\Taxi::inRandomOrder()->first();
+        $status = $this->faker->randomElement(['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED']);
+
         return [
-            'booking_uuid' => Str::uuid(),
+            'booking_uuid' => \Illuminate\Support\Str::uuid(),
             'client_id' => \App\Models\User::whereHas('role', function ($q) {
                 $q->where('name', 'CLIENT');
             })->inRandomOrder()->first()->id,
@@ -23,11 +25,13 @@ class BookingFactory extends Factory
             'pickup_city_id' => \App\Models\City::inRandomOrder()->first()->id,
             'destination_city_id' => \App\Models\City::inRandomOrder()->first()->id,
             'pickup_datetime' => $this->faker->dateTimeBetween('+1 hour', '+3 days'),
-            'status' => $this->faker->randomElement(['PENDING', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED']),
-            'assigned_taxi_id' => $taxi->id,
-            'assigned_driver_id' => \App\Models\User::inRandomOrder()->first()->id,
+            'status' => $status,
+            'assigned_taxi_id' => $status === 'PENDING' ? null : $taxi->id,
+            'assigned_driver_id' => $status === 'PENDING' ? null : \App\Models\User::whereHas('role', function ($q) {
+                $q->where('name', 'DRIVER');
+            })->inRandomOrder()->first()->id,
             'estimated_fare' => $this->faker->randomFloat(2, 10, 100),
-            'qr_code_data' => json_encode(['code' => Str::uuid()]),
+            'qr_code_data' => json_encode(['code' => \Illuminate\Support\Str::uuid()]),
             'search_tier' => $this->faker->numberBetween(0, 2),
             'taxi_type' => $taxi->type,
         ];
