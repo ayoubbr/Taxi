@@ -36,18 +36,6 @@
             {{-- <i class="fas fa-user-cog"></i>  --}}
         </header>
 
-        {{-- @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-error">
-                {{ session('error') }}
-            </div>
-        @endif --}}
-
         <div class="dashboard-content">
             <form action="{{ route('driver.profile.update') }}" method="POST" id="profileForm">
                 @csrf

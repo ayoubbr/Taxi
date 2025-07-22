@@ -76,7 +76,7 @@ class BroadenBookingSearch extends Command
 
             // Exclude drivers who have already been notified in a previous tier
             // (More complex logic needed here if you want to avoid re-notifying)
-            // Notification::send($driversToNotify, new NewBookingAvailable($booking));
+            Notification::send($driversToNotify, new NewBookingAvailable($booking));
         }
 
         $this->info('Done.');

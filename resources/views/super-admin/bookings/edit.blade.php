@@ -99,22 +99,6 @@
                                 </span>
                             @enderror
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label for="client_phone" class="form-label required">
-                                <i class="fas fa-phone"></i>
-                                Téléphone
-                            </label>
-                            <input type="tel" id="client_phone" name="client_phone"
-                                class="form-input @error('client_phone') error @enderror"
-                                value="{{ old('client_phone', $booking->client_phone) }}" required>
-                            @error('client_phone')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div> --}}
                     </div>
                 </div>
 
@@ -184,35 +168,13 @@
                             @enderror
                         </div>
 
-                        {{-- <div class="form-group">
-                            <label for="passenger_count" class="form-label required">
-                                <i class="fas fa-users"></i>
-                                Nombre de Passagers
-                            </label>
-                            <select id="passenger_count" name="passenger_count"
-                                class="form-select @error('passenger_count') error @enderror" required>
-                                @for ($i = 1; $i <= 8; $i++)
-                                    <option value="{{ $i }}"
-                                        {{ old('passenger_count', $booking->passenger_count) == $i ? 'selected' : '' }}>
-                                        {{ $i }} {{ $i == 1 ? 'passager' : 'passagers' }}
-                                    </option>
-                                @endfor
-                            </select>
-                            @error('passenger_count')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div> --}}
-
                         <div class="form-group">
                             <label for="taxi_type" class="form-label required">
                                 <i class="fas fa-taxi"></i>
                                 Type de Taxi
                             </label>
-                            <select id="taxi_type" name="taxi_type"
-                                class="form-select @error('taxi_type') error @enderror" required>
+                            <select id="taxi_type" name="taxi_type" class="form-select @error('taxi_type') error @enderror"
+                                required>
                                 <option value="standard"
                                     {{ old('taxi_type', $booking->taxi_type) === 'standard' ? 'selected' : '' }}>Standard
                                 </option>
@@ -371,134 +333,8 @@
                                 </span>
                             @enderror
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label for="final_fare" class="form-label">
-                                <i class="fas fa-receipt"></i>
-                                Tarif Final (€)
-                            </label>
-                            <input type="number" id="final_fare" name="final_fare"
-                                class="form-input @error('final_fare') error @enderror"
-                                value="{{ old('final_fare', $booking->final_fare) }}" step="0.01" min="0"
-                                placeholder="0.00">
-                            @error('final_fare')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div> --}}
-
-                        {{-- <div class="form-group">
-                            <label for="payment_method" class="form-label">
-                                <i class="fas fa-credit-card"></i>
-                                Mode de Paiement
-                            </label>
-                            <select id="payment_method" name="payment_method"
-                                class="form-select @error('payment_method') error @enderror">
-                                <option value="">Non spécifié</option>
-                                <option value="cash"
-                                    {{ old('payment_method', $booking->payment_method) === 'cash' ? 'selected' : '' }}>
-                                    Espèces</option>
-                                <option value="card"
-                                    {{ old('payment_method', $booking->payment_method) === 'card' ? 'selected' : '' }}>
-                                    Carte</option>
-                                <option value="mobile"
-                                    {{ old('payment_method', $booking->payment_method) === 'mobile' ? 'selected' : '' }}>
-                                    Mobile</option>
-                            </select>
-                            @error('payment_method')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div> --}}
-
-                        {{-- <div class="form-group">
-                            <label for="payment_status" class="form-label">
-                                <i class="fas fa-money-check"></i>
-                                Statut du Paiement
-                            </label>
-                            <select id="payment_status" name="payment_status"
-                                class="form-select @error('payment_status') error @enderror">
-                                <option value="PENDING"
-                                    {{ old('payment_status', $booking->payment_status) === 'PENDING' ? 'selected' : '' }}>
-                                    En Attente</option>
-                                <option value="PAID"
-                                    {{ old('payment_status', $booking->payment_status) === 'PAID' ? 'selected' : '' }}>Payé
-                                </option>
-                                <option value="FAILED"
-                                    {{ old('payment_status', $booking->payment_status) === 'FAILED' ? 'selected' : '' }}>
-                                    Échoué</option>
-                            </select>
-                            @error('payment_status')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div> --}}
                     </div>
                 </div>
-
-                <!-- Admin Notes -->
-                {{-- <div class="form-card full-width">
-                    <div class="card-header">
-                        <h3><i class="fas fa-sticky-note"></i> Notes Administrateur</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="form-group">
-                            <label for="admin_notes" class="form-label">
-                                <i class="fas fa-comment"></i>
-                                Commentaires sur les modifications
-                            </label>
-                            <textarea id="admin_notes" name="admin_notes" class="form-textarea @error('admin_notes') error @enderror"
-                                rows="4" placeholder="Ajoutez des notes sur les modifications apportées...">{{ old('admin_notes', $booking->admin_notes) }}</textarea>
-                            @error('admin_notes')
-                                <span class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                            <div class="input-help">
-                                <p>Ces notes seront enregistrées dans l'historique des modifications.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
-                <!-- Cancellation Reason (if status is CANCELLED) -->
-                {{-- <div class="form-card full-width" id="cancellation-section" style="display: none;">
-                    <div class="card-header">
-                        <h3><i class="fas fa-ban"></i> Raison d'Annulation</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="form-group">
-                            <label for="cancellation_reason" class="form-label">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Motif d'Annulation
-                            </label>
-                            <select id="cancellation_reason" name="cancellation_reason" class="form-select">
-                                <option value="">Sélectionnez un motif</option>
-                                <option value="client_request">Demande du client</option>
-                                <option value="driver_unavailable">Chauffeur indisponible</option>
-                                <option value="weather_conditions">Conditions météorologiques</option>
-                                <option value="technical_issue">Problème technique</option>
-                                <option value="other">Autre</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cancellation_notes" class="form-label">
-                                <i class="fas fa-comment-alt"></i>
-                                Détails de l'Annulation
-                            </label>
-                            <textarea id="cancellation_notes" name="cancellation_notes" class="form-textarea" rows="3"
-                                placeholder="Détails supplémentaires sur l'annulation...">{{ old('cancellation_notes', $booking->cancellation_notes) }}</textarea>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
 
             <!-- Form Actions -->
@@ -526,82 +362,6 @@
             </div>
         </form>
 
-        <!-- Quick Actions Panel -->
-        {{-- <div class="quick-actions-panel">
-            <div class="card-header">
-                <h3><i class="fas fa-bolt"></i> Actions Rapides</h3>
-            </div>
-            <div class="card-content">
-                <div class="quick-actions">
-                    @if ($booking->status === 'PENDING')
-                        <form method="POST" action="{{ route('super-admin.bookings.update-status', $booking) }}"
-                            style="display: inline;">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="status" value="NO_TAXI_FOUND">
-                            <button type="submit" class="btn btn-warning"
-                                onclick="return confirm('Marquer comme aucun taxi trouvé ?')">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Aucun Taxi Trouvé
-                            </button>
-                        </form>
-                    @endif
-
-                    @if (in_array($booking->status, ['PENDING', 'ASSIGNED']))
-                        <form method="POST" action="{{ route('super-admin.bookings.update-status', $booking) }}"
-                            style="display: inline;">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="status" value="CANCELLED">
-                            <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
-                                <i class="fas fa-ban"></i>
-                                Annuler la Réservation
-                            </button>
-                        </form>
-                    @endif
-
-                    @if ($booking->status === 'ASSIGNED')
-                        <form method="POST" action="{{ route('super-admin.bookings.update-status', $booking) }}"
-                            style="display: inline;">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="status" value="IN_PROGRESS">
-                            <button type="submit" class="btn btn-info"
-                                onclick="return confirm('Marquer le trajet comme en cours ?')">
-                                <i class="fas fa-play"></i>
-                                Démarrer le Trajet
-                            </button>
-                        </form>
-                    @endif
-
-                    @if ($booking->status === 'IN_PROGRESS')
-                        <form method="POST" action="{{ route('super-admin.bookings.update-status', $booking) }}"
-                            style="display: inline;">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="status" value="COMPLETED">
-                            <button type="submit" class="btn btn-success"
-                                onclick="return confirm('Marquer le trajet comme terminé ?')">
-                                <i class="fas fa-check"></i>
-                                Terminer le Trajet
-                            </button>
-                        </form>
-                    @endif
-
-                    <button type="button" class="btn btn-outline" onclick="duplicateBooking()">
-                        <i class="fas fa-copy"></i>
-                        Dupliquer
-                    </button>
-
-                    <button type="button" class="btn btn-outline" onclick="sendNotification()">
-                        <i class="fas fa-bell"></i>
-                        Notifier Client
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
     @endsection
 
     @section('js')

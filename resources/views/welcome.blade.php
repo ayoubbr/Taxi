@@ -6,9 +6,6 @@
 @endsection
 
 @section('content')
-    @php
-        // dd(Auth::user());
-    @endphp
     <section class="hero mt-70">
         <div class="container">
             <div class="hero-content">

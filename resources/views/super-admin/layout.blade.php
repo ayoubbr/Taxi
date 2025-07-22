@@ -56,13 +56,6 @@
                             <span>Tableau de Bord</span>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.analytics') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.analytics*') ? 'active' : '' }}">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Analytiques</span>
-                        </a>
-                    </li> --}}
                 </ul>
             </div>
 
@@ -98,72 +91,23 @@
                             class="nav-link {{ request()->routeIs('super-admin.bookings*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-alt"></i>
                             <span>Réservations</span>
-                            <span
-                                class="nav-badge">{{ \App\Models\Booking::count() }}</span>
+                            <span class="nav-badge">{{ \App\Models\Booking::count() }}</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <div class="nav-section">
+            {{-- <div class="nav-section">
                 <h3 class="nav-title">Modération</h3>
                 <ul class="nav-list">
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.reports.index') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.reports*') ? 'active' : '' }}">
-                            <i class="fas fa-flag"></i>
-                            <span>Signalements</span>
-                            @if (\App\Models\Report::where('status', 'pending')->count() > 0)
-                                <span
-                                    class="nav-badge danger">{{ \App\Models\Report::where('status', 'pending')->count() }}</span>
-                            @endif
-                        </a>
-                    </li> --}}
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.users.banned') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.users.banned') ? 'active' : '' }}">
-                            <i class="fas fa-ban"></i>
-                            <span>Utilisateurs Bannis</span>
-                            <span
-                                class="nav-badge danger">{{ \App\Models\User::where('status', 'banned')->count() }}</span>
-                        </a>
-                    </li> --}}
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.logs.index') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.logs*') ? 'active' : '' }}">
-                            <i class="fas fa-history"></i>
-                            <span>Logs d'Activité</span>
-                        </a>
-                    </li> --}}
                 </ul>
             </div>
 
             <div class="nav-section">
                 <h3 class="nav-title">Configuration</h3>
                 <ul class="nav-list">
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.settings.index') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.settings*') ? 'active' : '' }}">
-                            <i class="fas fa-cog"></i>
-                            <span>Paramètres</span>
-                        </a>
-                    </li> --}}
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('super-admin.notifications.index') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.notifications*') ? 'active' : '' }}">
-                            <i class="fas fa-bell"></i>
-                            <span>Notifications</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('super-admin.backup.index') }}"
-                            class="nav-link {{ request()->routeIs('super-admin.backup*') ? 'active' : '' }}">
-                            <i class="fas fa-database"></i>
-                            <span>Sauvegardes</span>
-                        </a>
-                    </li> --}}
                 </ul>
-            </div>
+            </div> --}}
         </nav>
 
         <div class="sidebar-footer">
@@ -219,36 +163,6 @@
                     </div>
                 </div>
 
-                {{-- <!-- Notifications -->
-                <div class="notifications-dropdown">
-                    <button class="notification-btn" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
-                        @if (\App\Models\Notification::where('read_at', null)->count() > 0)
-                            <span
-                                class="notification-badge">{{ \App\Models\Notification::where('read_at', null)->count() }}</span>
-                        @endif
-                    </button>
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="dropdown-header">
-                            <h4>Notifications</h4>
-                            <a href="#" class="mark-all-read">Tout marquer lu</a>
-                        </div>
-                        <div class="notification-list">
-                            <!-- Notifications will be loaded here -->
-                            <div class="notification-item">
-                                <i class="fas fa-user-plus"></i>
-                                <div class="notification-content">
-                                    <p>Nouvel utilisateur inscrit</p>
-                                    <small>Il y a 5 minutes</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown-footer">
-                            <a href="{{ route('super-admin.notifications.index') }}">Voir toutes les notifications</a>
-                        </div>
-                    </div>
-                </div> --}}
-
                 <!-- Admin Menu -->
                 <div class="admin-menu-dropdown">
                     <button class="admin-menu-btn" id="adminMenuBtn">
@@ -292,33 +206,6 @@
                 </div>
             </div>
         </header>
-
-        {{-- <!-- Page Content -->
-        <div class="admin-content">
-            @if (session('success'))
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
-                    {{ session('success') }}
-                    <button class="alert-close">&times;</button>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="alert alert-error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ session('error') }}
-                    <button class="alert-close">&times;</button>
-                </div>
-            @endif
-
-            @if (session('warning'))
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    {{ session('warning') }}
-                    <button class="alert-close">&times;</button>
-                </div>
-            @endif --}}
-
 
         <div class="flash-messages-container">
             @include('partials.flash-messages')
@@ -428,33 +315,6 @@
                 })
             }
 
-            // Loading overlay functions
-            // window.showLoading = () => {
-            //     const loadingOverlay = document.getElementById("loadingOverlay")
-            //     if (loadingOverlay) {
-            //         loadingOverlay.classList.add("active")
-            //     }
-            // }
-
-            // window.hideLoading = () => {
-            //     const loadingOverlay = document.getElementById("loadingOverlay")
-            //     if (loadingOverlay) {
-            //         loadingOverlay.classList.remove("active")
-            //     }
-            // }
-
-            // Auto-hide loading on page load
-            // window.addEventListener("load", () => {
-            //     hideLoading()
-            // })
-
-            // Show loading on form submissions
-            // const forms = document.querySelectorAll("form")
-            // forms.forEach((form) => {
-            //     form.addEventListener("submit", () => {
-            //         showLoading()
-            //     })
-            // })
 
             // Show loading on navigation links
             const navLinks = document.querySelectorAll(".nav-link, .action-card")
@@ -465,41 +325,6 @@
                     }
                 })
             })
-
-            // Mark all notifications as read
-            // const markAllReadBtn = document.querySelector(".mark-all-read")
-            // if (markAllReadBtn) {
-            //     markAllReadBtn.addEventListener("click", (e) => {
-            //         e.preventDefault()
-            //         // Add AJAX call to mark all notifications as read
-            //         fetch("/super-admin/notifications/mark-all-read", {
-            //                 method: "POST",
-            //                 headers: {
-            //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-            //                         .getAttribute("content"),
-            //                     "Content-Type": "application/json",
-            //                 },
-            //             })
-            //             .then((response) => response.json())
-            //             .then((data) => {
-            //                 if (data.success) {
-            //                     // Update notification badge
-            //                     const notificationBadge = document.querySelector(".notification-badge")
-            //                     if (notificationBadge) {
-            //                         notificationBadge.style.display = "none"
-            //                     }
-
-            //                     // Show success message
-            //                     showAlert("Toutes les notifications ont été marquées comme lues",
-            //                         "success")
-            //                 }
-            //             })
-            //             .catch((error) => {
-            //                 console.error("Error:", error)
-            //                 showAlert("Erreur lors de la mise à jour des notifications", "error")
-            //             })
-            //     })
-            // }
 
             // Alert system
             window.showAlert = (message, type = "info") => {
@@ -543,32 +368,6 @@
                     }
                 })
             })
-
-            // Auto-refresh notifications every 30 seconds
-            // setInterval(() => {
-            //     if (document.visibilityState === "visible") {
-            //         fetch("/super-admin/notifications/count")
-            //             .then((response) => response.json())
-            //             .then((data) => {
-            //                 const notificationBadge = document.querySelector(".notification-badge")
-            //                 if (data.count > 0) {
-            //                     if (notificationBadge) {
-            //                         notificationBadge.textContent = data.count
-            //                         notificationBadge.style.display = "block"
-            //                     } else {
-            //                         // Create badge if it doesn't exist
-            //                         const badge = document.createElement("span")
-            //                         badge.className = "notification-badge"
-            //                         badge.textContent = data.count
-            //                         notificationBtn.appendChild(badge)
-            //                     }
-            //                 } else if (notificationBadge) {
-            //                     notificationBadge.style.display = "none"
-            //                 }
-            //             })
-            //             .catch((error) => console.error("Error fetching notification count:", error))
-            //     }
-            // }, 30000)
         })
 
         // CSRF Token for AJAX requests
